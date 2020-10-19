@@ -1,8 +1,11 @@
 # frontend
-frontend client
+Tradedis mobile client
 
 
 ### Starting the development server
+
+`git clone https://github.com/TradeDis/frontend.git` and `cd frontend`
+
 `yarn global add expo-cli` to get the latest expo client
 
 `yarn install` to install dependencies
