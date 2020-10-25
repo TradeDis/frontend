@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: "center"
     },
+    settingsButton: {
+      backgroundColor: 'rgba(52, 52, 52, 0)',
+      marginLeft: 300
+    },
     profileImage: {
         marginTop: -120,
         backgroundColor: 'rgba(52, 52, 52, 0.8)',
@@ -123,7 +127,11 @@ const UserProfileScreen = () => {
             borderBottomLeftRadius: 30,
             borderBottomRightRadius: 30
         }}> 
+        <View style={styles.settingsButton}>
+          <Button  title="Settings" onPress={()=> console.log("settings button clicked")} color='white'/>
+          </View>
         </View>
+        
         <View style={styles.profileImage}>
         <Image source={require("../assets/images/profilePhoto.jpeg")} style={{width: 150, height: 150, borderRadius: 150/2}} >
             </Image>
