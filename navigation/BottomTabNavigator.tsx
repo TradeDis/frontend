@@ -9,6 +9,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
+import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 
@@ -58,8 +59,8 @@ function TabOneNavigator() {
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
-        name="TabOneScreen"
-        component={UserProfileScreen}
+        name="UserProfileScreen"
+        component={UserProfileSettingsScreen}
         options={{ title: "tab 1"}}
       />
     </TabOneStack.Navigator>

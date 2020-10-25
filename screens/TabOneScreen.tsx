@@ -4,15 +4,10 @@ import { StyleSheet, SafeAreaView, Button } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
-export default function TabOneScreen(this: any) {
+export default function TabOneScreen() {
   return (
     <View style={styles.container}>
-        <Button
-          title="Add some friends"
-          onPress={() =>
-            this.props.navigation.navigate('Friends')
-          }
-        />
+      
     </View>
   );
 }
