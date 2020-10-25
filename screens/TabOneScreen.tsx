@@ -1,32 +1,24 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, SafeAreaView, Button } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
-export default function TabOneScreen() {
+export default function TabOneScreen(this: any) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.js" />
+        <Button
+          title="Add some friends"
+          onPress={() =>
+            this.props.navigation.navigate('Friends')
+          }
+        />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  container: { 
+    width: '25%', 
   },
 });

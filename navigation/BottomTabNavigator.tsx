@@ -3,11 +3,18 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 
+
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+
+
+import { StyleSheet, View, Button, TouchableWithoutFeedback} from 'react-native';
+import { ScreenStackHeaderRightView } from 'react-native-screens';
+import Navigation from '.';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -46,17 +53,28 @@ function TabBarIcon(props: { name: string; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
+
 function TabOneNavigator() {
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
         name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        component={UserProfileScreen}
+        options={{ title: "tab 1"}}
       />
     </TabOneStack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  leftBarButton: { 
+    color: 'white',
+    marginLeft: 12
+
+  },
+
+});
+
 
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
