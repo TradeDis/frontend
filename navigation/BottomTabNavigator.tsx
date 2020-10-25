@@ -60,7 +60,7 @@ function TabOneNavigator() {
     <TabOneStack.Navigator>
       <TabOneStack.Screen
         name="UserProfileScreen"
-        component={UserProfileSettingsScreen}
+        component={UserProfileScreen}
         options={{ title: "tab 1"}}
       />
     </TabOneStack.Navigator>

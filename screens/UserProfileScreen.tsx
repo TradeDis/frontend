@@ -87,47 +87,19 @@ function Item( itemList:any ) {
 const getData = () => {
     return [
       {
-        id: 1, title: 'Albert Einstein',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-        image_url: 'http://vivirtupasion.com/wp-content/uploads/2016/05/DANI_PERFILzoomCircle.png'
+        id: 1, title: 'Ashley',
+        description: 'I have eggs',
+        image_url: 'http://3.bp.blogspot.com/-jd5x3rFRLJc/VngrSWSHcjI/AAAAAAAAGJ4/ORPqZNDpQoY/s1600/Profile%2Bcircle.png'
       },
       {
         id: 2,
-        title: 'Isaac newton',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
+        title: 'Ashley',
+        description: 'I can trade for school supplies',
         image_url: 'http://3.bp.blogspot.com/-jd5x3rFRLJc/VngrSWSHcjI/AAAAAAAAGJ4/ORPqZNDpQoY/s1600/Profile%2Bcircle.png'
       },
       {
-        id: 3, title: 'Albert Einstein',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-        image_url: 'http://vivirtupasion.com/wp-content/uploads/2016/05/DANI_PERFILzoomCircle.png'
-      },
-      {
-        id: 4,
-        title: 'Isaac newton',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-        image_url: 'http://3.bp.blogspot.com/-jd5x3rFRLJc/VngrSWSHcjI/AAAAAAAAGJ4/ORPqZNDpQoY/s1600/Profile%2Bcircle.png'
-      },
-      {
-        id: 5, title: 'Albert Einstein',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-        image_url: 'http://vivirtupasion.com/wp-content/uploads/2016/05/DANI_PERFILzoomCircle.png'
-      },
-      {
-        id: 6,
-        title: 'Isaac newton',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-        image_url: 'http://3.bp.blogspot.com/-jd5x3rFRLJc/VngrSWSHcjI/AAAAAAAAGJ4/ORPqZNDpQoY/s1600/Profile%2Bcircle.png'
-      },
-      {
-        id: 7, title: 'Albert Einstein',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-        image_url: 'http://vivirtupasion.com/wp-content/uploads/2016/05/DANI_PERFILzoomCircle.png'
-      },
-      {
-        id: 8,
-        title: 'Isaac newton',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
+        id: 3, title: 'Ashley',
+        description: 'I need some sugar',
         image_url: 'http://3.bp.blogspot.com/-jd5x3rFRLJc/VngrSWSHcjI/AAAAAAAAGJ4/ORPqZNDpQoY/s1600/Profile%2Bcircle.png'
       }
     ]
@@ -157,7 +129,7 @@ const UserProfileScreen = () => {
             </Image>
         </View>
         <View style={styles.profileName}>
-        <Text style={{fontSize:35}}>Akash Desai</Text>
+        <Text style={{fontSize:35}}>Ashley Smith</Text>
         </View>
         <View>
             <View style={styles.feedButtonContainer}>
