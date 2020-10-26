@@ -9,39 +9,42 @@ import {
     Switch,
     TouchableOpacity
 } from "react-native";
+import { useEffect } from "react";
 
 interface User {
-    username: string;
-    first_name: string;
-    last_name: string;
     email: string;
     password: string;
 }
 
-export default function SignUpScreen({ navigation }: any) {
+export default function LoginScreen({ route, navigation }: any) {
+    const [response, setResponse] = useState({ status: "pending", message: "" });
+
+    const { message } = route.params || { message: '' };
+
+    useEffect(() => {
+        setResponse({ status: 'success', message })
+    }, [])
+
     const [user, setUser] = useState<User>({
-        username: '',
-        first_name: '',
-        last_name: '',
         email: '',
         password: ''
     });
 
-    const [response, setResponse] = useState({ status: "pending", message: "" });
-
     const createPosting = () => {
         console.log(user);
         axios
-            .post("http://localhost:3000/api/v1/users", user)
+            .post("http://localhost:3000/api/v1/users/login", user)
             .then(resp => {
-                setResponse({ status: 'success', message: `User ${resp.data.username} Successfully created!` })
-                navigation.navigate('TabTwo', { message: `User ${resp.data.username} Successfully created! Plesae login here.` })
+                const { result: isAuth, user } = resp.data
+                if (isAuth) {
+                    setResponse({ status: 'success', message: `User ${user.username} logged in successfully!` })
+                } else {
+                    setResponse({ status: 'error', message: `Wrong email or password!` })
+                }
             })
             .catch(err => {
                 const { errors } = err.response.data
-                console.log(errors)
                 const message = Object.values(errors).map((field: any) => field.message).join(' / ')
-                console.log(message)
                 setResponse({ status: 'error', message })
             });
     };
@@ -50,37 +53,13 @@ export default function SignUpScreen({ navigation }: any) {
         <View style={styles.container}>
             <View style={styles.top}>
                 <View style={styles.topElements}>
-                    <Text style={styles.title}>Sign Up</Text>
+                    <Text style={styles.title}>Log in</Text>
                 </View>
             </View>
             {response.status != "pending" && (
                 <Text style={response.status == "success" ? styles.successMessage : styles.errorMessage}> {response.message} </Text>
             )}
             <View style={styles.form}>
-                <TextInput
-                    placeholder="Username"
-                    style={styles.formInput}
-                    onChangeText={username =>
-                        setUser(prevState => ({ ...prevState, username }))
-                    }
-                    value={user.username}
-                />
-                <TextInput
-                    placeholder="First Name"
-                    style={styles.formInput}
-                    onChangeText={first_name =>
-                        setUser(prevState => ({ ...prevState, first_name }))
-                    }
-                    value={user.first_name}
-                />
-                <TextInput
-                    placeholder="Last Name"
-                    style={styles.formInput}
-                    onChangeText={last_name =>
-                        setUser(prevState => ({ ...prevState, last_name }))
-                    }
-                    value={user.last_name}
-                />
                 <TextInput
                     placeholder="Email"
                     style={styles.formInput}
@@ -100,6 +79,12 @@ export default function SignUpScreen({ navigation }: any) {
                 <TouchableOpacity
                     style={styles.postButton}
                     onPress={() => createPosting()}
+                >
+                    <Text style={styles.postText}>Log In</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.signupButton}
+                    onPress={() => navigation.navigate('TabOne')}
                 >
                     <Text style={styles.postText}>Sign Up</Text>
                 </TouchableOpacity>
@@ -156,6 +141,15 @@ const styles = StyleSheet.create({
         width: "30%",
         height: 45,
         backgroundColor: "#EB5757",
+        marginTop: 40,
+        borderRadius: 50,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    signupButton: {
+        width: "30%",
+        height: 45,
+        backgroundColor: "#ccc",
         marginTop: 40,
         borderRadius: 50,
         justifyContent: "center",
