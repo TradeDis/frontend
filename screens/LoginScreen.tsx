@@ -19,11 +19,10 @@ interface User {
 export default function LoginScreen({ route, navigation }: any) {
     const [response, setResponse] = useState({ status: "pending", message: "" });
 
-    const { message } = route.params || { message: '' };
-
     useEffect(() => {
+        const { message } = route.params || '';
         setResponse({ status: 'success', message })
-    }, [])
+    }, [route])
 
     const [user, setUser] = useState<User>({
         email: '',
