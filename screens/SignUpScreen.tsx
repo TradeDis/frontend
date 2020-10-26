@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
+import { API_URL } from "@env"
 import {
     StyleSheet,
     View,
@@ -32,7 +33,7 @@ export default function SignUpScreen({ navigation }: any) {
     const createPosting = () => {
         console.log(user);
         axios
-            .post("http://localhost:3000/api/v1/users", user)
+            .post(`${API_URL}/api/v1/users`, user)
             .then(resp => {
                 setResponse({ status: 'success', message: `User ${resp.data.username} Successfully created!` })
                 navigation.navigate('TabTwo', { message: `User ${resp.data.username} Successfully created! Plesae login here.` })

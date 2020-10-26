@@ -10,6 +10,7 @@ import {
     TouchableOpacity
 } from "react-native";
 import { useEffect } from "react";
+import { API_URL } from "@env"
 
 interface User {
     email: string;
@@ -18,7 +19,6 @@ interface User {
 
 export default function LoginScreen({ route, navigation }: any) {
     const [response, setResponse] = useState({ status: "pending", message: "" });
-
     useEffect(() => {
         const { message } = route.params || '';
         setResponse({ status: 'success', message })
@@ -30,9 +30,8 @@ export default function LoginScreen({ route, navigation }: any) {
     });
 
     const createPosting = () => {
-        console.log(user);
         axios
-            .post("http://localhost:3000/api/v1/users/login", user)
+            .post(`${API_URL}/api/v1/users/login`, user)
             .then(resp => {
                 const { result: isAuth, user } = resp.data
                 if (isAuth) {
