@@ -18,7 +18,7 @@ interface User {
     password: string;
 }
 
-export default function NewPostScreen() {
+export default function SignUpScreen() {
     const [user, setUser] = useState<User>({
         username: '',
         first_name: '',
@@ -29,7 +29,7 @@ export default function NewPostScreen() {
 
     const [response, setResponse] = useState({ status: "pending", message: "" });
 
-    const createPosting = () => {
+    const createUser = () => {
         console.log(user);
         axios
             .post("http://localhost:3000/api/v1/users", user)
@@ -98,7 +98,7 @@ export default function NewPostScreen() {
                 />
                 <TouchableOpacity
                     style={styles.postButton}
-                    onPress={() => createPosting()}
+                    onPress={() => createUser()}
                 >
                     <Text style={styles.postText}>Sign Up</Text>
                 </TouchableOpacity>
