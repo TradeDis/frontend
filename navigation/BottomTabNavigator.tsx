@@ -5,7 +5,7 @@ import * as React from "react";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
-import TabOneScreen from "../screens/TabOneScreen";
+import SignUp from "../screens/SignUpScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import NewPostScreen from "../screens/NewPostScreen";
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types";
@@ -22,7 +22,7 @@ export default function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="TabOne"
-        component={TabOneNavigator}
+        component={SignUp}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
