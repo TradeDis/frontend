@@ -39,7 +39,7 @@ export default function NewPostScreen() {
             .catch(err => {
                 const { errors } = err.response.data
                 console.log(errors)
-                const message = Object.values(errors).map((field: any) => field.message).join(' / ')
+                const message = Object.values(errors).map((field: any) => field.message).join(' \n ')
                 console.log(message)
                 setResponse({ status: 'error', message })
             });
