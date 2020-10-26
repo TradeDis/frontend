@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         shadowRadius: 6.27,
         
         elevation: 10,
-        borderRadius: 150/2,
+        borderRadius: 140/2,
         borderColor: 'white',
         borderWidth: 2.5
     },
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     feedList: {
         marginHorizontal: -50,
         marginTop: 10,
-        marginBottom: -10,
+        marginBottom: -40,
         backgroundColor: 'white'
     }
 
@@ -91,20 +91,20 @@ function Item( itemList:any ) {
 const getData = () => {
     return [
       {
-        id: 1, title: 'Ashley',
+        id: 1, title: 'John',
         description: 'I have eggs',
-        image_url: 'http://3.bp.blogspot.com/-jd5x3rFRLJc/VngrSWSHcjI/AAAAAAAAGJ4/ORPqZNDpQoY/s1600/Profile%2Bcircle.png'
+        image_url: '../assets/images/profileImage.png'
       },
       {
         id: 2,
-        title: 'Ashley',
+        title: 'John',
         description: 'I can trade for school supplies',
-        image_url: 'http://3.bp.blogspot.com/-jd5x3rFRLJc/VngrSWSHcjI/AAAAAAAAGJ4/ORPqZNDpQoY/s1600/Profile%2Bcircle.png'
+        image_url: '../assets/images/profileImage.png'
       },
       {
-        id: 3, title: 'Ashley',
+        id: 3, title: 'John',
         description: 'I need some sugar',
-        image_url: 'http://3.bp.blogspot.com/-jd5x3rFRLJc/VngrSWSHcjI/AAAAAAAAGJ4/ORPqZNDpQoY/s1600/Profile%2Bcircle.png'
+        image_url: '../assets/images/profileImage.png'
       }
     ]
 }
@@ -133,11 +133,11 @@ const UserProfileScreen = () => {
         </View>
         
         <View style={styles.profileImage}>
-        <Image source={require("../assets/images/profilePhoto.jpeg")} style={{width: 150, height: 150, borderRadius: 150/2}} >
+        <Image source={require("../assets/images/profileImage.png")} style={{width: 140, height: 140, borderRadius: 150/2}} >
             </Image>
         </View>
         <View style={styles.profileName}>
-        <Text style={{fontSize:35}}>Ashley Smith</Text>
+        <Text style={{fontSize:35}}>John Smith</Text>
         </View>
         <View>
             <View style={styles.feedButtonContainer}>
