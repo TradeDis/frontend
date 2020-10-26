@@ -13,7 +13,7 @@ import {
 interface Post {
   post_id: string;
   title: string;
-  trading: boolean;
+  requesting: boolean;
   content: string;
   location: string;
   created_by: object;
@@ -27,25 +27,27 @@ export default function NewPostScreen() {
   const [post, setPost] = useState<Post>({
     title: "",
     post_id: "",
-    trading: true,
+    requesting: true,
     content: "",
     location: "",
     created_by: {},
     date: new Date(),
-    status: "",
+    status: "active",
     tags: [],
     comments: []
   });
+  const [status, setStatus] = useState("pending");
 
   const createPosting = () => {
     console.log(post);
     axios
       .post("http://localhost:3000/api/v1/posts", post)
       .then(resp => {
-        console.log("Response: " + resp);
+        setStatus("success");
       })
       .catch(err => {
-        console.log("Error: " + err);
+        console.log(err);
+        setStatus("error");
       });
   };
 
@@ -84,19 +86,19 @@ export default function NewPostScreen() {
           value={post.location}
         />
         <View style={styles.switchContainer}>
-          <Text style={styles.switchOptions}>Requesting</Text>
+          <Text style={styles.switchOptions}>Trading</Text>
           <Switch
             style={styles.switch}
             trackColor={{ false: "#767577", true: "#EB5757" }}
             onValueChange={() =>
               setPost(prevState => ({
                 ...prevState,
-                trading: !prevState.trading
+                requestins: !prevState.requesting
               }))
             }
-            value={post.trading}
+            value={post.requesting}
           />
-          <Text style={styles.switchOptions}>Trading</Text>
+          <Text style={styles.switchOptions}>Requesting</Text>
         </View>
         <TouchableOpacity
           style={styles.postButton}
@@ -104,6 +106,9 @@ export default function NewPostScreen() {
         >
           <Text style={styles.postText}>Post!</Text>
         </TouchableOpacity>
+        {status === "success" && (
+          <Text style={styles.successMessage}>Post successfully created!</Text>
+        )}
       </View>
     </View>
   );
@@ -168,5 +173,9 @@ const styles = StyleSheet.create({
   },
   switchOptions: {
     fontSize: 15
+  },
+  successMessage: {
+    marginTop: 10,
+    color: "green"
   }
 });
