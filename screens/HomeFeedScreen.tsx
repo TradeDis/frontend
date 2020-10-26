@@ -4,7 +4,8 @@ import { StyleSheet, TextInput, Text, View, ScrollView } from "react-native";
 import { Posting } from "./../components/Posting";
 
 const postings = [
-  {
+    //Example 1 for a request post
+    {
     tags: ["bread", "toast"],
     title: "Sliced Bread",
     requesting: true,
@@ -22,6 +23,7 @@ const postings = [
     comments: [],
     post_id: "1"
   },
+  //Example 2 for a request post
   {
     tags: [],
     title: "Apples",
@@ -36,6 +38,7 @@ const postings = [
     status: "active",
     comments: []
   },
+  //Example 3 for a non-request post
   {
     title: "Printer",
     post_id: "10",
@@ -45,6 +48,7 @@ const postings = [
   }
 ];
 
+//all the visuals
 export default function HomeFeedScreen() {
   const [search, setSearch] = useState("");
 
