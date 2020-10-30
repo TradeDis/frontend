@@ -8,6 +8,9 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
+import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
+import UserInfoScreen from '../screens/UserInfoScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 
@@ -26,14 +29,21 @@ export default function BottomTabNavigator() {
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
         name="TabOne"
-        component={TabOneNavigator}
+        component={TabOneScreen}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+        }}
+      /> 
+      <BottomTab.Screen
+        name="TabTwo"
+        component={UserProfileScreen}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        <BottomTab.Screen
+        name="."
+        component={UserProfileSettingsScreen}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
@@ -57,11 +67,12 @@ function TabOneNavigator() {
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
-        name="TabOneScreen"
+        name="UserProfileScreen"
         component={TabOneScreen}
         options={{ title: "tab 1"}}
       />
     </TabOneStack.Navigator>
+    
   );
 }
 
@@ -81,9 +92,13 @@ function TabTwoNavigator() {
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
+        name="profile"
+        component={UserProfileScreen}
         options={{ headerTitle: 'Tab Two Title' }}
+      />
+        <TabTwoStack.Screen
+        name="settings"
+        component={UserProfileSettingsScreen}
       />
     </TabTwoStack.Navigator>
   );

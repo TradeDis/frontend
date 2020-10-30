@@ -13,5 +13,6 @@ export type TabOneParamList = {
 };
 
 export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+  profile: undefined;
+  Settings: undefined;
 };

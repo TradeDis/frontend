@@ -6,8 +6,6 @@ import { Component } from 'react';
 import { StyleSheet, SafeAreaView, Button, FlatList, TextInput, Dimensions, Image } from 'react-native';
 import { Text, View } from '../components/Themed';
 import CustomRow from '../components/CustomRowUserProfileScreen';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
 
 
 const styles = StyleSheet.create({
@@ -22,7 +20,7 @@ const styles = StyleSheet.create({
     },
     profileImage: {
         marginTop: -120,
-        backgroundColor: 'rgba(52, 52, 52, 0.8)',
+        backgroundColor: 'white',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -54,7 +52,7 @@ const styles = StyleSheet.create({
     separator: {
         borderBottomColor: 'lightgrey',
         borderBottomWidth: 1,
-        marginHorizontal: -30
+        marginHorizontal: -130
     },
     customListView: {
         width: 300,
@@ -110,7 +108,7 @@ const getData = () => {
 }
 
 //trying to use useState
-const UserProfileScreen = () => {
+const UserProfileScreen = ({navigation} : any) => {
     const [feed, setFeedVisible] = useState(true);
     const [userInfo, setUserInfoVisible] = useState(true);
     const [userReviews, setUserReviewsVisible] = useState(true);
@@ -121,17 +119,16 @@ const UserProfileScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
         <View style={{
-            backgroundColor : 'red',
+            backgroundColor : 'rgba(235, 87, 87, 1)',
             width: "100%",
             height: "30%",
             borderBottomLeftRadius: 30,
             borderBottomRightRadius: 30
         }}> 
         <View style={styles.settingsButton}>
-          <Button  title="Settings" onPress={()=> console.log("settings button clicked")} color='white'/>
+          <Button  title="Settings" onPress={()=> navigation.navigate('.')} color='white'/>
           </View>
         </View>
-        
         <View style={styles.profileImage}>
         <Image source={require("../assets/images/profileImage.png")} style={{width: 140, height: 140, borderRadius: 150/2}} >
             </Image>
@@ -143,12 +140,12 @@ const UserProfileScreen = () => {
             <View style={styles.feedButtonContainer}>
             <Button title="Feed" onPress={() => { reviews() }}/>
             </View>
-            <View style={styles.userInfoButtonContainer}>
+            {/* <View style={styles.userInfoButtonContainer}>
             <Button title="My info" onPress={() => setUserInfoVisible(true)}/>
-            </View>
-            <View style={styles.reviewsButtonContainer}>
+            </View> */}
+            {/* <View style={styles.reviewsButtonContainer}>
             <Button title="Reviews" onPress={() => setUserInfoVisible(true)}/>
-            </View>
+            </View> */}
             <View style={styles.separator}/>
             
         </View>
