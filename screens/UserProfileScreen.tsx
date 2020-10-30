@@ -140,12 +140,12 @@ const UserProfileScreen = ({navigation} : any) => {
             <View style={styles.feedButtonContainer}>
             <Button title="Feed" onPress={() => { reviews() }}/>
             </View>
-            {/* <View style={styles.userInfoButtonContainer}>
+            <View style={styles.userInfoButtonContainer}>
             <Button title="My info" onPress={() => setUserInfoVisible(true)}/>
-            </View> */}
-            {/* <View style={styles.reviewsButtonContainer}>
+            </View> 
+             <View style={styles.reviewsButtonContainer}>
             <Button title="Reviews" onPress={() => setUserInfoVisible(true)}/>
-            </View> */}
+            </View>
             <View style={styles.separator}/>
             
         </View>
