@@ -10,7 +10,7 @@ import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
-import UserInfoScreen from '../screens/UserInfoScreen';
+import UserInfoScreen from '../components/UserInfoScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 

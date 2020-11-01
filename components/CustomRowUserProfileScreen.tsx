@@ -94,6 +94,4 @@ const CustomRow = (props: any) => {
     )
 }
 
-
-
 export default CustomRow;

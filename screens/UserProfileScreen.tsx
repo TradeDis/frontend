@@ -14,10 +14,11 @@ import {
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import CustomRow from "../components/CustomRowUserProfileScreen";
+import UserInfoScreen from "../components/UserInfoScreen";
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: "rgba(242, 242, 242, 1)",
     flex: 1,
     alignItems: "center"
   },
@@ -35,57 +36,49 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.34,
     shadowRadius: 6.27,
-
     elevation: 10,
     borderRadius: 140 / 2,
     borderColor: "white",
     borderWidth: 2.5
   },
   profileName: {
-    backgroundColor: "rgba(52, 52, 52, 0.0)",
+    backgroundColor: "rgba(242, 242, 242, 1)",
     marginTop: 12
   },
-  feedButtonContainer: {
-    marginTop: 10
+  myInfoButtonContainer: {
+    position: 'absolute',
+    left: 100,
+    backgroundColor: "rgba(242, 242, 242, 1)",
   },
-  userInfoButtonContainer: {
-    marginTop: -36.8,
-    marginLeft: 250
+  feedButtonContainer: {
+    backgroundColor: "rgba(242, 242, 242, 1)",
   },
   reviewsButtonContainer: {
-    position: "absolute",
-    marginTop: 10
+    backgroundColor: "rgba(242, 242, 242, 1)",
+    position: 'absolute',
+    right: 100,
   },
   separator: {
     borderBottomColor: "lightgrey",
     borderBottomWidth: 1,
-    marginHorizontal: -130
+    marginHorizontal: -120
   },
   customListView: {
     width: 300,
     marginBottom: 380,
-    backgroundColor: "white"
+    backgroundColor: "rgba(242, 242, 242, 1)",
   },
   feedList: {
     marginHorizontal: -50,
     marginTop: 10,
     marginBottom: -40,
-    backgroundColor: "white"
+    backgroundColor: "rgba(52, 52, 52, 0.0)"
+  },
+  userInfo: {
+    backgroundColor: "rgba(52, 52, 52, 0.0)"
+
   }
 });
-
-//using onPress to try to open these views that these fucntions return, but no luck
-function reviews() {
-  return <View />;
-}
-
-function feedTab() {
-  return <View />;
-}
-
-function Item(itemList: any) {
-  return <View style={styles.container}>data={itemList}</View>;
-}
 
 //random data to test the listview
 const getData = () => {
@@ -116,12 +109,6 @@ const UserProfileScreen = ({ navigation }: any) => {
   const [feed, setFeedVisible] = useState(true);
   const [userInfo, setUserInfoVisible] = useState(false); //setting intial value to be false so we see feed
   const [userReviews, setUserReviewsVisible] = useState(false); //setting intial value to be false so we see feed
-  //   const toggleFeedSwitch = () =>
-  //     setFeedVisible(previousState => !previousState);
-  //   const toggleReviewsSwitch = () =>
-  //     setUserReviewsVisible(previousState => !previousState);
-  //   const toggleUserInfoSwitch = () =>
-  //     setUserInfoVisible(previousState => !previousState);
 
   const viewFeed = () => {
     setFeedVisible(true);
@@ -170,38 +157,48 @@ const UserProfileScreen = ({ navigation }: any) => {
         <Text style={{ fontSize: 35 }}>John Smith</Text>
       </View>
       <View>
-        <View style={styles.feedButtonContainer}>
-          <Button title="Feed" onPress={() => viewFeed()} />
-        </View>
-        <View style={styles.userInfoButtonContainer}>
+        <View style={styles.myInfoButtonContainer}>
           <Button title="My info" onPress={() => viewInfo()} />
         </View>
         <View style={styles.reviewsButtonContainer}>
           <Button title="Reviews" onPress={() => viewReviews()} />
         </View>
+        <View style={styles.feedButtonContainer}>
+          <Button title="Feed" onPress={() => viewFeed()} />
+        </View>
         <View style={styles.separator} />
       </View>
       <SafeAreaView>
         {//shows when feed is true
-        feed && (
-          <View style={styles.customListView}>
-            <FlatList
-              style={styles.feedList}
-              data={getData()}
-              renderItem={({ item }) => (
-                <CustomRow
-                  title={item.title}
-                  description={item.description}
-                  image_url={item.image_url}
-                />
-              )}
-            />
-          </View>
-        )}
+          feed && (
+            <View style={styles.customListView}>
+              <FlatList
+                style={styles.feedList}
+                data={getData()}
+                renderItem={({ item }) => (
+                  <CustomRow
+                    title={item.title}
+                    description={item.description}
+                    image_url={item.image_url}
+                  />
+                )}
+              />
+            </View>
+          )}
         {// shows when userInfo is true
-        userInfo && <Text>User info component</Text>}
+          userInfo && (
+            <View style={styles.userInfo}>
+              <UserInfoScreen
+                usernameTitle="username"
+                emailTitle="email"
+                passwordTitle="password"
+                addressTitle="address"
+              >
+              </UserInfoScreen>
+            </View>
+          )}
         {//shows when userReviews is true
-        userReviews && <Text>User review component</Text>}
+          userReviews && <Text>User review component</Text>}
       </SafeAreaView>
     </SafeAreaView>
   );
