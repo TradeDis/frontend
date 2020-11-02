@@ -1,7 +1,7 @@
 //User profile Screen, includes Reviews, Feed, User info, a Settings button in top right corner and Back button on the left
 
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Component } from "react";
 import {
   StyleSheet,
@@ -15,6 +15,8 @@ import {
 import { Text, View } from "../components/Themed";
 import CustomRow from "../components/CustomRowUserProfileScreen";
 import UserInfoScreen from "../components/UserInfoScreen";
+import UserReviewsScreen from "../components/ReviewsUserProfileScreen"
+import axios from "axios";
 
 const styles = StyleSheet.create({
   container: {
@@ -104,6 +106,20 @@ const getData = () => {
   ];
 };
 
+interface User {
+  user_id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  address: string;
+  avatar: string;
+  reviews: []
+}
+
+
+
 //trying to use useState
 const UserProfileScreen = ({ navigation }: any) => {
   const [feed, setFeedVisible] = useState(true);
@@ -127,6 +143,28 @@ const UserProfileScreen = ({ navigation }: any) => {
     setUserInfoVisible(false);
     setUserReviewsVisible(true);
   };
+
+  const [user, setUser] = useState<User>();
+  const [status, setStatus] = useState("pending");
+
+  useEffect(() => {
+    getUserData();
+  }, );
+
+  const getUserData = () => {
+    axios
+      .get("http://localhost:3000/api/v1/users/24")
+      .then(resp => {
+        setUser(resp.data)
+       
+      })
+      .catch(err => {
+        console.log(err);
+        setStatus("error")
+      })
+  }
+
+ 
 
   return (
     <SafeAreaView style={styles.container}>
@@ -188,17 +226,31 @@ const UserProfileScreen = ({ navigation }: any) => {
         {// shows when userInfo is true
           userInfo && (
             <View style={styles.userInfo}>
-              <UserInfoScreen
-                usernameTitle="username"
-                emailTitle="email"
-                passwordTitle="password"
-                addressTitle="address"
-              >
-              </UserInfoScreen>
+                   <UserInfoScreen
+                   user={user}
+                   usernameTitle={user?.username}
+                 >
+                 </UserInfoScreen>
+            
             </View>
           )}
         {//shows when userReviews is true
-          userReviews && <Text>User review component</Text>}
+          userReviews && (
+            <View style={styles.customListView}>
+            <FlatList
+              style={styles.feedList}
+              data={getData()}
+              renderItem={({ item }) => (
+                <UserReviewsScreen
+                  ratings={3}
+                  title={item.title}
+                  description={item.description}
+                  image_url={item.image_url}
+                />
+              )}
+            />
+          </View>
+          )}
       </SafeAreaView>
     </SafeAreaView>
   );

@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { Rating, AirbnbRating } from 'react-native-ratings';
+
 
 
 const styles = StyleSheet.create({
@@ -40,20 +42,7 @@ const styles = StyleSheet.create({
     },
     description: {
         fontSize: 13,
-        marginTop:10
-        
-    },
-    photo: {
-        marginLeft: -12,
-        height: 50,
-        width: 50,
-        borderRadius: 50/2,
-        shadowColor: "black",
-        shadowOpacity: 0.3,
-        shadowOffset: {
-            width: 0,
-            height: 10,
-        },
+        marginTop:10    
     },
     timeContainer: {
         marginRight: -45,
@@ -68,14 +57,20 @@ const styles = StyleSheet.create({
     },
     requestText: {
         color: 'grey'
+    },
+    container_ratings: {
+        width:'50%'
     }
 });
 
-const CustomRow = (props: any) => {
+const ReviewRow = (props: any) => {
     return (
         <View style={styles.container}>
-        <Image source={require("../assets/images/profileImage.png")} style={styles.photo} />
         <View style={styles.container_text}>
+            <View style={styles.container_ratings}>
+            <AirbnbRating defaultRating={props.ratings} isDisabled={true} showRating={false} size={15}/>
+            </View>
+                
             <Text style={styles.title}>
                 {props.title}
             </Text>
@@ -93,4 +88,4 @@ const CustomRow = (props: any) => {
     )
 }
 
-export default CustomRow;
+export default ReviewRow;
