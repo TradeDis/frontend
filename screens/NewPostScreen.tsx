@@ -38,6 +38,7 @@ export default function NewPostScreen({ navigation }) {
   });
   const [status, setStatus] = useState("pending");
   const [displayMessage, setDisplayMessage] = useState("");
+  const [tagString, setTagString] = useState("");
 
   const createPosting = () => {
     setStatus("pending");
@@ -46,8 +47,9 @@ export default function NewPostScreen({ navigation }) {
       setDisplayMessage("One or more required fields missing");
       return;
     }
+    convertTagString();
     axios
-      .post("http://192.168.2.91:3000/api/v1/posts", post)
+      .post("http://localhost:3000/api/v1/posts", post)
       .then(resp => {
         setStatus("success");
         setDisplayMessage("Successfully created post");
@@ -58,6 +60,18 @@ export default function NewPostScreen({ navigation }) {
         setStatus("error");
         setDisplayMessage(err);
       });
+  };
+
+  const handleTagStringChange = (tags: string) => {
+    setTagString(tags);
+  };
+
+  const convertTagString = () => {
+    const tags = tagString.toLowerCase().split(",");
+    for (let i = 0; i < tags.length; i++) {
+      tags[i] = tags[i].trim();
+    }
+    setPost(prevState => ({ ...prevState, tags: tags }));
   };
 
   return (
@@ -95,6 +109,11 @@ export default function NewPostScreen({ navigation }) {
             setPost(prevState => ({ ...prevState, location: location }))
           }
           value={post.location}
+        />
+        <TextInput
+          placeholder="Tags separated by commas (optional)"
+          style={styles.formInput}
+          onChangeText={tags => handleTagStringChange(tags)}
         />
         <View style={styles.switchContainer}>
           <Text style={styles.switchOptions}>Trading</Text>
