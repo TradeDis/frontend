@@ -23,7 +23,7 @@ interface Post {
   comments: object[];
 }
 
-export default function NewPostScreen() {
+export default function NewPostScreen({ navigation }) {
   const [post, setPost] = useState<Post>({
     title: "",
     post_id: "",
@@ -37,28 +37,39 @@ export default function NewPostScreen() {
     comments: []
   });
   const [status, setStatus] = useState("pending");
+  const [displayMessage, setDisplayMessage] = useState("");
 
   const createPosting = () => {
-    console.log(post);
+    setStatus("pending");
+    if (!post.title || !post.content || !post.location) {
+      setStatus("error");
+      setDisplayMessage("One or more required fields missing");
+      return;
+    }
     axios
-      .post("http://localhost:3000/api/v1/posts", post)
+      .post("http://192.168.2.91:3000/api/v1/posts", post)
       .then(resp => {
         setStatus("success");
+        setDisplayMessage("Successfully created post");
+        //navigate back to homefeed after success
+        navigation.navigate("HomeFeed");
       })
       .catch(err => {
-        console.log(err);
         setStatus("error");
+        setDisplayMessage(err);
       });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <View style={styles.topElements}>
+        <TouchableOpacity onPress={() => navigation.navigate("HomeFeed")}>
           <Text style={styles.topSecondaryText}>Back</Text>
+        </TouchableOpacity>
+        <View>
           <Text style={styles.title}>Post</Text>
-          <Text style={styles.topSecondaryText}>Camera</Text>
         </View>
+        <Text style={styles.topSecondaryText}>Camera</Text>
       </View>
       <View style={styles.form}>
         <TextInput
@@ -93,7 +104,7 @@ export default function NewPostScreen() {
             onValueChange={() =>
               setPost(prevState => ({
                 ...prevState,
-                requestins: !prevState.requesting
+                requesting: !prevState.requesting
               }))
             }
             value={post.requesting}
@@ -106,8 +117,15 @@ export default function NewPostScreen() {
         >
           <Text style={styles.postText}>Post!</Text>
         </TouchableOpacity>
-        {status === "success" && (
-          <Text style={styles.successMessage}>Post successfully created!</Text>
+        {(status === "success" || status === "error") && (
+          <Text
+            style={{
+              marginTop: 10,
+              color: status === "error" ? "red" : "green"
+            }}
+          >
+            {displayMessage}
+          </Text>
         )}
       </View>
     </View>
@@ -116,18 +134,12 @@ export default function NewPostScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
+    flex: 1
   },
   top: {
     flex: 2,
-    width: "100%",
-    backgroundColor: "#EB5757",
-    justifyContent: "center"
-  },
-  topElements: {
     flexDirection: "row",
+    backgroundColor: "#EB5757",
     justifyContent: "space-evenly",
     alignItems: "center"
   },
@@ -173,9 +185,5 @@ const styles = StyleSheet.create({
   },
   switchOptions: {
     fontSize: 15
-  },
-  successMessage: {
-    marginTop: 10,
-    color: "green"
   }
 });
