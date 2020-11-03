@@ -1,16 +1,27 @@
 import * as React from "react";
-import { StyleSheet, TextInput, Text, View } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  Text,
+  View,
+  TouchableOpacity
+} from "react-native";
 
-export function Posting(props: any) {
+export function Posting({ post, navigation }) {
   return (
-    <View style={styles.postingContainer}>
-      <Text style={styles.postTitle}>{props.post.title}</Text>
-      <Text style={styles.postContent}>{props.post.content}</Text>
-      <Text style={styles.location}>{props.post.location}</Text>
-      <Text style={styles.postType}>
-        {props.post.requesting ? "Request" : "Trade"}
-      </Text>
-    </View>
+    // Create PostPage in nav which accepts post_id data payload
+    <TouchableOpacity
+      onPress={() => navigation.navigate("PostPage", { post_id: post.post_id })}
+    >
+      <View style={styles.postingContainer}>
+        <Text style={styles.postTitle}>{post.title}</Text>
+        <Text style={styles.postContent}>{post.content}</Text>
+        <Text style={styles.location}>{post.location}</Text>
+        <Text style={styles.postType}>
+          {post.requesting ? "Request" : "Trade"}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 }
 

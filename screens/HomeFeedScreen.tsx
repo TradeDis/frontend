@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Posting } from "./../components/Posting";
 import axios from "axios";
+import BottomNavigation from "../components/BottomNavigation";
 
 interface Post {
   post_id: string;
@@ -24,7 +25,7 @@ interface Post {
   comments: object[];
 }
 
-export default function HomeFeedScreen() {
+export default function HomeFeedScreen({ navigation }) {
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
@@ -34,11 +35,9 @@ export default function HomeFeedScreen() {
   }, []);
 
   const fetchPosts = () => {
-    console.log("here");
     axios
-      .get("http://192.168.2.91:3000/api/v1/posts")
+      .get("http://localhost:3000/api/v1/posts")
       .then(resp => {
-        //console.log(resp.data);
         setPosts(resp.data);
       })
       .catch(err => {
@@ -73,7 +72,11 @@ export default function HomeFeedScreen() {
             <View style={styles.postings}>
               <ScrollView horizontal={true}>
                 {posts.map(post => (
-                  <Posting key={post.post_id} post={post}></Posting>
+                  <Posting
+                    key={post.post_id}
+                    post={post}
+                    navigation={navigation}
+                  ></Posting>
                 ))}
               </ScrollView>
             </View>
@@ -89,20 +92,18 @@ export default function HomeFeedScreen() {
             <View style={styles.postings}>
               <ScrollView horizontal={true}>
                 {posts.map(post => (
-                  <Posting key={post.post_id} post={post}></Posting>
+                  <Posting
+                    key={post.post_id}
+                    post={post}
+                    navigation={navigation}
+                  ></Posting>
                 ))}
               </ScrollView>
             </View>
           )}
         </View>
       </View>
-      <View style={styles.nav}>
-        <TouchableOpacity>
-          <View style={styles.circle}>
-            <Text style={styles.plusSign}>+</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+      <BottomNavigation navigation={navigation}></BottomNavigation>
     </View>
   );
 }
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   feed: {
-    flex: 6
+    flex: 7
   },
   newPostingsContainer: {
     margin: 15
@@ -157,20 +158,5 @@ const styles = StyleSheet.create({
   },
   postings: {
     flexDirection: "row"
-  },
-  nav: {
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  circle: {
-    backgroundColor: "#EB5757",
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    alignItems: "center"
-  },
-  plusSign: {
-    fontSize: 75,
-    color: "white"
   }
 });
