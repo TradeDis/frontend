@@ -99,15 +99,17 @@ export default function NewPostScreen({ navigation }) {
           }
           value={post.location}
         />
-        <Tags
-          style={styles.tagsInput}
-          initialText="Tags separated by commas"
-          initialTags={[]}
-          createTagOnString={[","]}
-          onChangeTags={tags =>
-            setPost(prevState => ({ ...prevState, tags: tags }))
-          }
-        />
+        <View style={styles.tagsContainer}>
+          <Text style={styles.tagsText}>Tags separated by commas</Text>
+          <Tags
+            style={styles.tagsInput}
+            initialTags={[]}
+            createTagOnString={[","]}
+            onChangeTags={tags =>
+              setPost(prevState => ({ ...prevState, tags: tags }))
+            }
+          />
+        </View>
         <View style={styles.switchContainer}>
           <Text style={styles.switchOptions}>Trading</Text>
           <Switch
@@ -198,7 +200,15 @@ const styles = StyleSheet.create({
   switchOptions: {
     fontSize: 15
   },
+  tagsContainer: {
+    margin: 15,
+    width: "100%"
+  },
+  tagsText: {
+    marginLeft: 20,
+    marginBottom: 5
+  },
   tagsInput: {
-    margin: 15
+    marginHorizontal: 15
   }
 });

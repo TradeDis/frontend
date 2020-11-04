@@ -31,12 +31,16 @@ export default function HomeFeedScreen({ navigation }) {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    //whenever screen is focused
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchPosts();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const fetchPosts = () => {
     axios
-      .get("http://localhost:3000/api/v1/posts")
+      .get(`${process.env.API_URL}/api/v1/posts`)
       .then(resp => {
         setPosts(resp.data);
       })
