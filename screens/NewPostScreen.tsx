@@ -7,8 +7,10 @@ import {
   Text,
   TextInput,
   Switch,
-  TouchableOpacity
+  TouchableOpacity,
+  Keyboard
 } from "react-native";
+import Tags from "react-native-tags";
 
 interface Post {
   post_id: string;
@@ -38,16 +40,15 @@ export default function NewPostScreen({ navigation }) {
   });
   const [status, setStatus] = useState("pending");
   const [displayMessage, setDisplayMessage] = useState("");
-  const [tagString, setTagString] = useState("");
 
   const createPosting = () => {
+    Keyboard.dismiss();
     setStatus("pending");
     if (!post.title || !post.content || !post.location) {
       setStatus("error");
       setDisplayMessage("One or more required fields missing");
       return;
     }
-    convertTagString();
     axios
       .post("http://localhost:3000/api/v1/posts", post)
       .then(resp => {
@@ -60,18 +61,6 @@ export default function NewPostScreen({ navigation }) {
         setStatus("error");
         setDisplayMessage(err);
       });
-  };
-
-  const handleTagStringChange = (tags: string) => {
-    setTagString(tags);
-  };
-
-  const convertTagString = () => {
-    const tags = tagString.toLowerCase().split(",");
-    for (let i = 0; i < tags.length; i++) {
-      tags[i] = tags[i].trim();
-    }
-    setPost(prevState => ({ ...prevState, tags: tags }));
   };
 
   return (
@@ -110,10 +99,14 @@ export default function NewPostScreen({ navigation }) {
           }
           value={post.location}
         />
-        <TextInput
-          placeholder="Tags separated by commas (optional)"
-          style={styles.formInput}
-          onChangeText={tags => handleTagStringChange(tags)}
+        <Tags
+          style={styles.tagsInput}
+          initialText="Tags separated by commas"
+          initialTags={[]}
+          createTagOnString={[","]}
+          onChangeTags={tags =>
+            setPost(prevState => ({ ...prevState, tags: tags }))
+          }
         />
         <View style={styles.switchContainer}>
           <Text style={styles.switchOptions}>Trading</Text>
@@ -204,5 +197,8 @@ const styles = StyleSheet.create({
   },
   switchOptions: {
     fontSize: 15
+  },
+  tagsInput: {
+    margin: 15
   }
 });
