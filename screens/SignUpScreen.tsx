@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { API_URL } from "@env"
+
 import {
     StyleSheet,
     View,
@@ -30,7 +31,7 @@ export default function SignUpScreen({ navigation }: any) {
 
     const [response, setResponse] = useState({ status: "pending", message: "" });
 
-    const createPosting = () => {
+    const createUser = () => {
         console.log(user);
         axios
             .post(`${API_URL}/api/v1/users`, user)
@@ -41,7 +42,7 @@ export default function SignUpScreen({ navigation }: any) {
             .catch(err => {
                 const { errors } = err.response.data
                 console.log(errors)
-                const message = Object.values(errors).map((field: any) => field.message).join(' / ')
+                const message = Object.values(errors).map((field: any) => field.message).join(' \n ')
                 console.log(message)
                 setResponse({ status: 'error', message })
             });
@@ -100,7 +101,7 @@ export default function SignUpScreen({ navigation }: any) {
                 />
                 <TouchableOpacity
                     style={styles.postButton}
-                    onPress={() => createPosting()}
+                    onPress={() => createUser()}
                 >
                     <Text style={styles.postText}>Sign Up</Text>
                 </TouchableOpacity>
