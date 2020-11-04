@@ -1,20 +1,22 @@
-import { Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import * as React from "react";
 
-
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import Colors from "../constants/Colors";
+import useColorScheme from "../hooks/useColorScheme";
+import SignUp from "../screens/SignUpScreen";
+import Login from "../screens/LoginScreen";
+import NewPostScreen from "../screens/NewPostScreen";
+import TabOneScreen from "../screens/TabOneScreen";
+import TabTwoScreen from "../screens/TabTwoScreen";
+import HomeFeedScreen from "../screens/HomeFeedScreen";
 import UserProfileScreen from '../screens/UserProfileScreen';
-import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
-import UserInfoScreen from '../components/UserInfoScreen';
+// import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 
-import { StyleSheet, View, Button, TouchableWithoutFeedback} from 'react-native';
+import { StyleSheet, View, Button, TouchableWithoutFeedback } from 'react-native';
 import { ScreenStackHeaderRightView } from 'react-native-screens';
 import Navigation from '.';
 
@@ -25,27 +27,34 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+      initialRouteName="TabTwo"
+      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+    >
       <BottomTab.Screen
         name="TabOne"
-        component={TabOneScreen}
+        component={SignUp}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
-        }}
-      /> 
-      <BottomTab.Screen
-        name="TabTwo"
-        component={UserProfileScreen}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
         }}
       />
-        <BottomTab.Screen
-        name="."
-        component={UserProfileSettingsScreen}
+      <BottomTab.Screen
+        name="TabTwo"
+        component={Login}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="HomeFeed"
+        component={HomeFeedScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
         }}
       />
     </BottomTab.Navigator>
@@ -67,17 +76,16 @@ function TabOneNavigator() {
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
+        options={{ title: "tab 1" }}
         name="UserProfileScreen"
-        component={TabOneScreen}
-        options={{ title: "tab 1"}}
+        component={UserProfileScreen}
       />
     </TabOneStack.Navigator>
-    
   );
 }
 
 const styles = StyleSheet.create({
-  leftBarButton: { 
+  leftBarButton: {
     color: 'white',
     marginLeft: 12
 
@@ -92,13 +100,9 @@ function TabTwoNavigator() {
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
-        name="profile"
-        component={UserProfileScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
-      />
-        <TabTwoStack.Screen
-        name="settings"
-        component={UserProfileSettingsScreen}
+        name="TabTwoScreen"
+        component={TabTwoScreen}
+        options={{ headerTitle: "Tab Two Title" }}
       />
     </TabTwoStack.Navigator>
   );
