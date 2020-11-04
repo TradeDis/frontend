@@ -50,7 +50,7 @@ export default function NewPostScreen({ navigation }) {
       return;
     }
     axios
-      .post("http://localhost:3000/api/v1/posts", post)
+      .post(`${process.env.API_URL}/api/v1/posts`, post)
       .then(resp => {
         setStatus("success");
         setDisplayMessage("Successfully created post");
