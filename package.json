@@ -33,6 +33,7 @@
     "react-native-gesture-handler": "~1.7.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
+    "react-native-tags": "^2.2.0",
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.13.12"
   },
