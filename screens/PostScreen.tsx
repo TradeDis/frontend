@@ -32,9 +32,12 @@ export default function PostScreen({ navigation, post }) {
           <Text style={styles.type}>
             {mockPost.requesting ? "Request" : "Trade"}
           </Text>
-          {/* {mockPost.tags.map((tag, index) => (
-            <Tag></Tag>
-          ))} */}
+          <Text style={styles.tagsText}>Tags:</Text>
+          <View style={styles.tags}>
+            {mockPost.tags.map((tag, index) => (
+              <Tag tag={tag}></Tag>
+            ))}
+          </View>
           <Text style={styles.location}>{mockPost.location}</Text>
           <Text style={styles.date}>
             Posted on {mockPost.date.toLocaleString()}
@@ -76,7 +79,7 @@ const styles = StyleSheet.create({
     fontSize: 17.5
   },
   basicInfo: {
-    flex: 3,
+    flex: 3.5,
     margin: 15,
     borderBottomColor: "#ccc",
     borderBottomWidth: 2
@@ -96,22 +99,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   type: {
-    fontSize: 22.5,
-    marginBottom: 10
+    fontSize: 22.5
+  },
+  tags: {
+    flexDirection: "row",
+    marginVertical: 10
+  },
+  tagsText: {
+    fontSize: 15
   },
   date: {
-    fontSize: 17.5
+    fontSize: 15
   },
   location: {
-    fontSize: 17.5
+    fontSize: 15
   },
   proposeContainer: {
-    alignItems: "center"
+    alignItems: "center",
+    marginVertical: 10
   },
   propose: {
-    width: "80%",
-    height: 50,
-    borderRadius: 25,
+    width: "90%",
+    height: 40,
+    borderRadius: 20,
     backgroundColor: "#EB5757",
     justifyContent: "center",
     alignItems: "center"
