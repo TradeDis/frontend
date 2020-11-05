@@ -11,6 +11,7 @@ import NewPostScreen from "../screens/NewPostScreen";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import HomeFeedScreen from "../screens/HomeFeedScreen";
+import PostScreen from "../screens/PostScreen";
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -44,6 +45,15 @@ export default function BottomTabNavigator() {
       <BottomTab.Screen
         name="HomeFeed"
         component={HomeFeedScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="Post"
+        component={PostScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />

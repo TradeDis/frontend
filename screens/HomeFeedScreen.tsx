@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity
 } from "react-native";
-import { Posting } from "./../components/Posting";
+import { Posting } from "../components/Posting";
 import axios from "axios";
 import BottomNavigation from "../components/BottomNavigation";
 
@@ -36,7 +36,7 @@ export default function HomeFeedScreen({ navigation }) {
 
   const fetchPosts = () => {
     axios
-      .get("http://localhost:3000/api/v1/posts")
+      .get(`${process.env.API_URL}/api/v1/posts`)
       .then(resp => {
         setPosts(resp.data);
       })
