@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Tag from "../components/Tag";
 
 export default function PostScreen({ navigation, post }) {
+  //Mock post for testing & implementation purposes, use passed in post in future
   const mockPost = {
     title: "In Need of Pencils",
     content:
@@ -48,8 +49,24 @@ export default function PostScreen({ navigation, post }) {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.details}></View>
-        <View style={styles.userInfo}></View>
+        <View style={styles.details}>
+          <Text style={styles.detailsText}>Details</Text>
+          <Text style={styles.content}>{mockPost.content}</Text>
+        </View>
+        <View style={styles.userInfo}>
+          <Text style={styles.userInfoText}>User Information</Text>
+          <View style={styles.userDetails}>
+            <View style={styles.avatar}>{/*avatar will be put here*/}</View>
+            <View style={styles.user}>
+              <Text style={styles.fullName}>
+                {mockPost.created_by.fullname}
+              </Text>
+              <Text style={styles.username}>
+                {mockPost.created_by.username}
+              </Text>
+            </View>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -87,12 +104,14 @@ const styles = StyleSheet.create({
   details: {
     flex: 4,
     margin: 15,
+    marginTop: 0,
     borderBottomColor: "#ccc",
     borderBottomWidth: 2
   },
   userInfo: {
     flex: 1,
-    margin: 15
+    margin: 15,
+    marginTop: 0
   },
   postTitle: {
     fontSize: 30,
@@ -129,5 +148,39 @@ const styles = StyleSheet.create({
   proposeText: {
     fontSize: 17.5,
     color: "white"
+  },
+  detailsText: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginBottom: 10
+  },
+  content: {
+    fontSize: 17.5
+  },
+  userInfoText: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginBottom: 10
+  },
+  userDetails: {
+    flexDirection: "row"
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#EB5757",
+    borderColor: "black",
+    borderWidth: 2
+  },
+  user: {
+    marginLeft: 10
+  },
+  fullName: {
+    fontSize: 17.5,
+    fontWeight: "bold"
+  },
+  username: {
+    fontSize: 15
   }
 });
