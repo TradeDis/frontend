@@ -33,15 +33,24 @@ export default function PostScreen({ navigation, post }) {
           <Text style={styles.type}>
             {mockPost.requesting ? "Request" : "Trade"}
           </Text>
-          <Text style={styles.tagsText}>Tags:</Text>
-          <View style={styles.tags}>
-            {mockPost.tags.map((tag, index) => (
-              <Tag tag={tag}></Tag>
-            ))}
-          </View>
-          <Text style={styles.location}>{mockPost.location}</Text>
+          {mockPost.tags && mockPost.tags.length > 0 && (
+            <View>
+              <Text style={styles.tagsText}>Tags:</Text>
+              <View style={styles.tags}>
+                {mockPost.tags.map((tag, index) => (
+                  <Tag tag={tag}></Tag>
+                ))}
+              </View>
+            </View>
+          )}
+
+          <Text style={styles.location}>
+            {mockPost.location ? mockPost.location : "No location available"}
+          </Text>
           <Text style={styles.date}>
-            Posted on {mockPost.date.toLocaleString()}
+            {mockPost.date
+              ? "Posted on " + mockPost.date.toLocaleString()
+              : "No date available"}
           </Text>
           <View style={styles.proposeContainer}>
             <TouchableOpacity style={styles.propose}>
@@ -125,6 +134,10 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   tagsText: {
+    fontSize: 15
+  },
+  noTags: {
+    marginVertical: 10,
     fontSize: 15
   },
   date: {
