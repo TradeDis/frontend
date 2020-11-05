@@ -70,7 +70,7 @@ export default function NewPostScreen({ navigation }) {
           <Text style={styles.topSecondaryText}>Back</Text>
         </TouchableOpacity>
         <View>
-          <Text style={styles.title}>Post</Text>
+          <Text style={styles.title}>Create Post</Text>
         </View>
         <Text style={styles.topSecondaryText}>Camera</Text>
       </View>
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   title: {
-    fontSize: 35,
+    fontSize: 30,
     color: "#fff"
   },
   topSecondaryText: {
