@@ -10,7 +10,7 @@ import {
     TouchableOpacity
 } from "react-native";
 import { useEffect } from "react";
-import { API_URL } from "@env"
+import { API_URL } from "@env";
 
 interface User {
     email: string;

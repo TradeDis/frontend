@@ -17,6 +17,7 @@ import CustomRow from "../components/CustomRowUserProfileScreen";
 import UserInfoScreen from "../components/UserInfoScreen";
 import UserReviewsScreen from "../components/ReviewsUserProfileScreen"
 import axios from "axios";
+import { API_URL } from "@env";
 
 const styles = StyleSheet.create({
   container: {
@@ -149,14 +150,14 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     getUserData();
-  }, );
+  });
 
   const getUserData = () => {
     axios
-      .get("http://localhost:3000/api/v1/users/24")
+      .get(`${API_URL}/api/v1/users/24`)
       .then(resp => {
         setUser(resp.data)
-       
+
       })
       .catch(err => {
         console.log(err);
@@ -164,7 +165,7 @@ const UserProfileScreen = ({ navigation }: any) => {
       })
   }
 
- 
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -226,30 +227,29 @@ const UserProfileScreen = ({ navigation }: any) => {
         {// shows when userInfo is true
           userInfo && (
             <View style={styles.userInfo}>
-                   <UserInfoScreen
-                   user={user}
-                   usernameTitle={user?.username}
-                 >
-                 </UserInfoScreen>
-            
+              <UserInfoScreen
+                user={user}
+                usernameTitle={user?.username}
+              >
+              </UserInfoScreen>
             </View>
           )}
         {//shows when userReviews is true
           userReviews && (
             <View style={styles.customListView}>
-            <FlatList
-              style={styles.feedList}
-              data={getData()}
-              renderItem={({ item }) => (
-                <UserReviewsScreen
-                  ratings={3}
-                  title={item.title}
-                  description={item.description}
-                  image_url={item.image_url}
-                />
-              )}
-            />
-          </View>
+              <FlatList
+                style={styles.feedList}
+                data={getData()}
+                renderItem={({ item }) => (
+                  <UserReviewsScreen
+                    ratings={3}
+                    title={item.title}
+                    description={item.description}
+                    image_url={item.image_url}
+                  />
+                )}
+              />
+            </View>
           )}
       </SafeAreaView>
     </SafeAreaView>

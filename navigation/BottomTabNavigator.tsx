@@ -41,7 +41,34 @@ export default function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabTwo"
+        component={UserProfileScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="HomseFeed"
+        component={HomeFeedScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="HomeeFeed"
         component={Login}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="HomaeFeed"
+        component={HomeFeedScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />

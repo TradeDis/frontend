@@ -11,7 +11,7 @@ import {
 import { Posting } from "./../components/Posting";
 import axios from "axios";
 import BottomNavigation from "../components/BottomNavigation";
-
+import { API_URL } from "@env";
 interface Post {
   post_id: string;
   title: string;
@@ -36,11 +36,12 @@ export default function HomeFeedScreen({ navigation }) {
 
   const fetchPosts = () => {
     axios
-      .get("http://localhost:3000/api/v1/posts")
+      .get(`${API_URL}/api/v1/posts`)
       .then(resp => {
         setPosts(resp.data);
       })
       .catch(err => {
+        console.log(err)
         setError(err);
       });
   };
@@ -69,18 +70,18 @@ export default function HomeFeedScreen({ navigation }) {
           ) : posts.length === 0 ? (
             <Text>No results available</Text>
           ) : (
-            <View style={styles.postings}>
-              <ScrollView horizontal={true}>
-                {posts.map(post => (
-                  <Posting
-                    key={post.post_id}
-                    post={post}
-                    navigation={navigation}
-                  ></Posting>
-                ))}
-              </ScrollView>
-            </View>
-          )}
+                <View style={styles.postings}>
+                  <ScrollView horizontal={true}>
+                    {posts.map(post => (
+                      <Posting
+                        key={post.post_id}
+                        post={post}
+                        navigation={navigation}
+                      ></Posting>
+                    ))}
+                  </ScrollView>
+                </View>
+              )}
         </View>
         <View style={styles.trendingContainer}>
           <Text style={styles.postingSubtitle}>Trending</Text>
@@ -89,18 +90,18 @@ export default function HomeFeedScreen({ navigation }) {
           ) : posts.length === 0 ? (
             <Text>No results available</Text>
           ) : (
-            <View style={styles.postings}>
-              <ScrollView horizontal={true}>
-                {posts.map(post => (
-                  <Posting
-                    key={post.post_id}
-                    post={post}
-                    navigation={navigation}
-                  ></Posting>
-                ))}
-              </ScrollView>
-            </View>
-          )}
+                <View style={styles.postings}>
+                  <ScrollView horizontal={true}>
+                    {posts.map(post => (
+                      <Posting
+                        key={post.post_id}
+                        post={post}
+                        navigation={navigation}
+                      ></Posting>
+                    ))}
+                  </ScrollView>
+                </View>
+              )}
         </View>
       </View>
       <BottomNavigation navigation={navigation}></BottomNavigation>
