@@ -100,9 +100,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2
   },
   details: {
-    flex: 4,
     margin: 15,
     marginTop: 0,
+    paddingVertical: 15,
     borderBottomColor: "#ccc",
     borderBottomWidth: 2
   },
