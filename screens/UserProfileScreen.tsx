@@ -165,8 +165,6 @@ const UserProfileScreen = ({ navigation }: any) => {
       })
   }
 
-
-
   return (
     <SafeAreaView style={styles.container}>
       <View
