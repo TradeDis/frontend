@@ -42,7 +42,7 @@ export default function PostScreen({ navigation, route }) {
               : "No date available"}
           </Text>
           <View style={styles.proposeContainer}>
-            <TouchableOpacity style={styles.propose}>
+            <TouchableOpacity style={styles.propose} onPress={() => navigation.navigate("Inbox")}>
               <Text style={styles.proposeText}>Propose Trade</Text>
             </TouchableOpacity>
           </View>
