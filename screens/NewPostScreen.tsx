@@ -42,13 +42,15 @@ export default function NewPostScreen({ navigation }) {
   const [displayMessage, setDisplayMessage] = useState("");
 
   const createPosting = () => {
-    Keyboard.dismiss();
+    Keyboard.dismiss(); //close keyboard on mobile devices
     setStatus("pending");
     if (!post.title || !post.content || !post.location) {
+      //error checking to ensure all fields are present
       setStatus("error");
       setDisplayMessage("One or more required fields missing");
       return;
     }
+    //perform api request to create new post
     axios
       .post(`${process.env.API_URL}/api/v1/posts`, post)
       .then(resp => {

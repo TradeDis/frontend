@@ -38,6 +38,7 @@ export default function HomeFeedScreen({ navigation }) {
     return unsubscribe;
   }, [navigation]);
 
+  //retrive posts from DB
   const fetchPosts = () => {
     axios
       .get(`${process.env.API_URL}/api/v1/posts`)
