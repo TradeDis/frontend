@@ -11,7 +11,7 @@ export function Posting({ post, navigation }) {
   return (
     // Create PostPage in nav which accepts post_id data payload
     <TouchableOpacity
-      onPress={() => navigation.navigate("PostPage", { post_id: post.post_id })}
+      onPress={() => navigation.navigate("Post", { post_id: post.post_id })}
     >
       <View style={styles.postingContainer}>
         <Text style={styles.postTitle}>{post.title}</Text>

@@ -21,7 +21,7 @@ export default function PostScreen({ navigation, post }) {
     <View style={styles.container}>
       <View style={styles.top}>
         {/* nav needs to be implemented */}
-        <TouchableOpacity onPress={navigation.navigate("Home")}>
+        <TouchableOpacity onPress={() => navigation.navigate("HomeFeed")}>
           <Text style={styles.secondaryText}>Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>TradeDis</Text>

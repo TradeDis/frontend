@@ -11,6 +11,7 @@ import {
 import { Posting } from "../components/Posting";
 import axios from "axios";
 import BottomNavigation from "../components/BottomNavigation";
+import { API_URL } from "@env";
 
 interface Post {
   post_id: string;
@@ -36,7 +37,7 @@ export default function HomeFeedScreen({ navigation }) {
 
   const fetchPosts = () => {
     axios
-      .get(`${process.env.API_URL}/api/v1/posts`)
+      .get(`${API_URL}/api/v1/posts`)
       .then(resp => {
         setPosts(resp.data);
       })
