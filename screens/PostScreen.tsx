@@ -1,22 +1,11 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Tag from "../components/Tag";
 
-export default function PostScreen({ navigation, post }) {
-  //Mock post for testing & implementation purposes, use passed in post in future
-  const mockPost = {
-    title: "In Need of Pencils",
-    content:
-      "Just ran out of my last pencil and have an exam today at 3pm! Please, if anyone has any spare ones let me know!",
-    created_by: {
-      username: "johnsmith21",
-      fullname: "John Smith"
-    },
-    date: new Date(),
-    tags: ["pencils", "stationary"],
-    location: "Icon North Tower Floor 8",
-    requesting: true
-  };
+export default function PostScreen({ navigation, route }) {
+  const [post, setPost] = useState(route.params?.post);
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -29,27 +18,27 @@ export default function PostScreen({ navigation, post }) {
       </View>
       <View style={styles.main}>
         <View style={styles.basicInfo}>
-          <Text style={styles.postTitle}>{mockPost.title}</Text>
+          <Text style={styles.postTitle}>{post.title}</Text>
           <Text style={styles.type}>
-            {mockPost.requesting ? "Request" : "Trade"}
+            {post.requesting ? "Request" : "Trade"}
           </Text>
-          {mockPost.tags && mockPost.tags.length > 0 && (
+          {post.tags && post.tags.length > 0 && (
             <View>
               <Text style={styles.tagsText}>Tags:</Text>
               <View style={styles.tags}>
-                {mockPost.tags.map((tag, index) => (
-                  <Tag tag={tag}></Tag>
+                {post.tags.map((tag, index) => (
+                  <Tag key={index} tag={tag}></Tag>
                 ))}
               </View>
             </View>
           )}
 
           <Text style={styles.location}>
-            {mockPost.location ? mockPost.location : "No location available"}
+            {post.location ? post.location : "No location available"}
           </Text>
           <Text style={styles.date}>
-            {mockPost.date
-              ? "Posted on " + mockPost.date.toLocaleString()
+            {post.date
+              ? "Posted on " + post.date.toLocaleString()
               : "No date available"}
           </Text>
           <View style={styles.proposeContainer}>
@@ -60,7 +49,7 @@ export default function PostScreen({ navigation, post }) {
         </View>
         <View style={styles.details}>
           <Text style={styles.detailsText}>Details</Text>
-          <Text style={styles.content}>{mockPost.content}</Text>
+          <Text style={styles.content}>{post.content}</Text>
         </View>
         <View style={styles.userInfo}>
           <Text style={styles.userInfoText}>User Information</Text>
@@ -68,10 +57,10 @@ export default function PostScreen({ navigation, post }) {
             <View style={styles.avatar}>{/*avatar will be put here*/}</View>
             <View style={styles.user}>
               <Text style={styles.fullName}>
-                {mockPost.created_by.fullname}
+                {post.created_by.fullname}
               </Text>
               <Text style={styles.username}>
-                {mockPost.created_by.username}
+                {post.created_by.username}
               </Text>
             </View>
           </View>
