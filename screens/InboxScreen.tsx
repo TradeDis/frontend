@@ -56,7 +56,11 @@ export default function InboxScreen({ navigation, route }) {
       </View>
       <View style={styles.main}>
         <Card>
-          <Card.Title>INBOX</Card.Title>
+          <View style={styles.head}>
+            <Text style={styles.newMessage}>New</Text>
+            <Card.Title>INBOX</Card.Title>
+            <Text style={styles.filter}>Filter</Text>
+          </View>
           <Card.Divider />
           {tempInbox.map((c, i) => (
             <ListItem key={i} bottomDivider>
@@ -100,5 +104,23 @@ const styles = StyleSheet.create({
   secondaryText: {
     color: "#fff",
     fontSize: 17.5,
+  },
+  head: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  newMessage: {
+    color: "#fff",
+    backgroundColor: "#EB5757",
+    borderRadius: 5,
+    margin: 10,
+    padding: 10,
+  },
+  filter: {
+    color: "#fff",
+    backgroundColor: "#EB5757",
+    borderRadius: 5,
+    margin: 10,
+    padding: 10,
   },
 });
