@@ -45,7 +45,7 @@ export default function PostScreen({ navigation, route }) {
             <TouchableOpacity
               style={styles.propose}
               onPress={() =>
-                navigation.navigate("Inbox", { screen: "Conversation" })
+                navigation.navigate("Inbox", { screen: "NewMessage", post })
               }
             >
               <Text style={styles.proposeText}>Propose Trade</Text>

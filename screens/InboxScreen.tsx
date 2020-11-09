@@ -57,13 +57,15 @@ export default function InboxScreen({ navigation, route }) {
       <View style={styles.main}>
         <Card>
           <View style={styles.head}>
-            <Text style={styles.newMessage}>New</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("NewMessage")}>
+              <Text style={styles.newMessage}>New</Text>
+            </TouchableOpacity>
             <Card.Title>INBOX</Card.Title>
             <Text style={styles.filter}>Filter</Text>
           </View>
           <Card.Divider />
           {tempInbox.map((c, i) => (
-            <ListItem key={i} bottomDivider>
+            <ListItem key={i} bottomDivider onPress={() => navigation.navigate("Conversation")}>
               <Avatar source={{ uri: c.avatar_url }} />
               <ListItem.Content>
                 <ListItem.Title style={{ fontWeight: "bold" }}>

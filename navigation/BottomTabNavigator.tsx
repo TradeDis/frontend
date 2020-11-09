@@ -14,6 +14,7 @@ import HomeFeedScreen from "../screens/HomeFeedScreen";
 import PostScreen from "../screens/PostScreen";
 import InboxScreen from "../screens/InboxScreen";
 import ConversationScreen from "../screens/ConversationScreen";
+import NewMessageScreen from "../screens/NewMessageScreen";
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -25,6 +26,7 @@ const InboxStack = () => {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Messages" component={InboxScreen} />
       <Stack.Screen name="Conversation" component={ConversationScreen} />
+      <Stack.Screen name="NewMessage" component={NewMessageScreen} />
     </Stack.Navigator>
   );
 };
