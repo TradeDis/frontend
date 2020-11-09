@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -12,6 +12,7 @@ import { Posting } from "./../components/Posting";
 import axios from "axios";
 import BottomNavigation from "../components/BottomNavigation";
 import { API_URL } from "@env";
+import { AuthContext } from "../navigation/AuthProvider";
 interface Post {
   post_id: string;
   title: string;
@@ -29,6 +30,8 @@ export default function HomeFeedScreen({ navigation }) {
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
+  const { user, setUser } = useContext(AuthContext);
+  console.log(user)
 
   useEffect(() => {
     fetchPosts();
@@ -50,9 +53,12 @@ export default function HomeFeedScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.top}>
         <View style={styles.topElements}>
-          <Text style={styles.topSecondaryText}>Avatar</Text>
+          <TouchableOpacity onPress={() => setUser(null)}>
+            <Text style={styles.topSecondaryText}>Logout</Text>
+          </TouchableOpacity>
           <Text style={styles.title}>TradeDis</Text>
-          <Text style={styles.topSecondaryText}>Filter</Text>
+
+          <Text style={styles.topSecondaryText}>Logged In as {user.username}</Text>
         </View>
         <TextInput
           style={styles.search}
@@ -63,6 +69,7 @@ export default function HomeFeedScreen({ navigation }) {
         />
       </View>
       <View style={styles.feed}>
+
         <View style={styles.newPostingsContainer}>
           <Text style={styles.postingSubtitle}>New Postings</Text>
           {error ? (

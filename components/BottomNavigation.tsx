@@ -28,6 +28,9 @@ export default function BottomNavigation({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#C9CED6",

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import {
     StyleSheet,
@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useEffect } from "react";
 import { API_URL } from "@env";
+import { AuthContext } from "../navigation/AuthProvider";
 
 interface User {
     email: string;
@@ -24,18 +25,22 @@ export default function LoginScreen({ route, navigation }: any) {
         setResponse({ status: 'success', message })
     }, [route])
 
-    const [user, setUser] = useState<User>({
+    const [user, setUserForm] = useState<User>({
         email: '',
         password: ''
     });
 
-    const createPosting = () => {
+    const { user: userAuth, setUser: setUserAuth } = useContext(AuthContext);
+
+    const login = () => {
+        console.log(API_URL)
         axios
             .post(`${API_URL}/api/v1/users/login`, user)
             .then(resp => {
                 const { result: isAuth, user } = resp.data
                 if (isAuth) {
                     setResponse({ status: 'success', message: `User ${user.username} logged in successfully!` })
+                    setUserAuth(user)
                 } else {
                     setResponse({ status: 'error', message: `Wrong email or password!` })
                 }
@@ -62,7 +67,7 @@ export default function LoginScreen({ route, navigation }: any) {
                     placeholder="Email"
                     style={styles.formInput}
                     onChangeText={email =>
-                        setUser(prevState => ({ ...prevState, email }))
+                        setUserForm(prevState => ({ ...prevState, email }))
                     }
                     value={user.email}
                 />
@@ -70,19 +75,19 @@ export default function LoginScreen({ route, navigation }: any) {
                     placeholder="Password"
                     style={styles.formInput}
                     onChangeText={password =>
-                        setUser(prevState => ({ ...prevState, password }))
+                        setUserForm(prevState => ({ ...prevState, password }))
                     }
                     value={user.password}
                 />
                 <TouchableOpacity
                     style={styles.postButton}
-                    onPress={() => createPosting()}
+                    onPress={() => login()}
                 >
                     <Text style={styles.postText}>Log In</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.signupButton}
-                    onPress={() => navigation.navigate('TabOne')}
+                    onPress={() => navigation.navigate('Signup')}
                 >
                     <Text style={styles.postText}>Sign Up</Text>
                 </TouchableOpacity>

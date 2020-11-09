@@ -29,6 +29,7 @@ export default function SignUpScreen({ navigation }: any) {
         password: ''
     });
 
+
     const [response, setResponse] = useState({ status: "pending", message: "" });
 
     const createUser = () => {
@@ -37,7 +38,7 @@ export default function SignUpScreen({ navigation }: any) {
             .post(`${API_URL}/api/v1/users`, user)
             .then(resp => {
                 setResponse({ status: 'success', message: `User ${resp.data.username} Successfully created!` })
-                navigation.navigate('TabTwo', { message: `User ${resp.data.username} Successfully created! Plesae login here.` })
+                navigation.navigate('Login', { message: `User ${resp.data.username} Successfully created! Plesae login here.` })
             })
             .catch(err => {
                 const { errors } = err.response.data

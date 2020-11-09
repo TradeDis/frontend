@@ -14,79 +14,90 @@ import HomeFeedScreen from "../screens/HomeFeedScreen";
 import UserProfileScreen from '../screens/UserProfileScreen';
 // import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
-
+import HomeStack from "./HomeStack";
 
 import { StyleSheet, View, Button, TouchableWithoutFeedback } from 'react-native';
 import { ScreenStackHeaderRightView } from 'react-native-screens';
 import Navigation from '.';
+import { IconButton } from "react-native-paper";
 
-const BottomTab = createBottomTabNavigator<BottomTabParamList>();
+const BottomTab = createBottomTabNavigator<any>();
+const HomeFeedStack = createStackNavigator();
 
-export default function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
-
+export default function HomeFeedStackNavigator() {
   return (
-    <BottomTab.Navigator
-      initialRouteName="TabTwo"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
-    >
-      <BottomTab.Screen
-        name="TabOne"
-        component={SignUp}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
-          )
-        }}
-      />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={UserProfileScreen}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
-          )
-        }}
-      />
-      <BottomTab.Screen
-        name="HomseFeed"
-        component={HomeFeedScreen}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
-          )
-        }}
-      />
-      <BottomTab.Screen
-        name="HomeeFeed"
-        component={Login}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
-          )
-        }}
-      />
-      <BottomTab.Screen
-        name="HomaeFeed"
-        component={HomeFeedScreen}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
-          )
-        }}
-      />
-      <BottomTab.Screen
-        name="HomeFeed"
-        component={HomeFeedScreen}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
-          )
-        }}
-      />
-    </BottomTab.Navigator>
-  );
-}
+    <HomeFeedStack.Navigator headerMode='none'>
+      <HomeFeedStack.Screen name='Home' component={HomeFeedScreen} />
+      <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
+    </HomeFeedStack.Navigator>
+  )
+};
+
+// function BottomTabNavigator() {
+//   const colorScheme = useColorScheme();
+
+//   return (
+//     <BottomTab.Navigator
+//       initialRouteName="TabTwo"
+//       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+//     >
+//       <BottomTab.Screen
+//         name="TabOne"
+//         component={HomeStack}
+//         options={{
+//           tabBarIcon: ({ color }) => (
+//             <TabBarIcon name="ios-code" color={color} />
+//           )
+//         }}
+//       />
+//       <BottomTab.Screen
+//         name="TabTwo"
+//         component={HomeStack}
+//         options={{
+//           tabBarIcon: ({ color }) => (
+//             <TabBarIcon name="ios-code" color={color} />
+//           )
+//         }}
+//       />
+//       <BottomTab.Screen
+//         name="HomseFeed"
+//         component={HomeFeedScreen}
+//         options={{
+//           tabBarIcon: ({ color }) => (
+//             <TabBarIcon name="ios-code" color={color} />
+//           )
+//         }}
+//       />
+//       <BottomTab.Screen
+//         name="HomeeFeed"
+//         component={Login}
+//         options={{
+//           tabBarIcon: ({ color }) => (
+//             <TabBarIcon name="ios-code" color={color} />
+//           )
+//         }}
+//       />
+//       <BottomTab.Screen
+//         name="HomaeFeed"
+//         component={HomeFeedScreen}
+//         options={{
+//           tabBarIcon: ({ color }) => (
+//             <TabBarIcon name="ios-code" color={color} />
+//           )
+//         }}
+//       />
+//       <BottomTab.Screen
+//         name="HomeFeed"
+//         component={HomeFeedScreen}
+//         options={{
+//           tabBarIcon: ({ color }) => (
+//             <TabBarIcon name="ios-code" color={color} />
+//           )
+//         }}
+//       />
+//     </BottomTab.Navigator>
+//   );
+// }
 
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
@@ -119,7 +130,6 @@ const styles = StyleSheet.create({
   },
 
 });
-
 
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
