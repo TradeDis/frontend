@@ -40,6 +40,8 @@
     "react-native-tags": "^2.2.0",
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.13.12",
+    "socket.io": "^3.0.1",
+    "socket.io-client": "^3.0.1",
     "websocket": "^1.0.32"
   },
   "devDependencies": {

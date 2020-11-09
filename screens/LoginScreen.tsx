@@ -35,7 +35,7 @@ export default function LoginScreen({ route, navigation }: any) {
     const login = () => {
         console.log(API_URL)
         axios
-            .post(`${API_URL}/api/v1/users/login`, user)
+            .post(`http://172.20.10.7:3000/api/v1/users/login`, user)
             .then(resp => {
                 const { result: isAuth, user } = resp.data
                 if (isAuth) {
