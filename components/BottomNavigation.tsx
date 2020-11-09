@@ -5,7 +5,7 @@ export default function BottomNavigation({ navigation }) {
   return (
     <View style={styles.container}>
       {/* Make Home in index.tsx naviation*/}
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity onPress={() => navigation.navigate("HomeFeed")}>
         <View style={styles.navButton}>
           <Text style={styles.navText}>Home</Text>
         </View>
