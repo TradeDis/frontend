@@ -154,7 +154,7 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   const getUserData = () => {
     axios
-      .get(`http://172.20.10.7:3000/api/v1/users/24`)
+      .get(`${API_URL}/api/v1/users/24`)
       .then(resp => {
         setUser(resp.data)
 

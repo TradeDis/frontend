@@ -35,7 +35,7 @@ export default function SignUpScreen({ navigation }: any) {
     const createUser = () => {
         console.log(user);
         axios
-            .post(`http://172.20.10.7:3000/api/v1/users`, user)
+            .post(`${API_URL}/api/v1/users`, user)
             .then(resp => {
                 setResponse({ status: 'success', message: `User ${resp.data.username} Successfully created!` })
                 navigation.navigate('Login', { message: `User ${resp.data.username} Successfully created! Plesae login here.` })
@@ -95,6 +95,7 @@ export default function SignUpScreen({ navigation }: any) {
                 <TextInput
                     placeholder="Password"
                     style={styles.formInput}
+                    secureTextEntry={true}
                     onChangeText={password =>
                         setUser(prevState => ({ ...prevState, password }))
                     }

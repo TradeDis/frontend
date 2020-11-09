@@ -35,7 +35,7 @@ export default function LoginScreen({ route, navigation }: any) {
     const login = () => {
         console.log(API_URL)
         axios
-            .post(`http://172.20.10.7:3000/api/v1/users/login`, user)
+            .post(`${API_URL}/api/v1/users/login`, user)
             .then(resp => {
                 const { result: isAuth, user } = resp.data
                 if (isAuth) {
@@ -74,6 +74,7 @@ export default function LoginScreen({ route, navigation }: any) {
                 <TextInput
                     placeholder="Password"
                     style={styles.formInput}
+                    secureTextEntry={true}
                     onChangeText={password =>
                         setUserForm(prevState => ({ ...prevState, password }))
                     }

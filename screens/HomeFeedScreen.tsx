@@ -42,7 +42,7 @@ export default function HomeFeedScreen({ navigation }) {
 
   const fetchPosts = () => {
     axios
-      .get(`http://172.20.10.7:3000/api/v1/posts`)
+      .get(`${API_URL}/api/v1/posts`)
       .then(resp => {
         setPosts(resp.data);
       })
