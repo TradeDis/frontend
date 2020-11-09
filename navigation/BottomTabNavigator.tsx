@@ -13,9 +13,21 @@ import TabTwoScreen from "../screens/TabTwoScreen";
 import HomeFeedScreen from "../screens/HomeFeedScreen";
 import PostScreen from "../screens/PostScreen";
 import InboxScreen from "../screens/InboxScreen";
+import ConversationScreen from "../screens/ConversationScreen";
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
+
+const Stack = createStackNavigator();
+
+const InboxStack = () => {
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Messages" component={InboxScreen} />
+      <Stack.Screen name="Conversation" component={ConversationScreen} />
+    </Stack.Navigator>
+  );
+};
 
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
@@ -31,7 +43,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
-          )
+          ),
         }}
       />
       <BottomTab.Screen
@@ -40,7 +52,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
-          )
+          ),
         }}
       />
       <BottomTab.Screen
@@ -49,7 +61,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
-          )
+          ),
         }}
       />
       <BottomTab.Screen
@@ -58,16 +70,16 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
-          )
+          ),
         }}
       />
       <BottomTab.Screen
         name="Inbox"
-        component={InboxScreen}
+        component={InboxStack}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
-          )
+          ),
         }}
       />
     </BottomTab.Navigator>
