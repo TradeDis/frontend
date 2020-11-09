@@ -32,34 +32,24 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         color: '#000',
-        marginTop: -20
+        marginTop: -5
     },
     container_text: {
         flex: 1,
         flexDirection: 'column',
-        marginLeft: 12,
+        marginLeft: 1,
         justifyContent: 'center',
     },
     description: {
         fontSize: 13,
-        marginTop:10    
-    },
-    timeContainer: {
-        marginRight: -45,
-        marginTop: -12
-    },
-    timeText: {
-        color: 'grey',
-    },
-    requestTypeContainer: {
-        marginRight: 5,
-        marginTop: 50
-    },
-    requestText: {
-        color: 'grey'
+        marginTop: 10,
+        marginLeft: 8,
+        marginBottom: 10   
     },
     container_ratings: {
-        width:'50%'
+        width:'50%',
+        marginHorizontal: 185,
+        marginVertical: -10,
     }
 });
 
@@ -70,19 +60,12 @@ const ReviewRow = (props: any) => {
             <View style={styles.container_ratings}>
             <AirbnbRating defaultRating={props.ratings} isDisabled={true} showRating={false} size={15}/>
             </View>
-                
             <Text style={styles.title}>
                 {props.title}
             </Text>
             <Text style={styles.description}>
                 {props.description}
             </Text>
-        </View>
-        <View style={styles.timeContainer}>
-            <Text style={styles.timeText}>10 min</Text>
-        </View>
-        <View style={styles.requestTypeContainer}>
-            <Text style={styles.requestText}>Request</Text>
         </View>
     </View>
     )

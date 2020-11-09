@@ -12,7 +12,6 @@ import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import HomeFeedScreen from "../screens/HomeFeedScreen";
 import UserProfileScreen from '../screens/UserProfileScreen';
-// import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 
@@ -32,7 +31,7 @@ export default function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="TabOne"
-        component={SignUp}
+        component={UserProfileScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />

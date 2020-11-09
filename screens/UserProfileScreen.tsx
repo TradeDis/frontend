@@ -13,10 +13,11 @@ import {
   Image
 } from "react-native";
 import { Text, View } from "../components/Themed";
-import CustomRow from "../components/CustomRowUserProfileScreen";
+import CustomRow from "../components/UserPostRow";
 import UserInfoScreen from "../components/UserInfoScreen";
-import UserReviewsScreen from "../components/ReviewsUserProfileScreen"
+import UserReviewsScreen from "../components/ReviewsUserProfileScreen";
 import axios from "axios";
+import * as ImagePicker from "expo-image-picker";
 
 const styles = StyleSheet.create({
   container: {
@@ -76,10 +77,87 @@ const styles = StyleSheet.create({
     marginBottom: -40,
     backgroundColor: "rgba(52, 52, 52, 0.0)"
   },
-  userInfo: {
+  userInfoContainer: {
+    flex: 1,
+    padding: 20,
     backgroundColor: "rgba(52, 52, 52, 0.0)"
+  },
+  usernameContainer: {
+    marginTop: 12,
+    marginHorizontal: -30,
+    borderRadius: 15,
+    padding: 12,
+    borderColor: 'grey',
+    borderWidth: 0.16,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
 
-  }
+    elevation: 2,
+  },
+  emailContainer: {
+    marginTop: 22,
+    marginHorizontal: -30,
+    borderRadius: 15,
+    padding: 12,
+    borderColor: 'grey',
+    borderWidth: 0.16,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
+  },
+  passwordContainer: {
+    marginTop: 22,
+    marginHorizontal: -30,
+    borderRadius: 15,
+    padding: 12,
+    borderColor: 'grey',
+    borderWidth: 0.16,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
+  },
+  addressContainer: {
+    marginTop: 22,
+    marginHorizontal: -30,
+    borderRadius: 15,
+    padding: 12,
+    borderColor: 'grey',
+    borderWidth: 0.16,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
+  },
+  saveButton: {
+    backgroundColor: 'rgba(235, 87, 87, 1)',
+    marginTop: 25,
+    marginHorizontal: 60,
+    width: 95,
+    height: 40,
+    borderRadius: 15,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
+  },
 });
 
 //random data to test the listview
@@ -87,21 +165,21 @@ const getData = () => {
   return [
     {
       id: 1,
-      title: "John",
+      title: "nice",
       description: "I have eggs",
-      image_url: "../assets/images/profileImage.png"
+      rating: 3
     },
     {
       id: 2,
-      title: "John",
-      description: "I can trade for school supplies",
-      image_url: "../assets/images/profileImage.png"
+      title: "okay",
+      description: "not good",
+      rating: 2
     },
     {
       id: 3,
-      title: "John",
-      description: "I need some sugar",
-      image_url: "../assets/images/profileImage.png"
+      title: "great",
+      description: "great!!",
+      rating: 5
     }
   ];
 };
@@ -118,6 +196,21 @@ interface User {
   reviews: []
 }
 
+interface UserToUpdate {
+  user_id: number;
+  username: string;
+  email: string;
+  password: string;
+  //address: string;
+}
+
+interface Post {
+  post_id: string;
+  title: string;
+  requesting: boolean;
+  content: string;
+  tags: string[];
+}
 
 
 //trying to use useState
@@ -146,17 +239,26 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   const [user, setUser] = useState<User>();
   const [status, setStatus] = useState("pending");
+  const [post, setPostData] = useState<Post[]>([]);
+  const [userToUpdate, setUserToUpdate] = useState<UserToUpdate>({
+    user_id: 31,
+    username: "",
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
     getUserData();
-  }, );
+    getPostData();
+  }, []);
 
   const getUserData = () => {
     axios
-      .get("http://localhost:3000/api/v1/users/24")
+      .get("http://localhost:3000/api/v1/users/31")
       .then(resp => {
         setUser(resp.data)
-       
+        setUserToUpdate(resp.data)
+
       })
       .catch(err => {
         console.log(err);
@@ -164,7 +266,49 @@ const UserProfileScreen = ({ navigation }: any) => {
       })
   }
 
- 
+
+  const getPostData = () => {
+    axios
+      .get("http://localhost:3000/api/v1/posts")
+      .then(resp => {
+        setPostData(resp.data)
+
+      })
+      .catch(err => {
+        console.log(err);
+        setStatus("error")
+      })
+  }
+
+  const updateUser = () => {
+    axios
+      .put("http://localhost:3000/api/v1/users/31", userToUpdate)
+      .then(resp => {
+        getUserData()
+      })
+      .catch(err => {
+        console.log(err);
+        setStatus("error")
+      })
+  }
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  let openImage = async () => {
+    let permission = await ImagePicker.requestCameraRollPermissionsAsync();
+
+    if (permission.granted === false) {
+      return;
+    }
+
+    let picker = await ImagePicker.launchImageLibraryAsync()
+
+    if (picker.cancelled === true) {
+      return;
+    }
+    setSelectedImage({ localURI: picker.uri });
+
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -177,22 +321,35 @@ const UserProfileScreen = ({ navigation }: any) => {
           borderBottomRightRadius: 30
         }}
       >
-        <View style={styles.settingsButton}>
-          <Button
-            title="Settings"
-            onPress={() => navigation.navigate(".")}
-            color="white"
-          />
-        </View>
+        {
+          userInfo && (
+            <View style={styles.settingsButton}>
+              <Button
+                title="Update picture"
+                onPress={() => openImage()}
+                color="white"
+              />
+            </View>
+          )
+        }
       </View>
       <View style={styles.profileImage}>
-        <Image
-          source={require("../assets/images/profileImage.png")}
-          style={{ width: 140, height: 140, borderRadius: 150 / 2 }}
-        ></Image>
+        {
+          selectedImage !== null ?
+            (
+              <Image
+                source={{ uri: selectedImage.localURI }}
+                style={{ width: 140, height: 140, borderRadius: 150 / 2 }}
+              ></Image>
+            ) : <Image
+              source={require("../assets/images/profileImage.png")}
+              style={{ width: 140, height: 140, borderRadius: 150 / 2 }}
+            ></Image>
+        }
+
       </View>
       <View style={styles.profileName}>
-        <Text style={{ fontSize: 35 }}>John Smith</Text>
+        <Text style={{ fontSize: 35 }}>{user?.first_name} {user?.last_name}</Text>
       </View>
       <View>
         <View style={styles.myInfoButtonContainer}>
@@ -208,48 +365,93 @@ const UserProfileScreen = ({ navigation }: any) => {
       </View>
       <SafeAreaView>
         {//shows when feed is true
-          feed && (
+          feed && post && (
             <View style={styles.customListView}>
               <FlatList
                 style={styles.feedList}
-                data={getData()}
+                data={post}
                 renderItem={({ item }) => (
                   <CustomRow
                     title={item.title}
-                    description={item.description}
-                    image_url={item.image_url}
+                    content={item.content}
+                    requesting={item.requesting}
+                    tags={item.tags}
+                    uri={selectedImage?.localURI}
+                    keyExtractor={(item: { id: any; }) => item.id}
                   />
                 )}
               />
             </View>
           )}
         {// shows when userInfo is true
-          userInfo && (
-            <View style={styles.userInfo}>
-                   <UserInfoScreen
-                   user={user}
-                   usernameTitle={user?.username}
-                 >
-                 </UserInfoScreen>
-            
+          userInfo && user && (
+            <View style={styles.userInfoContainer}>
+              <View style={styles.usernameContainer}>
+                <Text>
+                  {user.username}
+                </Text>
+                <TextInput
+                  placeholder="Change Username"
+                  onChangeText={username =>
+                    setUserToUpdate(prevState => ({ ...prevState, username: username }))
+                  }
+                ></TextInput>
+              </View>
+
+              <View style={styles.emailContainer}>
+                <Text>
+                  {user.email}
+                </Text>
+                <TextInput placeholder="Change Email"
+                  onChangeText={email =>
+                    setUserToUpdate(prevState => ({ ...prevState, email: email }))
+                  }
+                ></TextInput>
+              </View>
+
+              <View style={styles.passwordContainer}>
+                <Text>
+                  {user.password}
+                </Text>
+                <TextInput placeholder="Change Password"
+                  secureTextEntry={true}
+                  onChangeText={password =>
+                    setUserToUpdate(prevState => ({ ...prevState, password: password }))
+                  }
+                ></TextInput>
+              </View>
+
+              <View style={styles.addressContainer}>
+                <Text>
+                  11 waterloo st{user.address}
+                </Text>
+                <TextInput placeholder="Change Address"
+                // onChangeText={address =>
+                //   setUserToUpdate(prevState => ({ ...prevState, address: address }))
+                // }
+                ></TextInput>
+              </View>
+              <View style={styles.saveButton}>
+                <Button color='white' title="Save" onPress={() => { updateUser() }}>
+                </Button>
+              </View>
             </View>
           )}
         {//shows when userReviews is true
           userReviews && (
             <View style={styles.customListView}>
-            <FlatList
-              style={styles.feedList}
-              data={getData()}
-              renderItem={({ item }) => (
-                <UserReviewsScreen
-                  ratings={3}
-                  title={item.title}
-                  description={item.description}
-                  image_url={item.image_url}
-                />
-              )}
-            />
-          </View>
+              <FlatList
+                style={styles.feedList}
+                data={getData()}
+                renderItem={({ item }) => (
+                  <UserReviewsScreen
+                    ratings={item.rating}
+                    title={item.title}
+                    description={item.description}
+                  />
+                )}
+              />
+            </View>
           )}
       </SafeAreaView>
     </SafeAreaView>
