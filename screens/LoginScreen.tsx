@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useEffect } from "react";
 import { API_URL } from "@env"
+import CustomButton from "../components/CustomButton";
 
 interface User {
     email: string;
@@ -74,18 +75,22 @@ export default function LoginScreen({ route, navigation }: any) {
                     }
                     value={user.password}
                 />
-                <TouchableOpacity
-                    style={styles.postButton}
-                    onPress={() => createPosting()}
-                >
-                    <Text style={styles.postText}>Log In</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.signupButton}
-                    onPress={() => navigation.navigate('TabOne')}
-                >
-                    <Text style={styles.postText}>Sign Up</Text>
-                </TouchableOpacity>
+                <View style={styles.postButtonContainer}>
+                    <CustomButton
+                        onPress={() => createPosting()}
+                        title="Log in"
+                    ></CustomButton>
+                </View>
+
+                <View style={styles.signupButtonContainer}>
+                    <CustomButton
+                        style={styles.button}
+                        onPress={() => navigation.navigate('TabOne')}
+                        title="Sign up"
+                    >
+                    </CustomButton>
+                </View>
+
             </View>
         </View>
     );
@@ -135,23 +140,35 @@ const styles = StyleSheet.create({
     switch: {
         marginHorizontal: 20
     },
-    postButton: {
-        width: "30%",
-        height: 45,
-        backgroundColor: "#EB5757",
-        marginTop: 40,
-        borderRadius: 50,
-        justifyContent: "center",
-        alignItems: "center"
+    postButtonContainer: {
+        height: 40,
+        width: '35%',
+        marginTop: 80,
+        borderRadius: 15,
+        alignItems: "center",
+        backgroundColor: 'rgba(235, 87, 87, 1)',
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.3,
+        elevation: 2,
     },
-    signupButton: {
-        width: "30%",
-        height: 45,
-        backgroundColor: "#ccc",
-        marginTop: 40,
-        borderRadius: 50,
-        justifyContent: "center",
-        alignItems: "center"
+    signupButtonContainer: {
+        height: 40,
+        width: '35%',
+        marginTop: 20,
+        borderRadius: 15,
+        alignItems: "center",
+        backgroundColor: 'gray',
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.3,
+        elevation: 2,
     },
     postText: {
         color: "#fff",

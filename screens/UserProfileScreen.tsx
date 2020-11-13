@@ -166,7 +166,7 @@ const getData = () => {
     {
       id: 1,
       title: "nice",
-      description: "I have eggs",
+      description: "Had a great time",
       rating: 3
     },
     {
@@ -201,6 +201,7 @@ interface UserToUpdate {
   username: string;
   email: string;
   password: string;
+  avatar: String;
   //address: string;
 }
 
@@ -245,6 +246,7 @@ const UserProfileScreen = ({ navigation }: any) => {
     username: "",
     email: "",
     password: "",
+    avatar: "",
   });
 
   useEffect(() => {
@@ -258,7 +260,6 @@ const UserProfileScreen = ({ navigation }: any) => {
       .then(resp => {
         setUser(resp.data)
         setUserToUpdate(resp.data)
-
       })
       .catch(err => {
         console.log(err);
@@ -272,7 +273,6 @@ const UserProfileScreen = ({ navigation }: any) => {
       .get("http://localhost:3000/api/v1/posts")
       .then(resp => {
         setPostData(resp.data)
-
       })
       .catch(err => {
         console.log(err);
@@ -307,7 +307,6 @@ const UserProfileScreen = ({ navigation }: any) => {
       return;
     }
     setSelectedImage({ localURI: picker.uri });
-
   }
 
   return (
@@ -317,8 +316,8 @@ const UserProfileScreen = ({ navigation }: any) => {
           backgroundColor: "rgba(235, 87, 87, 1)",
           width: "100%",
           height: "30%",
-          borderBottomLeftRadius: 30,
-          borderBottomRightRadius: 30
+          borderBottomLeftRadius: 35,
+          borderBottomRightRadius: 35
         }}
       >
         {

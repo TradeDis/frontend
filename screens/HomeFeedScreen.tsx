@@ -116,7 +116,10 @@ const styles = StyleSheet.create({
     flex: 3,
     width: "100%",
     backgroundColor: "#EB5757",
-    justifyContent: "center"
+    justifyContent: "center",
+    borderBottomEndRadius: 35,
+    borderBottomStartRadius: 35,
+    marginBottom: 20
   },
   topElements: {
     flexDirection: "row",
@@ -143,10 +146,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   feed: {
-    flex: 7
+    flex: 7,
   },
   newPostingsContainer: {
-    margin: 15
+    margin: 15,
   },
   trendingContainer: {
     margin: 15
@@ -157,6 +160,6 @@ const styles = StyleSheet.create({
     color: "black"
   },
   postings: {
-    flexDirection: "row"
+    flexDirection: "row",
   }
 });

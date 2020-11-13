@@ -10,6 +10,7 @@ import {
 export function Posting({ post, navigation }) {
   return (
     // Create PostPage in nav which accepts post_id data payload
+
     <TouchableOpacity
       onPress={() => navigation.navigate("PostPage", { post_id: post.post_id })}
     >
@@ -29,10 +30,17 @@ const styles = StyleSheet.create({
   postingContainer: {
     width: 150,
     height: 150,
-    borderRadius: 10,
-    borderWidth: 2,
+    borderRadius: 12,
     margin: 5,
-    padding: 5
+    padding: 8,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 1.5,
+        height: 2.5,
+    },
+    shadowOpacity: 0.5,
+    elevation: 20,
+    backgroundColor: 'white'
   },
   postTitle: {
     fontWeight: "bold",
@@ -43,8 +51,8 @@ const styles = StyleSheet.create({
   },
   postType: {
     position: "absolute",
-    right: 5,
-    bottom: 5
+    right: 8,
+    bottom: 8
   },
   location: {
     fontWeight: "bold"
