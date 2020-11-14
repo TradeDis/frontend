@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { API_URL } from "@env"
 
+
 import {
     StyleSheet,
     View,
@@ -11,6 +12,7 @@ import {
     Switch,
     TouchableOpacity
 } from "react-native";
+import CustomButton from "../components/CustomButton";
 
 interface User {
     username: string;
@@ -99,12 +101,14 @@ export default function SignUpScreen({ navigation }: any) {
                     }
                     value={user.password}
                 />
-                <TouchableOpacity
-                    style={styles.postButton}
-                    onPress={() => createUser()}
-                >
-                    <Text style={styles.postText}>Sign Up</Text>
-                </TouchableOpacity>
+                <View style={styles.postButtonContainer}>
+                    <CustomButton
+                        onPress={() => createUser()}
+                        title="Sign up"
+                    >
+                    </CustomButton>
+                </View>
+
             </View>
         </View>
     );
@@ -117,15 +121,18 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     top: {
-        flex: 2,
+        flex: 2.5,
         width: "100%",
         backgroundColor: "#EB5757",
-        justifyContent: "center"
+        justifyContent: "center",
+        borderBottomEndRadius: 35,
+        borderBottomLeftRadius: 35
     },
     topElements: {
         flexDirection: "row",
         justifyContent: "space-evenly",
-        alignItems: "center"
+        alignItems: "center",
+        marginTop: 25
     },
     title: {
         fontSize: 35,
@@ -138,7 +145,8 @@ const styles = StyleSheet.create({
     form: {
         width: "100%",
         flex: 9,
-        alignItems: "center"
+        alignItems: "center",
+        marginTop: 20
     },
     formInput: {
         width: "90%",
@@ -154,14 +162,20 @@ const styles = StyleSheet.create({
     switch: {
         marginHorizontal: 20
     },
-    postButton: {
-        width: "30%",
-        height: 45,
-        backgroundColor: "#EB5757",
-        marginTop: 40,
-        borderRadius: 50,
-        justifyContent: "center",
-        alignItems: "center"
+    postButtonContainer: {
+        height: 40,
+        width: '35%',
+        marginTop: 80,
+        borderRadius: 15,
+        alignItems: "center",
+        backgroundColor: 'rgba(235, 87, 87, 1)',
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.3,
+        elevation: 2,
     },
     postText: {
         color: "#fff",
