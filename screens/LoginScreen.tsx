@@ -103,10 +103,12 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     top: {
-        flex: 2,
+        flex: 2.5,
         width: "100%",
         backgroundColor: "#EB5757",
-        justifyContent: "center"
+        justifyContent: "center",
+        borderBottomEndRadius: 35,
+        borderBottomLeftRadius: 35
     },
     topElements: {
         flexDirection: "row",
@@ -115,7 +117,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 35,
-        color: "#fff"
+        color: "#fff",
+        marginTop: 25
     },
     topSecondaryText: {
         color: "#fff",
