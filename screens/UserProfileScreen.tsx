@@ -310,7 +310,7 @@ const UserProfileScreen = ({ navigation }: any) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View
         style={{
           backgroundColor: "rgba(235, 87, 87, 1)",
@@ -453,7 +453,7 @@ const UserProfileScreen = ({ navigation }: any) => {
             </View>
           )}
       </SafeAreaView>
-    </SafeAreaView>
+    </View>
   );
 };
 
