@@ -11,6 +11,7 @@ import {
   Keyboard
 } from "react-native";
 import Tags from "react-native-tags";
+import CustomButton from "../components/CustomButton";
 
 interface Post {
   post_id: string;
@@ -123,12 +124,13 @@ export default function NewPostScreen({ navigation }) {
           />
           <Text style={styles.switchOptions}>Requesting</Text>
         </View>
-        <TouchableOpacity
-          style={styles.postButton}
-          onPress={() => createPosting()}
-        >
-          <Text style={styles.postText}>Post!</Text>
-        </TouchableOpacity>
+        <View style={styles.createPostButtonContainer}>
+          <CustomButton
+            onPress={() => createPosting()}
+            title="Post!"
+          ></CustomButton>
+        </View>
+
         {(status === "success" || status === "error") && (
           <Text
             style={{
@@ -149,15 +151,18 @@ const styles = StyleSheet.create({
     flex: 1
   },
   top: {
-    flex: 2,
+    flex: 2.5,
     flexDirection: "row",
     backgroundColor: "#EB5757",
-    justifyContent: "space-evenly",
-    alignItems: "center"
+    justifyContent: "space-around",
+    alignItems: "center",
+    borderBottomEndRadius: 35,
+    borderBottomLeftRadius: 35
   },
   title: {
     fontSize: 35,
-    color: "#fff"
+    color: "#fff",
+    marginLeft: 15
   },
   topSecondaryText: {
     color: "#fff",
@@ -166,7 +171,8 @@ const styles = StyleSheet.create({
   form: {
     width: "100%",
     flex: 9,
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 20
   },
   formInput: {
     width: "90%",
@@ -177,19 +183,26 @@ const styles = StyleSheet.create({
   switchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
+    marginLeft: 20
   },
   switch: {
     marginHorizontal: 20
   },
-  postButton: {
-    width: "30%",
-    height: 45,
-    backgroundColor: "#EB5757",
+  createPostButtonContainer: {
+    height: 40,
+    width: '30%',
     marginTop: 40,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center"
+    borderRadius: 15,
+    alignItems: "center",
+    backgroundColor: 'rgba(235, 87, 87, 1)',
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
   },
   postText: {
     color: "#fff",
