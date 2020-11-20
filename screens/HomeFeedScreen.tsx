@@ -41,17 +41,13 @@ export default function HomeFeedScreen({ navigation }) {
   //retrive posts from DB
   const fetchPosts = () => {
     axios
-<<<<<<< HEAD
-      .get(`${process.env.API_URL}/api/v1/posts`)
-=======
       .get(`${API_URL}/api/v1/posts`)
->>>>>>> main
       .then(resp => {
         setPosts(resp.data);
         setFilteredPosts(resp.data);
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
         setError(err);
       });
   };

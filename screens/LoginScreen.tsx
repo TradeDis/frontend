@@ -10,10 +10,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { useEffect } from "react";
-<<<<<<< HEAD
-=======
 import { API_URL } from "@env";
->>>>>>> main
 
 interface User {
   email: string;
