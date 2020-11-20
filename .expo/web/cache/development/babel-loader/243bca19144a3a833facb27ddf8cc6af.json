@@ -1,0 +1,1 @@
+{"ast":null,"code":"import Tags from \"./Tags\";\nexport default Tags;","map":{"version":3,"sources":["/Users/ryanhow/MSCI342/frontend/node_modules/react-native-tags/index.js"],"names":["Tags"],"mappings":"AAAA,OAAOA,IAAP;AACA,eAAeA,IAAf","sourcesContent":["import Tags from './Tags';\nexport default Tags;\n"]},"metadata":{},"sourceType":"module"}

@@ -1,4 +1,6 @@
-.expo
+.expo/
+
+*.expo
 
 # Logs
 logs

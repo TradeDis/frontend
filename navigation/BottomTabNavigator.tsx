@@ -11,8 +11,19 @@ import NewPostScreen from "../screens/NewPostScreen";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import HomeFeedScreen from "../screens/HomeFeedScreen";
+<<<<<<< HEAD
 import PostScreen from "../screens/PostScreen";
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types";
+=======
+import UserProfileScreen from '../screens/UserProfileScreen';
+// import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
+import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+
+
+import { StyleSheet, View, Button, TouchableWithoutFeedback } from 'react-native';
+import { ScreenStackHeaderRightView } from 'react-native-screens';
+import Navigation from '.';
+>>>>>>> main
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -35,7 +46,34 @@ export default function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabTwo"
+        component={UserProfileScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="HomseFeed"
+        component={HomeFeedScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="HomeeFeed"
         component={Login}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-code" color={color} />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="HomaeFeed"
+        component={HomeFeedScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
@@ -74,17 +112,28 @@ function TabBarIcon(props: { name: string; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
+
 function TabOneNavigator() {
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: "Tab One Title" }}
+        options={{ title: "tab 1" }}
+        name="UserProfileScreen"
+        component={UserProfileScreen}
       />
     </TabOneStack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  leftBarButton: {
+    color: 'white',
+    marginLeft: 12
+
+  },
+
+});
+
 
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 

@@ -31,6 +31,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
     "react-native-dotenv": "^2.4.2",
     "react-native-gesture-handler": "~1.7.0",
+    "react-native-ratings": "^7.3.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
     "react-native-tags": "^2.2.0",

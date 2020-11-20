@@ -1,6 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
+<<<<<<< HEAD
+=======
+import { API_URL } from "@env";
+>>>>>>> main
 
 import {
   StyleSheet,
