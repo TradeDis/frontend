@@ -1,6 +1,9 @@
 import * as React from "react";
+import { useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Tag from "../components/Tag";
+import axios from "axios";
+import { API_URL } from "@env";
 
 export default function PostScreen({ navigation, post }) {
   //Mock post for testing & implementation purposes, use passed in post in future
@@ -15,8 +18,18 @@ export default function PostScreen({ navigation, post }) {
     date: new Date(),
     tags: ["pencils", "stationary"],
     location: "Icon North Tower Floor 8",
-    requesting: true
+    requesting: true,
+    status: "active"
   };
+
+  const updateStatus = status => {
+    //update status
+    axios
+      .put(`${API_URL}/api/v1/posts`, post)
+      .then()
+      .catch();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -29,7 +42,45 @@ export default function PostScreen({ navigation, post }) {
       </View>
       <View style={styles.main}>
         <View style={styles.basicInfo}>
-          <Text style={styles.postTitle}>{mockPost.title}</Text>
+          <View style={styles.topInfo}>
+            <Text style={styles.postTitle}>{mockPost.title}</Text>
+            <View style={styles.switch}>
+              <TouchableOpacity onPress={() => updateStatus("active")}>
+                <View
+                  style={{
+                    flex: 1,
+                    padding: 5,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                    borderTopLeftRadius: 17.5,
+                    borderBottomLeftRadius: 17.5,
+                    backgroundColor:
+                      mockPost.status === "active" ? "#EB5757" : "#d3d3d3"
+                  }}
+                >
+                  <Text>Active</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => updateStatus("inactive")}>
+                <View
+                  style={{
+                    flex: 1,
+                    padding: 5,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                    borderTopRightRadius: 17.5,
+                    borderBottomRightRadius: 17.5,
+                    backgroundColor:
+                      mockPost.status === "active" ? "#949494" : "#EB5757"
+                  }}
+                >
+                  <Text>Inactive</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
           <Text style={styles.type}>
             {mockPost.requesting ? "Request" : "Trade"}
           </Text>
@@ -116,6 +167,18 @@ const styles = StyleSheet.create({
     marginTop: 0,
     borderBottomColor: "#ccc",
     borderBottomWidth: 2
+  },
+  topInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  switch: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 120,
+    height: 35
   },
   userInfo: {
     flex: 1,
