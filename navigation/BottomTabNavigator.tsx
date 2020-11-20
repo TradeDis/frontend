@@ -11,7 +11,8 @@ import NewPostScreen from "../screens/NewPostScreen";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import HomeFeedScreen from "../screens/HomeFeedScreen";
-import UserProfileScreen from '../screens/UserProfileScreen';
+import UserProfileScreen from "../screens/UserProfileScreen";
+import PostScreen from "../screens/PostScreen";
 // import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import HomeStack from "./HomeStack";
@@ -109,7 +110,6 @@ function TabBarIcon(props: { name: string; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
-
 function TabOneNavigator() {
   return (
     <TabOneStack.Navigator>
@@ -124,11 +124,9 @@ function TabOneNavigator() {
 
 const styles = StyleSheet.create({
   leftBarButton: {
-    color: 'white',
+    color: "white",
     marginLeft: 12
-
-  },
-
+  }
 });
 
 const TabTwoStack = createStackNavigator<TabTwoParamList>();

@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity
 } from "react-native";
-import { Posting } from "./../components/Posting";
+import { Posting } from "../components/Posting";
 import axios from "axios";
 import BottomNavigation from "../components/BottomNavigation";
 import { API_URL } from "@env";
@@ -29,27 +29,52 @@ interface Post {
 }
 
 export default function HomeFeedScreen({ navigation }) {
-  const [search, setSearch] = useState("");
   const [error, setError] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
   const { user, setUser } = useContext(AuthContext);
   console.log(user)
 
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+
   useEffect(() => {
+    //whenever screen is focused
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchPosts();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
-    fetchPosts();
-  }, []);
-
+  //retrive posts from DB
   const fetchPosts = () => {
     axios
       .get(`https://tradis.herokuapp.com/api/v1/posts`)
       .then(resp => {
         setPosts(resp.data);
+        setFilteredPosts(resp.data);
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
         setError(err);
       });
+  };
+
+  const filterTags = (tags, searchText) => {
+    for (let i = 0; i < tags.length; i++) {
+      if (tags[i].toLowerCase().includes(searchText)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const filterPosts = searchText => {
+    const search = searchText.toLowerCase();
+    const filtered = posts.filter(
+      post =>
+        post.title.toLowerCase().includes(search) ||
+        filterTags(post.tags, search)
+    );
+    setFilteredPosts(filtered);
   };
 
   return (
@@ -67,8 +92,7 @@ export default function HomeFeedScreen({ navigation }) {
           style={styles.search}
           placeholder="Search"
           placeholderTextColor="black"
-          onChangeText={searchText => setSearch(searchText)}
-          value={search}
+          onChangeText={searchText => filterPosts(searchText)}
         />
       </View>
       <View style={styles.feed}>
@@ -77,12 +101,12 @@ export default function HomeFeedScreen({ navigation }) {
           <Text style={styles.postingSubtitle}>New Postings</Text>
           {error ? (
             <Text>Error retrieving posts</Text>
-          ) : posts.length === 0 ? (
+          ) : filteredPosts.length === 0 ? (
             <Text>No results available</Text>
           ) : (
                 <View style={styles.postings}>
                   <ScrollView horizontal={true}>
-                    {posts.map(post => (
+                    {filteredPosts.map(post => (
                       <Posting
                         key={post.post_id}
                         post={post}
@@ -97,12 +121,12 @@ export default function HomeFeedScreen({ navigation }) {
           <Text style={styles.postingSubtitle}>Trending</Text>
           {error ? (
             <Text>Error retrieving posts</Text>
-          ) : posts.length === 0 ? (
+          ) : filteredPosts.length === 0 ? (
             <Text>No results available</Text>
           ) : (
                 <View style={styles.postings}>
                   <ScrollView horizontal={true}>
-                    {posts.map(post => (
+                    {filteredPosts.map(post => (
                       <Posting
                         key={post.post_id}
                         post={post}

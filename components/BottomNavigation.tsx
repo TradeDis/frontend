@@ -11,7 +11,7 @@ export default function BottomNavigation({ navigation }) {
         </View>
       </TouchableOpacity>
       {/* Make CreatePost in index.tsx naviation*/}
-      <TouchableOpacity onPress={() => navigation.navigate("CreatePost")}>
+      <TouchableOpacity onPress={() => navigation.navigate("NewPost")}>
         <View style={styles.circle}>
           <Text style={styles.plusSign}>+</Text>
         </View>

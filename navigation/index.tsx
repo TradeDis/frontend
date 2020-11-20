@@ -16,6 +16,7 @@ import HomeFeedScreen from "../screens/HomeFeedScreen";
 import HomeStack from "./HomeStack";
 import { useContext, useState } from "react";
 import { AuthContext } from "./AuthProvider";
+import NewPostScreen from "../screens/NewPostScreen";
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -61,6 +62,6 @@ function RootNavigator() {
       />
 
       {/* <Stack.Screen name="Home" component={HomeFeedStackNavigator} /> */}
-    </Stack.Navigator>
+    </Stack.Navigator >
   );
 }

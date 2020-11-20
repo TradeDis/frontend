@@ -22,11 +22,11 @@ interface User {
 
 export default function SignUpScreen({ navigation }: any) {
     const [user, setUser] = useState<User>({
-        username: '',
-        first_name: '',
-        last_name: '',
-        email: '',
-        password: ''
+        username: "",
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: ""
     });
 
 
@@ -114,7 +114,71 @@ export default function SignUpScreen({ navigation }: any) {
                 </TouchableOpacity>
             </View>
         </View>
-    );
+      </View >
+    {
+        response.status != "pending" && (
+            <Text
+                style={
+                    response.status == "success"
+                        ? styles.successMessage
+                        : styles.errorMessage
+                }
+            >
+                {" "}
+                {response.message}{" "}
+            </Text>
+        )
+    }
+        < View style = { styles.form } >
+        <TextInput
+          placeholder="Username"
+          style={styles.formInput}
+          onChangeText={username =>
+            setUser(prevState => ({ ...prevState, username }))
+          }
+          value={user.username}
+        />
+        <TextInput
+          placeholder="First Name"
+          style={styles.formInput}
+          onChangeText={first_name =>
+            setUser(prevState => ({ ...prevState, first_name }))
+          }
+          value={user.first_name}
+        />
+        <TextInput
+          placeholder="Last Name"
+          style={styles.formInput}
+          onChangeText={last_name =>
+            setUser(prevState => ({ ...prevState, last_name }))
+          }
+          value={user.last_name}
+        />
+        <TextInput
+          placeholder="Email"
+          style={styles.formInput}
+          onChangeText={email =>
+            setUser(prevState => ({ ...prevState, email }))
+          }
+          value={user.email}
+        />
+        <TextInput
+          placeholder="Password"
+          style={styles.formInput}
+          onChangeText={password =>
+            setUser(prevState => ({ ...prevState, password }))
+          }
+          value={user.password}
+        />
+        <TouchableOpacity
+          style={styles.postButton}
+          onPress={() => createUser()}
+        >
+          <Text style={styles.postText}>Sign Up</Text>
+        </TouchableOpacity>
+      </View >
+    </View >
+  );
 }
 
 const styles = StyleSheet.create({
