@@ -35,7 +35,7 @@ export default function SignUpScreen({ navigation }: any) {
     const createUser = () => {
         console.log(user);
         axios
-            .post(`http://192.168.31.138:3000/api/v1/users`, user)
+            .post(`https://tradis.herokuapp.com/api/v1/users`, user)
             .then(resp => {
                 setResponse({ status: 'success', message: `User ${resp.data.username} Successfully created!` })
                 navigation.navigate('Login', { message: `User ${resp.data.username} Successfully created! Plesae login here.` })
@@ -107,6 +107,11 @@ export default function SignUpScreen({ navigation }: any) {
                 >
                     <Text style={styles.postText}>Sign Up</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.signupButton}
+                    onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.postText}> Log in  </Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -160,6 +165,15 @@ const styles = StyleSheet.create({
         width: "30%",
         height: 45,
         backgroundColor: "#EB5757",
+        marginTop: 40,
+        borderRadius: 50,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    signupButton: {
+        width: "30%",
+        height: 45,
+        backgroundColor: "#ccc",
         marginTop: 40,
         borderRadius: 50,
         justifyContent: "center",

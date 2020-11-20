@@ -12,6 +12,7 @@ import {
 import { useEffect } from "react";
 import { API_URL } from "@env";
 import { AuthContext } from "../navigation/AuthProvider";
+import Loading from '../components/Loading';
 
 interface User {
     email: string;
@@ -20,6 +21,7 @@ interface User {
 
 export default function LoginScreen({ route, navigation }: any) {
     const [response, setResponse] = useState({ status: "pending", message: "" });
+    const [isLoadingComplete, setLoadingComplete] = React.useState(true);
     useEffect(() => {
         const { message } = route.params || '';
         setResponse({ status: 'success', message })
@@ -33,9 +35,10 @@ export default function LoginScreen({ route, navigation }: any) {
     const { user: userAuth, setUser: setUserAuth } = useContext(AuthContext);
 
     const login = () => {
+        setLoadingComplete(false)
         console.log(API_URL)
         axios
-            .post(`http://192.168.31.138:3000/api/v1/users/login`, user)
+            .post(`https://tradis.herokuapp.com/api/v1/users/login`, user)
             .then(resp => {
                 const { result: isAuth, user } = resp.data
                 if (isAuth) {
@@ -44,11 +47,13 @@ export default function LoginScreen({ route, navigation }: any) {
                 } else {
                     setResponse({ status: 'error', message: `Wrong email or password!` })
                 }
+                setLoadingComplete(true)
             })
             .catch(err => {
                 const { errors } = err.response.data
                 const message = Object.values(errors).map((field: any) => field.message).join(' / ')
                 setResponse({ status: 'error', message })
+                setLoadingComplete(true)
             });
     };
 
@@ -80,18 +85,20 @@ export default function LoginScreen({ route, navigation }: any) {
                     }
                     value={user.password}
                 />
-                <TouchableOpacity
-                    style={styles.postButton}
-                    onPress={() => login()}
-                >
-                    <Text style={styles.postText}>Log In</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.signupButton}
-                    onPress={() => navigation.navigate('Signup')}
-                >
-                    <Text style={styles.postText}>Sign Up</Text>
-                </TouchableOpacity>
+                {isLoadingComplete ? <>
+                    <TouchableOpacity
+                        style={styles.postButton}
+                        onPress={() => login()}>
+                        <Text style={styles.postText}> Log in  </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.signupButton}
+                        onPress={() => navigation.navigate('Signup')}>
+                        <Text style={styles.postText}> Sign up  </Text>
+                    </TouchableOpacity>
+                </>
+                    : <Loading />}
+
             </View>
         </View>
     );

@@ -51,7 +51,7 @@ export default function NewPostScreen({ navigation }) {
       return;
     }
     axios
-      .post(`http://192.168.31.138:3000/api/v1/posts`, post)
+      .post(`https://tradis.herokuapp.com/api/v1/posts`, post)
       .then(resp => {
         setStatus("success");
         setDisplayMessage("Successfully created post");

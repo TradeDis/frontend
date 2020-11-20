@@ -42,7 +42,7 @@ export default function HomeFeedScreen({ navigation }) {
 
   const fetchPosts = () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/posts`)
+      .get(`https://tradis.herokuapp.com/api/v1/posts`)
       .then(resp => {
         setPosts(resp.data);
       })

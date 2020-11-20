@@ -154,7 +154,7 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   const getUserData = () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/users/24`)
+      .get(`https://tradis.herokuapp.com/api/v1/users/24`)
       .then(resp => {
         setUser(resp.data)
 
