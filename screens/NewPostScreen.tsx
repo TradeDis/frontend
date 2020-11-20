@@ -11,6 +11,7 @@ import {
   Keyboard
 } from "react-native";
 import Tags from "react-native-tags";
+import { API_URL } from "@env";
 
 interface Post {
   post_id: string;
@@ -52,7 +53,7 @@ export default function NewPostScreen({ navigation }) {
     }
     //perform api request to create new post
     axios
-      .post(`${process.env.API_URL}/api/v1/posts`, post)
+      .post(`${API_URL}/api/v1/posts`, post)
       .then(resp => {
         setStatus("success");
         setDisplayMessage("Successfully created post");
