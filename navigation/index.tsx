@@ -12,6 +12,7 @@ import { RootStackParamList } from "../types";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
 import HomeFeedScreen from "../screens/HomeFeedScreen";
+import NewPostScreen from "../screens/NewPostScreen";
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -45,6 +46,7 @@ function RootNavigator() {
         options={{ title: "Oops!" }}
       />
       <Stack.Screen name="Home" component={HomeFeedScreen} />
+      <Stack.Screen name="NewPost" component={NewPostScreen} />
     </Stack.Navigator>
   );
 }
