@@ -3,24 +3,11 @@ import { StyleSheet, View, Text, TouchableOpacity, Keyboard, Switch, TextInput }
 import Tag from "../components/Tag";
 import { useNavigation } from '@react-navigation/native';
 import BottomNavigation from "../components/BottomNavigation";
+import { useState } from "react";
 
-
-export const PostScreen = ({ navigation, route }) => {
-  console.log(route.params.post_id)
-
-  let mockPost = {
-    title: "In Need of Pencils",
-    content:
-      "Just ran out of my last pencil and have an exam today at 3pm! Please, if anyone has any spare ones let me know!",
-    created_by: {
-      username: "johnsmith21",
-      fullname: "John Smith"
-    },
-    date: new Date(),
-    tags: ["pencils", "stationary"],
-    location: "Icon North Tower Floor 8",
-    requesting: true
-  };
+export default function PostScreen({ navigation, route }) {
+  const [post, setPost] = useState(route.params?.post);
+  console.log(post)
 
   return (
     <View style={styles.container}>
@@ -34,50 +21,51 @@ export const PostScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.main}>
         <View style={styles.basicInfo}>
-          <Text style={styles.postTitle}>{mockPost.title}</Text>
+          <Text style={styles.postTitle}>{post.title}</Text>
           <Text style={styles.type}>
-            {mockPost.requesting ? "Request" : "Trade"}
+            {post.requesting ? "Request" : "Trade"}
           </Text>
-          {mockPost.tags && mockPost.tags.length > 0 && (
+          {post.tags && post.tags.length > 0 && (
             <View>
               <Text style={styles.tagsText}>Tags:</Text>
               <View style={styles.tags}>
-                {mockPost.tags.map((tag, index) => (
-                  <Tag tag={tag}></Tag>
+                {post.tags.map((tag, index) => (
+                  <Tag key={index} tag={tag}></Tag>
                 ))}
               </View>
             </View>
           )}
 
           <Text style={styles.location}>
-            {mockPost.location ? mockPost.location : "No location available"}
+            {post.location ? post.location : "No location available"}
           </Text>
           <Text style={styles.date}>
-            {mockPost.date
-              ? "Posted on " + mockPost.date.toLocaleString()
+            {post.date
+              ? "Posted on " + post.date.toLocaleString()
               : "No date available"}
           </Text>
           <View style={styles.proposeContainer}>
-            <TouchableOpacity style={styles.propose}>
+            <TouchableOpacity
+              style={styles.propose}
+              onPress={() =>
+                navigation.navigate("Inbox", { screen: "NewMessage", post })
+              }
+            >
               <Text style={styles.proposeText}>Propose Trade</Text>
             </TouchableOpacity>
           </View>
         </View>
         <View style={styles.details}>
           <Text style={styles.detailsText}>Details</Text>
-          <Text style={styles.content}>{mockPost.content}</Text>
+          <Text style={styles.content}>{post.content}</Text>
         </View>
         <View style={styles.userInfo}>
           <Text style={styles.userInfoText}>User Information</Text>
           <View style={styles.userDetails}>
             <View style={styles.avatar}>{/*avatar will be put here*/}</View>
             <View style={styles.user}>
-              <Text style={styles.fullName}>
-                {mockPost.created_by.fullname}
-              </Text>
-              <Text style={styles.username}>
-                {mockPost.created_by.username}
-              </Text>
+              <Text style={styles.fullName}>{post.created_by.fullname}</Text>
+              <Text style={styles.username}>{post.created_by.username}</Text>
             </View>
           </View>
         </View>
@@ -89,72 +77,72 @@ export const PostScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   top: {
     flex: 2,
     flexDirection: "row",
     backgroundColor: "#EB5757",
     justifyContent: "space-evenly",
-    alignItems: "center"
+    alignItems: "center",
   },
   main: {
-    flex: 8
+    flex: 8,
   },
   title: {
     fontSize: 35,
     color: "#fff",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   secondaryText: {
     color: "#fff",
-    fontSize: 17.5
+    fontSize: 17.5,
   },
   basicInfo: {
     flex: 3.5,
     margin: 15,
     borderBottomColor: "#ccc",
-    borderBottomWidth: 2
+    borderBottomWidth: 2,
   },
   details: {
-    flex: 4,
     margin: 15,
     marginTop: 0,
+    paddingVertical: 15,
     borderBottomColor: "#ccc",
-    borderBottomWidth: 2
+    borderBottomWidth: 2,
   },
   userInfo: {
     flex: 1,
     margin: 15,
-    marginTop: 0
+    marginTop: 0,
   },
   postTitle: {
     fontSize: 30,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   type: {
-    fontSize: 22.5
+    fontSize: 22.5,
   },
   tags: {
     flexDirection: "row",
-    marginVertical: 10
+    marginVertical: 10,
   },
   tagsText: {
-    fontSize: 15
+    fontSize: 15,
   },
   noTags: {
     marginVertical: 10,
-    fontSize: 15
+    fontSize: 15,
   },
   date: {
-    fontSize: 15
+    fontSize: 15,
   },
   location: {
-    fontSize: 15
+    fontSize: 15,
   },
   proposeContainer: {
     alignItems: "center",
-    marginVertical: 10
+    marginVertical: 10,
   },
   propose: {
     width: "90%",
@@ -162,27 +150,27 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#EB5757",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   proposeText: {
     fontSize: 17.5,
-    color: "white"
+    color: "white",
   },
   detailsText: {
     fontSize: 25,
     fontWeight: "bold",
-    marginBottom: 10
+    marginBottom: 10,
   },
   content: {
-    fontSize: 17.5
+    fontSize: 17.5,
   },
   userInfoText: {
     fontSize: 25,
     fontWeight: "bold",
-    marginBottom: 10
+    marginBottom: 10,
   },
   userDetails: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   avatar: {
     width: 40,
@@ -190,16 +178,16 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#EB5757",
     borderColor: "black",
-    borderWidth: 2
+    borderWidth: 2,
   },
   user: {
-    marginLeft: 10
+    marginLeft: 10,
   },
   fullName: {
     fontSize: 17.5,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   username: {
-    fontSize: 15
-  }
+    fontSize: 15,
+  },
 });

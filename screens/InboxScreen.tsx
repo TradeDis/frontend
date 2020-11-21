@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { List, Divider } from 'react-native-paper';
-// import firestore from '@react-native-firebase/firestore';
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { Card, ListItem, Avatar } from "react-native-elements";
 import Loading from '../components/Loading';
 import useStatsBar from '../hooks/useStatusBar';
 import axios from "axios";
@@ -60,34 +59,7 @@ export default function InboxScreen({ navigation }) {
         // const message = Object.values(errors).map((field: any) => field.message).join(' / ')
         // setResponse({ status: 'error', message })
       });
-    // const unsubscribe = firestore()
-    //   .collection('THREADS')
-    //   .orderBy('latestMessage.createdAt', 'desc')
-    //   .onSnapshot(querySnapshot => {
-    //     const threads = querySnapshot.docs.map(documentSnapshot => {
-    //       return {
-    //         _id: documentSnapshot.id,
-    //         // give defaults
-    //         name: '',
 
-    //         latestMessage: {
-    //           text: ''
-    //         },
-    //         ...documentSnapshot.data()
-    //       };
-    //     });
-
-    //     setThreads(threads);
-
-    //     if (loading) {
-    //       setLoading(false);
-    //     }
-    //   });
-
-    /**
-     * unsubscribe listener
-     */
-    // return () => unsubscribe();
   }, []);
 
   if (loading) {
@@ -96,26 +68,31 @@ export default function InboxScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={conversations}
-        keyExtractor={item => item._id}
-        ItemSeparatorComponent={() => <Divider />}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Room', { conversation: item })}
-          >
-            <List.Item
-              title={item.name}
-              subtitle={item.post}
-              description={item.members.map(member => member.name).join(' & ')}
-              titleNumberOfLines={1}
-              titleStyle={styles.listTitle}
-              descriptionStyle={styles.listDescription}
-              descriptionNumberOfLines={1}
-            />
-          </TouchableOpacity>
-        )}
-      />
+      <View style={styles.main}>
+        <Card>
+          <View style={styles.head}>
+            <TouchableOpacity onPress={() => navigation.navigate("NewMessage")}>
+              <Text style={styles.newMessage}>New</Text>
+            </TouchableOpacity>
+            <Card.Title>INBOX</Card.Title>
+            <Text style={styles.filter}>Filter</Text>
+          </View>
+          <Card.Divider />
+          {conversations.map((c, i) => (
+            <ListItem key={i} bottomDivider onPress={() => navigation.navigate('Room', { conversation: c })}>
+              <Avatar source={{ uri: "https://gravatar.com/avatar/a43bffa6b4c3516d30784cdce14557cc?s=400&d=robohash&r=x" }} />
+              <ListItem.Content>
+                <ListItem.Title style={{ fontWeight: "bold" }}>
+                  {c.members.map(member => member.name).join(' & ')}
+                </ListItem.Title>
+                <ListItem.Subtitle numberOfLines={1}>
+                  <Text>{c.post} {c.name}</Text>
+                </ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
+          ))}
+        </Card>
+      </View>
       <BottomNavigation navigation={navigation}></BottomNavigation>
     </View>
   );
@@ -123,13 +100,44 @@ export default function InboxScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f5f5f5',
-    flex: 1
+    flex: 1,
   },
-  listTitle: {
-    fontSize: 22
+  top: {
+    flex: 2,
+    flexDirection: "row",
+    backgroundColor: "#EB5757",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
-  listDescription: {
-    fontSize: 16
+  main: {
+    flex: 8,
+    marginHorizontal: 15,
+  },
+  title: {
+    fontSize: 35,
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  secondaryText: {
+    color: "#fff",
+    fontSize: 17.5,
+  },
+  head: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  newMessage: {
+    color: "#fff",
+    backgroundColor: "#EB5757",
+    borderRadius: 5,
+    margin: 10,
+    padding: 10,
+  },
+  filter: {
+    color: "#fff",
+    backgroundColor: "#EB5757",
+    borderRadius: 5,
+    margin: 10,
+    padding: 10,
   }
 });

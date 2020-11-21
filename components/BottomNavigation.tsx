@@ -17,7 +17,9 @@ export default function BottomNavigation({ navigation }) {
         </View>
       </TouchableOpacity>
       {/* Make Home in index.tsx naviation*/}
-      <TouchableOpacity onPress={() => navigation.navigate("Inbox")}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Inbox", { screen: "Messages" })}
+      >
         <View style={styles.navButton}>
           <Text style={styles.navText}>Inbox</Text>
         </View>
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#C9CED6",
     justifyContent: "space-evenly",
-    alignItems: "center"
+    alignItems: "center",
   },
   circle: {
     backgroundColor: "#EB5757",
@@ -43,11 +45,11 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     alignItems: "center",
-    top: "-50%"
+    top: "-50%",
   },
   plusSign: {
     fontSize: 75,
-    color: "white"
+    color: "white",
   },
   navButton: {
     width: 90,
@@ -55,10 +57,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "#EB5757",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   navText: {
     fontSize: 17.5,
-    color: "white"
-  }
+    color: "white",
+  },
 });

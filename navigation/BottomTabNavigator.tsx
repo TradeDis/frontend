@@ -11,10 +11,13 @@ import NewPostScreen from "../screens/NewPostScreen";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import HomeFeedScreen from "../screens/HomeFeedScreen";
+import InboxScreen from "../screens/InboxScreen";
+import ConversationScreen from "../screens/ConversationScreen";
+import NewMessageScreen from "../screens/NewMessageScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
 import UserProfileSettingsScreen from "../screens/UserProfileSettingsScreen";
 
-import { PostScreen } from "../screens/PostScreen";
+import PostScreen from "../screens/PostScreen";
 // import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import HomeStack from "./HomeStack";

@@ -5,6 +5,7 @@ import { IconButton } from 'react-native-paper';
 import InboxScreen from '../screens/InboxScreen';
 // import AddConversationScreen from '../screens/AddConversationScreen';
 import ConversationScreen from '../screens/ConversationScreen';
+import NewMessageScreen from '../screens/NewMessageScreen';
 // import { AuthContext } from './AuthProvider';
 
 const ChatAppStack = createStackNavigator();
@@ -67,7 +68,7 @@ export default function HomeStack() {
   return (
     <ModalStack.Navigator mode='modal' headerMode='none'>
       <ModalStack.Screen name='ChatApp' component={ChatApp} />
-      <ModalStack.Screen name='AddRoom' component={ConversationScreen} />
+      <ModalStack.Screen name='NewMessage' component={NewMessageScreen} />
     </ModalStack.Navigator>
   );
 }
