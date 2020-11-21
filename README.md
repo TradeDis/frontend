@@ -1,6 +1,6 @@
 # frontend
-Tradedis mobile client
 
+Tradedis mobile client
 
 ### Starting the development server
 
@@ -14,10 +14,14 @@ yarn global add expo-cli
 # install JS dependencies
 yarn install
 
+#setup .env
+cp .env.example .env
+
 # start the expo
 expo start
 
 ```
+
 When you run `expo start` (or `yarn start`), Expo CLI starts Metro Bundler, which is an HTTP server that compiles the JavaScript code of our app using Babel and serves it to the Expo app. It also pops up Expo Dev Tools, a graphical interface for Expo CLI.
 
 > 👋 You can close the Expo Dev Tools window and disable it from starting in the future by pressing shift+d in your terminal running Expo CLI. Start it again at any time by pressing d in the terminal running Expo CLI.

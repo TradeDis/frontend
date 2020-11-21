@@ -6,22 +6,27 @@ import {
   View,
   TouchableOpacity
 } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
-export function Posting({ post, navigation }) {
+
+export const Posting = ({ post }) => {
+  const navigation = useNavigation();
+
   return (
-    // Create PostPage in nav which accepts post_id data payload
-    <TouchableOpacity
-      onPress={() => navigation.navigate("Post", { post })}
-    >
-      <View style={styles.postingContainer}>
-        <Text style={styles.postTitle}>{post.title}</Text>
-        <Text style={styles.postContent}>{post.content}</Text>
-        <Text style={styles.location}>{post.location}</Text>
-        <Text style={styles.postType}>
-          {post.requesting ? "Request" : "Trade"}
-        </Text>
-      </View>
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Post", { post_id: post.post_id })}
+      >
+        <View style={styles.postingContainer}>
+          <Text style={styles.postTitle}>{post.title}</Text>
+          <Text style={styles.postContent}>{post.content}</Text>
+          <Text style={styles.location}>{post.location}</Text>
+          <Text style={styles.postType}>
+            {post.requesting ? "Request" : "Trade"}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -29,10 +34,17 @@ const styles = StyleSheet.create({
   postingContainer: {
     width: 150,
     height: 150,
-    borderRadius: 10,
-    borderWidth: 2,
+    borderRadius: 12,
     margin: 5,
-    padding: 5
+    padding: 8,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 1.5,
+      height: 2.5,
+    },
+    shadowOpacity: 0.5,
+    elevation: 20,
+    backgroundColor: 'white'
   },
   postTitle: {
     fontWeight: "bold",
@@ -43,8 +55,8 @@ const styles = StyleSheet.create({
   },
   postType: {
     position: "absolute",
-    right: 5,
-    bottom: 5
+    right: 8,
+    bottom: 8
   },
   location: {
     fontWeight: "bold"

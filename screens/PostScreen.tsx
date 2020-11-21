@@ -1,7 +1,9 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard, Switch, TextInput } from "react-native";
 import Tag from "../components/Tag";
+import { useNavigation } from '@react-navigation/native';
+import BottomNavigation from "../components/BottomNavigation";
+import { useState } from "react";
 
 export default function PostScreen({ navigation, route }) {
   const [post, setPost] = useState(route.params?.post);
@@ -10,7 +12,7 @@ export default function PostScreen({ navigation, route }) {
     <View style={styles.container}>
       <View style={styles.top}>
         {/* nav needs to be implemented */}
-        <TouchableOpacity onPress={() => navigation.navigate("HomeFeed")}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.secondaryText}>Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>TradeDis</Text>
@@ -67,6 +69,7 @@ export default function PostScreen({ navigation, route }) {
           </View>
         </View>
       </View>
+      <BottomNavigation navigation={navigation}></BottomNavigation>
     </View>
   );
 }

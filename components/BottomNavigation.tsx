@@ -11,7 +11,7 @@ export default function BottomNavigation({ navigation }) {
         </View>
       </TouchableOpacity>
       {/* Make CreatePost in index.tsx naviation*/}
-      <TouchableOpacity onPress={() => navigation.navigate("CreatePost")}>
+      <TouchableOpacity onPress={() => navigation.navigate("NewPost")}>
         <View style={styles.circle}>
           <Text style={styles.plusSign}>+</Text>
         </View>
@@ -30,6 +30,9 @@ export default function BottomNavigation({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#C9CED6",
