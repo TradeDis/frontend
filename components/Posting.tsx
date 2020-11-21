@@ -15,7 +15,7 @@ export const Posting = ({ post }) => {
   return (
     <View>
       <TouchableOpacity
-        onPress={() => navigation.navigate("Post", { post_id: post.post_id })}
+        onPress={() => navigation.navigate("Post", { post: post })}
       >
         <View style={styles.postingContainer}>
           <Text style={styles.postTitle}>{post.title}</Text>

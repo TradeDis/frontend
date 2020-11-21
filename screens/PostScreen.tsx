@@ -7,6 +7,7 @@ import { useState } from "react";
 
 export default function PostScreen({ navigation, route }) {
   const [post, setPost] = useState(route.params?.post);
+  console.log(post)
 
   return (
     <View style={styles.container}>

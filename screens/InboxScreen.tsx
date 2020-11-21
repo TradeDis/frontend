@@ -68,14 +68,6 @@ export default function InboxScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.top}>
-        {/* nav needs to be implemented */}
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.secondaryText}>Back</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>TradeDis</Text>
-        <Text style={styles.secondaryText}>Avatar</Text>
-      </View>
       <View style={styles.main}>
         <Card>
           <View style={styles.head}>
@@ -101,6 +93,7 @@ export default function InboxScreen({ navigation }) {
           ))}
         </Card>
       </View>
+      <BottomNavigation navigation={navigation}></BottomNavigation>
     </View>
   );
 }
