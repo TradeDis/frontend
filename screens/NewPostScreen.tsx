@@ -53,12 +53,12 @@ export default function NewPostScreen({ navigation }) {
     }
     //perform api request to create new post
     axios
-      .post(`https://tradis.herokuapp.com/api/v1/posts`, post)
+      .post(`http://192.168.31.138:3000/api/v1/posts`, post)
       .then(resp => {
         setStatus("success");
         setDisplayMessage("Successfully created post");
         //navigate back to homefeed after success
-        navigation.navigate("HomeFeed");
+        navigation.navigate("Home");
       })
       .catch(err => {
         setStatus("error");
@@ -69,7 +69,7 @@ export default function NewPostScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <TouchableOpacity onPress={() => navigation.navigate("HomeFeed")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Text style={styles.topSecondaryText}>Back</Text>
         </TouchableOpacity>
         <View>

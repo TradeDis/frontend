@@ -38,7 +38,7 @@ export default function LoginScreen({ route, navigation }: any) {
         setLoadingComplete(false)
         console.log(API_URL)
         axios
-            .post(`https://tradis.herokuapp.com/api/v1/users/login`, user)
+            .post(`http://192.168.31.138:3000/api/v1/users/login`, user)
             .then(resp => {
                 const { result: isAuth, user } = resp.data
                 if (isAuth) {
@@ -101,53 +101,7 @@ export default function LoginScreen({ route, navigation }: any) {
 
             </View>
         </View>
-      </View >
-    {
-        response.status != "pending" && (
-            <Text
-                style={
-                    response.status == "success"
-                        ? styles.successMessage
-                        : styles.errorMessage
-                }
-            >
-                {" "}
-                {response.message}{" "}
-            </Text>
-        )
-    }
-        < View style = { styles.form } >
-        <TextInput
-          placeholder="Email"
-          style={styles.formInput}
-          onChangeText={email =>
-            setUser(prevState => ({ ...prevState, email }))
-          }
-          value={user.email}
-        />
-        <TextInput
-          placeholder="Password"
-          style={styles.formInput}
-          onChangeText={password =>
-            setUser(prevState => ({ ...prevState, password }))
-          }
-          value={user.password}
-        />
-        <TouchableOpacity
-          style={styles.postButton}
-          onPress={() => createPosting()}
-        >
-          <Text style={styles.postText}>Log In</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.signupButton}
-          onPress={() => navigation.navigate("TabOne")}
-        >
-          <Text style={styles.postText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View >
-    </View >
-  );
+    );
 }
 
 const styles = StyleSheet.create({

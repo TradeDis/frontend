@@ -1,10 +1,14 @@
 import * as React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard, Switch, TextInput } from "react-native";
 import Tag from "../components/Tag";
+import { useNavigation } from '@react-navigation/native';
+import BottomNavigation from "../components/BottomNavigation";
 
-export default function PostScreen({ navigation, post }) {
-  //Mock post for testing & implementation purposes, use passed in post in future
-  const mockPost = {
+
+export const PostScreen = ({ navigation, route }) => {
+  console.log(route.params.post_id)
+
+  let mockPost = {
     title: "In Need of Pencils",
     content:
       "Just ran out of my last pencil and have an exam today at 3pm! Please, if anyone has any spare ones let me know!",
@@ -17,11 +21,12 @@ export default function PostScreen({ navigation, post }) {
     location: "Icon North Tower Floor 8",
     requesting: true
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
         {/* nav needs to be implemented */}
-        <TouchableOpacity onPress={navigation.navigate("Home")}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.secondaryText}>Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>TradeDis</Text>
@@ -77,6 +82,7 @@ export default function PostScreen({ navigation, post }) {
           </View>
         </View>
       </View>
+      <BottomNavigation navigation={navigation}></BottomNavigation>
     </View>
   );
 }

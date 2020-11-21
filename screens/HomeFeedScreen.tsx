@@ -47,7 +47,7 @@ export default function HomeFeedScreen({ navigation }) {
   //retrive posts from DB
   const fetchPosts = () => {
     axios
-      .get(`https://tradis.herokuapp.com/api/v1/posts`)
+      .get(`http://192.168.31.138:3000/api/v1/posts`)
       .then(resp => {
         setPosts(resp.data);
         setFilteredPosts(resp.data);
@@ -110,7 +110,6 @@ export default function HomeFeedScreen({ navigation }) {
                       <Posting
                         key={post.post_id}
                         post={post}
-                        navigation={navigation}
                       ></Posting>
                     ))}
                   </ScrollView>
@@ -130,7 +129,6 @@ export default function HomeFeedScreen({ navigation }) {
                       <Posting
                         key={post.post_id}
                         post={post}
-                        navigation={navigation}
                       ></Posting>
                     ))}
                   </ScrollView>
@@ -144,6 +142,29 @@ export default function HomeFeedScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  postingContainer: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    borderWidth: 2,
+    margin: 5,
+    padding: 5
+  },
+  postTitle: {
+    fontWeight: "bold",
+    fontSize: 20
+  },
+  postContent: {
+    marginVertical: 3
+  },
+  postType: {
+    position: "absolute",
+    right: 5,
+    bottom: 5
+  },
+  location: {
+    fontWeight: "bold"
+  },
   container: {
     flex: 1
   },

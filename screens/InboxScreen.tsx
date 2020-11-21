@@ -49,7 +49,7 @@ export default function InboxScreen({ navigation }) {
     // ]);
 
     axios
-      .get(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}/conversations`)
+      .get(`http://192.168.31.138:3000/api/v1/users/${user.user_id}/conversations`)
       .then(resp => {
         console.log(resp.data)
         setConversations(resp.data)

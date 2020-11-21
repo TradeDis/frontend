@@ -12,7 +12,7 @@ import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import HomeFeedScreen from "../screens/HomeFeedScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
-import PostScreen from "../screens/PostScreen";
+import { PostScreen } from "../screens/PostScreen";
 // import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import HomeStack from "./HomeStack";
@@ -30,9 +30,95 @@ export default function HomeFeedStackNavigator() {
     <HomeFeedStack.Navigator headerMode='none'>
       <HomeFeedStack.Screen name='Home' component={HomeFeedScreen} />
       <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
+      <HomeFeedStack.Screen name='Post' component={PostScreen} />
+      <HomeFeedStack.Screen
+        name='NewPost'
+        component={NewPostStack}
+      />
     </HomeFeedStack.Navigator>
   )
 };
+
+const NewPostModalStack = createStackNavigator();
+
+function NewPostStack() {
+  return (
+    <NewPostModalStack.Navigator mode='modal' headerMode='none'>
+      {/* <ModalStack.Screen name='Home' component={Post} /> */}
+      <NewPostModalStack.Screen
+        name='NewPost'
+        component={NewPostScreen}
+      />
+    </NewPostModalStack.Navigator>
+  );
+}
+
+
+const ChatAppStack = createStackNavigator();
+const ModalStack = createStackNavigator();
+
+/**
+ * All chat app related screens
+ */
+
+function Post() {
+  // const { logout } = useContext(AuthContext);
+
+  return (
+    <ChatAppStack.Navigator
+      headerMode='none'
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#EB5757'
+        },
+        headerTintColor: '#ffffff',
+        headerTitleStyle: {
+          fontSize: 22
+        }
+      }}
+    >
+      {/* <ChatAppStack.Screen
+        name='Inbox'
+        component={InboxScreen}
+        options={({ navigation }) => ({
+          title: 'Inbox',
+          headerRight: () => (
+            <IconButton
+              icon='message-plus'
+              size={28}
+              color='#ffffff'
+              onPress={() => navigation.navigate('AddRoom')}
+            />
+          ),
+          // headerLeft: () => (
+          //   <IconButton
+          //     icon='logout-variant'
+          //     size={28}
+          //     color='#ffffff'
+          //     onPress={() => logout()}
+          //   />
+          // )
+        })}
+      /> */}
+      <ChatAppStack.Screen
+        name='Post'
+        component={PostScreen}
+      />
+    </ChatAppStack.Navigator>
+  );
+}
+
+function PostStack() {
+  return (
+    <ModalStack.Navigator mode='modal' headerMode='none'>
+      {/* <ModalStack.Screen name='Home' component={Post} /> */}
+      <ModalStack.Screen
+        name='Post'
+        component={Post}
+      />
+    </ModalStack.Navigator>
+  );
+}
 
 // function BottomTabNavigator() {
 //   const colorScheme = useColorScheme();
