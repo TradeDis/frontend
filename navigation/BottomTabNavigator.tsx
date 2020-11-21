@@ -25,6 +25,8 @@ import { IconButton } from "react-native-paper";
 const BottomTab = createBottomTabNavigator<any>();
 const HomeFeedStack = createStackNavigator();
 
+// route can only be passed in the same stack
+
 export default function HomeFeedStackNavigator() {
   return (
     <HomeFeedStack.Navigator headerMode='none'>
@@ -114,7 +116,7 @@ function PostStack() {
       {/* <ModalStack.Screen name='Home' component={Post} /> */}
       <ModalStack.Screen
         name='Post'
-        component={Post}
+        component={PostScreen}
       />
     </ModalStack.Navigator>
   );
