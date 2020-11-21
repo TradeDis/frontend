@@ -12,6 +12,8 @@ import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import HomeFeedScreen from "../screens/HomeFeedScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
+import UserProfileSettingsScreen from "../screens/UserProfileSettingsScreen";
+
 import { PostScreen } from "../screens/PostScreen";
 // import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
@@ -33,6 +35,7 @@ export default function HomeFeedStackNavigator() {
       <HomeFeedStack.Screen name='Home' component={HomeFeedScreen} />
       <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
       <HomeFeedStack.Screen name='Post' component={PostScreen} />
+      <HomeFeedStack.Screen name='User' component={UserStack} />
       <HomeFeedStack.Screen
         name='NewPost'
         component={NewPostStack}
@@ -40,6 +43,22 @@ export default function HomeFeedStackNavigator() {
     </HomeFeedStack.Navigator>
   )
 };
+
+const UserModalStack = createStackNavigator();
+
+function UserStack() {
+  return (
+    <UserModalStack.Navigator mode='modal' headerMode='none'>
+      <UserModalStack.Screen name='User' component={UserProfileScreen} />
+      <UserModalStack.Screen
+        name='UserSetting'
+        component={UserProfileSettingsScreen}
+      />
+    </UserModalStack.Navigator>
+  );
+}
+
+
 
 const NewPostModalStack = createStackNavigator();
 

@@ -9,14 +9,14 @@ const styles = StyleSheet.create({
         paddingBottom: 16,
         paddingTop: 30,
         paddingLeft: 30,
-        paddingRight:12,
-        marginLeft:16,
-        marginRight:16,
+        paddingRight: 12,
+        marginLeft: 16,
+        marginRight: 16,
         marginTop: 8,
         marginBottom: 2,
         borderRadius: 5,
         backgroundColor: '#FFF',
-        borderColor:'lightgray',
+        borderColor: 'lightgray',
         borderWidth: 0.2,
         shadowColor: "black",
         shadowOpacity: 0.2,
@@ -38,16 +38,15 @@ const styles = StyleSheet.create({
         marginLeft: 12,
         justifyContent: 'center',
     },
-    description: {
+    content: {
         fontSize: 13,
-        marginTop:10
-        
+        marginTop: 10
     },
     photo: {
         marginLeft: -12,
         height: 50,
         width: 50,
-        borderRadius: 50/2,
+        borderRadius: 50 / 2,
         shadowColor: "black",
         shadowOpacity: 0.3,
         shadowOffset: {
@@ -55,11 +54,11 @@ const styles = StyleSheet.create({
             height: 10,
         },
     },
-    timeContainer: {
+    tagContainer: {
         marginRight: -45,
         marginTop: -12
     },
-    timeText: {
+    tags: {
         color: 'grey',
     },
     requestTypeContainer: {
@@ -71,26 +70,27 @@ const styles = StyleSheet.create({
     }
 });
 
-const CustomRow = (props: any) => {
+const UserPostRow = (props: any) => {
     return (
         <View style={styles.container}>
-        <Image source={require("../assets/images/profileImage.png")} style={styles.photo} />
-        <View style={styles.container_text}>
-            <Text style={styles.title}>
-                {props.title}
-            </Text>
-            <Text style={styles.description}>
-                {props.description}
-            </Text>
+            <Image source={{uri:props.uri}} style={styles.photo} />
+            <View style={styles.container_text}>
+                <Text style={styles.title}>
+                    {props.title}
+                </Text>
+                <Text style={styles.content}>
+                    {props.content}
+                </Text>
+            </View>
+            <View style={styles.tagContainer}>
+                <Text style={styles.tags}>{props.tags}</Text>
+            </View>
+            <View style={styles.requestTypeContainer}>
+                <Text style={styles.requestText}>{props.requesting ? "Request" : "Trade"}
+                </Text>
+            </View>
         </View>
-        <View style={styles.timeContainer}>
-            <Text style={styles.timeText}>10 min</Text>
-        </View>
-        <View style={styles.requestTypeContainer}>
-            <Text style={styles.requestText}>Request</Text>
-        </View>
-    </View>
     )
 }
 
-export default CustomRow;
+export default UserPostRow;

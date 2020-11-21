@@ -113,7 +113,7 @@ const UserProfileSettingScreen = ({ navigation }: any) => {
                 borderBottomRightRadius: 30
             }}>
                 <View style={styles.backButton}>
-                    <Button title="Back" onPress={() => navigation.navigate('TabTwo')} color='white' />
+                    <Button title="Back" onPress={() => navigation.goBack()} color='white' />
                 </View>
             </View>
             <View style={styles.profileImage}>

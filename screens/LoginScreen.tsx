@@ -87,12 +87,12 @@ export default function LoginScreen({ route, navigation }: any) {
                 />
                 {isLoadingComplete ? <>
                     <TouchableOpacity
-                        style={styles.postButton}
+                        style={styles.postButtonContainer}
                         onPress={() => login()}>
                         <Text style={styles.postText}> Log in  </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.signupButton}
+                        style={styles.signupButtonContainer}
                         onPress={() => navigation.navigate('Signup')}>
                         <Text style={styles.postText}> Sign up  </Text>
                     </TouchableOpacity>
@@ -148,23 +148,35 @@ const styles = StyleSheet.create({
     switch: {
         marginHorizontal: 20
     },
-    postButton: {
-        width: "30%",
-        height: 45,
-        backgroundColor: "#EB5757",
-        marginTop: 40,
-        borderRadius: 50,
-        justifyContent: "center",
-        alignItems: "center"
+    postButtonContainer: {
+        height: 40,
+        width: '35%',
+        marginTop: 80,
+        borderRadius: 15,
+        alignItems: "center",
+        backgroundColor: 'rgba(235, 87, 87, 1)',
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.3,
+        elevation: 2,
     },
-    signupButton: {
-        width: "30%",
-        height: 45,
-        backgroundColor: "#ccc",
-        marginTop: 40,
-        borderRadius: 50,
-        justifyContent: "center",
-        alignItems: "center"
+    signupButtonContainer: {
+        height: 40,
+        width: '35%',
+        marginTop: 20,
+        borderRadius: 15,
+        alignItems: "center",
+        backgroundColor: 'gray',
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.3,
+        elevation: 2,
     },
     postText: {
         color: "#fff",
