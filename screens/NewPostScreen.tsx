@@ -11,6 +11,7 @@ import {
   Keyboard
 } from "react-native";
 import Tags from "react-native-tags";
+import { API_URL } from "@env";
 
 interface Post {
   post_id: string;
@@ -42,20 +43,22 @@ export default function NewPostScreen({ navigation }) {
   const [displayMessage, setDisplayMessage] = useState("");
 
   const createPosting = () => {
-    Keyboard.dismiss();
+    Keyboard.dismiss(); //close keyboard on mobile devices
     setStatus("pending");
     if (!post.title || !post.content || !post.location) {
+      //error checking to ensure all fields are present
       setStatus("error");
       setDisplayMessage("One or more required fields missing");
       return;
     }
+    //perform api request to create new post
     axios
-      .post(`${process.env.API_URL}/api/v1/posts`, post)
+      .post(`http://192.168.31.138:3000/api/v1/posts`, post)
       .then(resp => {
         setStatus("success");
         setDisplayMessage("Successfully created post");
         //navigate back to homefeed after success
-        navigation.navigate("HomeFeed");
+        navigation.navigate("Home");
       })
       .catch(err => {
         setStatus("error");
@@ -66,11 +69,11 @@ export default function NewPostScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <TouchableOpacity onPress={() => navigation.navigate("HomeFeed")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Text style={styles.topSecondaryText}>Back</Text>
         </TouchableOpacity>
         <View>
-          <Text style={styles.title}>Post</Text>
+          <Text style={styles.title}>Create Post</Text>
         </View>
         <Text style={styles.topSecondaryText}>Camera</Text>
       </View>
@@ -99,15 +102,17 @@ export default function NewPostScreen({ navigation }) {
           }
           value={post.location}
         />
-        <Tags
-          style={styles.tagsInput}
-          initialText="Tags separated by commas"
-          initialTags={[]}
-          createTagOnString={[","]}
-          onChangeTags={tags =>
-            setPost(prevState => ({ ...prevState, tags: tags }))
-          }
-        />
+        <View style={styles.tagsContainer}>
+          <Text style={styles.tagsText}>Tags separated by commas</Text>
+          <Tags
+            style={styles.tagsInput}
+            initialTags={[]}
+            createTagOnString={[","]}
+            onChangeTags={tags =>
+              setPost(prevState => ({ ...prevState, tags: tags }))
+            }
+          />
+        </View>
         <View style={styles.switchContainer}>
           <Text style={styles.switchOptions}>Trading</Text>
           <Switch
@@ -156,7 +161,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   title: {
-    fontSize: 35,
+    fontSize: 30,
     color: "#fff"
   },
   topSecondaryText: {
@@ -198,7 +203,15 @@ const styles = StyleSheet.create({
   switchOptions: {
     fontSize: 15
   },
+  tagsContainer: {
+    margin: 15,
+    width: "100%"
+  },
+  tagsText: {
+    marginLeft: 20,
+    marginBottom: 5
+  },
   tagsInput: {
-    margin: 15
+    marginHorizontal: 15
   }
 });

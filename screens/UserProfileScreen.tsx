@@ -10,7 +10,8 @@ import {
   FlatList,
   TextInput,
   Dimensions,
-  Image
+  Image,
+  TouchableOpacity
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import CustomRow from "../components/UserPostRow";
@@ -18,6 +19,8 @@ import UserInfoScreen from "../components/UserInfoScreen";
 import UserReviewsScreen from "../components/ReviewsUserProfileScreen";
 import axios from "axios";
 import * as ImagePicker from "expo-image-picker";
+import { API_URL } from "@env";
+import BottomNavigation from "../components/BottomNavigation";
 
 const styles = StyleSheet.create({
   container: {
@@ -158,6 +161,80 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     elevation: 2,
   },
+  postingContainer: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    borderWidth: 2,
+    margin: 5,
+    padding: 5
+  },
+  postTitle: {
+    fontWeight: "bold",
+    fontSize: 20
+  },
+  postContent: {
+    marginVertical: 3
+  },
+  postType: {
+    position: "absolute",
+    right: 5,
+    bottom: 5
+  },
+  location: {
+    fontWeight: "bold"
+  },
+
+  top: {
+    flex: 3,
+    width: "100%",
+    backgroundColor: "#EB5757",
+    justifyContent: "center",
+    borderBottomEndRadius: 35,
+    borderBottomStartRadius: 35,
+    marginBottom: 20
+  },
+  topElements: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    backgroundColor: "#EB5757"
+  },
+  title: {
+    fontSize: 35,
+    color: "#fff",
+    fontWeight: "bold"
+  },
+  topSecondaryText: {
+    color: "#fff",
+    fontSize: 17.5
+  },
+  search: {
+    height: 60,
+    borderColor: "black",
+    borderWidth: 2,
+    marginHorizontal: 20,
+    marginTop: 30,
+    borderRadius: 50,
+    padding: 10,
+    backgroundColor: "white"
+  },
+  feed: {
+    flex: 7,
+  },
+  newPostingsContainer: {
+    margin: 15,
+  },
+  trendingContainer: {
+    margin: 15
+  },
+  postingSubtitle: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "black"
+  },
+  postings: {
+    flexDirection: "row",
+  }
 });
 
 //random data to test the listview
@@ -256,7 +333,7 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   const getUserData = () => {
     axios
-      .get("http://localhost:3000/api/v1/users/31")
+      .get("http://192.168.31.138:3000/api/v1/users/31")
       .then(resp => {
         setUser(resp.data)
         setUserToUpdate(resp.data)
@@ -270,7 +347,7 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   const getPostData = () => {
     axios
-      .get("http://localhost:3000/api/v1/posts")
+      .get("http://192.168.31.138:3000/api/v1/posts")
       .then(resp => {
         setPostData(resp.data)
       })
@@ -282,7 +359,7 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   const updateUser = () => {
     axios
-      .put("http://localhost:3000/api/v1/users/31", userToUpdate)
+      .put("http://192.168.31.138:3000/api/v1/users/31", userToUpdate)
       .then(resp => {
         getUserData()
       })
@@ -311,6 +388,7 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
+
       <View
         style={{
           backgroundColor: "rgba(235, 87, 87, 1)",
@@ -320,6 +398,12 @@ const UserProfileScreen = ({ navigation }: any) => {
           borderBottomRightRadius: 35
         }}
       >
+        <View style={styles.settingsButton}>
+          <TouchableOpacity onPress={() => navigation.navigate("UserSetting")}>
+            <Text style={styles.topSecondaryText}>Setting</Text>
+          </TouchableOpacity>
+        </View>
+
         {
           userInfo && (
             <View style={styles.settingsButton}>
@@ -331,7 +415,7 @@ const UserProfileScreen = ({ navigation }: any) => {
             </View>
           )
         }
-      </View>
+      </View >
       <View style={styles.profileImage}>
         {
           selectedImage !== null ?
@@ -453,7 +537,8 @@ const UserProfileScreen = ({ navigation }: any) => {
             </View>
           )}
       </SafeAreaView>
-    </SafeAreaView>
+      <BottomNavigation navigation={navigation}></BottomNavigation>
+    </SafeAreaView >
   );
 };
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import {
     StyleSheet,
@@ -10,8 +10,9 @@ import {
     TouchableOpacity
 } from "react-native";
 import { useEffect } from "react";
-import { API_URL } from "@env"
-import CustomButton from "../components/CustomButton";
+import { API_URL } from "@env";
+import { AuthContext } from "../navigation/AuthProvider";
+import Loading from '../components/Loading';
 
 interface User {
     email: string;
@@ -20,31 +21,39 @@ interface User {
 
 export default function LoginScreen({ route, navigation }: any) {
     const [response, setResponse] = useState({ status: "pending", message: "" });
+    const [isLoadingComplete, setLoadingComplete] = React.useState(true);
     useEffect(() => {
         const { message } = route.params || '';
         setResponse({ status: 'success', message })
     }, [route])
 
-    const [user, setUser] = useState<User>({
+    const [user, setUserForm] = useState<User>({
         email: '',
         password: ''
     });
 
-    const createPosting = () => {
+    const { user: userAuth, setUser: setUserAuth } = useContext(AuthContext);
+
+    const login = () => {
+        setLoadingComplete(false)
+        console.log(API_URL)
         axios
-            .post(`${API_URL}/api/v1/users/login`, user)
+            .post(`http://192.168.31.138:3000/api/v1/users/login`, user)
             .then(resp => {
                 const { result: isAuth, user } = resp.data
                 if (isAuth) {
                     setResponse({ status: 'success', message: `User ${user.username} logged in successfully!` })
+                    setUserAuth(user)
                 } else {
                     setResponse({ status: 'error', message: `Wrong email or password!` })
                 }
+                setLoadingComplete(true)
             })
             .catch(err => {
                 const { errors } = err.response.data
                 const message = Object.values(errors).map((field: any) => field.message).join(' / ')
                 setResponse({ status: 'error', message })
+                setLoadingComplete(true)
             });
     };
 
@@ -63,33 +72,32 @@ export default function LoginScreen({ route, navigation }: any) {
                     placeholder="Email"
                     style={styles.formInput}
                     onChangeText={email =>
-                        setUser(prevState => ({ ...prevState, email }))
+                        setUserForm(prevState => ({ ...prevState, email }))
                     }
                     value={user.email}
                 />
                 <TextInput
                     placeholder="Password"
                     style={styles.formInput}
+                    secureTextEntry={true}
                     onChangeText={password =>
-                        setUser(prevState => ({ ...prevState, password }))
+                        setUserForm(prevState => ({ ...prevState, password }))
                     }
                     value={user.password}
                 />
-                <View style={styles.postButtonContainer}>
-                    <CustomButton
-                        onPress={() => createPosting()}
-                        title="Log in"
-                    ></CustomButton>
-                </View>
-
-                <View style={styles.signupButtonContainer}>
-                    <CustomButton
-                        style={styles.button}
-                        onPress={() => navigation.navigate('TabOne')}
-                        title="Sign up"
-                    >
-                    </CustomButton>
-                </View>
+                {isLoadingComplete ? <>
+                    <TouchableOpacity
+                        style={styles.postButtonContainer}
+                        onPress={() => login()}>
+                        <Text style={styles.postText}> Log in  </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.signupButtonContainer}
+                        onPress={() => navigation.navigate('Signup')}>
+                        <Text style={styles.postText}> Sign up  </Text>
+                    </TouchableOpacity>
+                </>
+                    : <Loading />}
 
             </View>
         </View>
