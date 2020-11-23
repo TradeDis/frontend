@@ -4,8 +4,8 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 import { TextInput } from "react-native-gesture-handler";
 
-export default function NewMessageScreen({ navigation, route }) {
-  const [post, setPost] = useState(route.params?.post);
+export default function NewMessageScreen({ navigation, post }) {
+  // const [post, setPost] = useState(route.params?.post);
 
   // temporary message
   const [recipient, setRecipient] = useState("");
@@ -18,8 +18,7 @@ export default function NewMessageScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.top}>
-        {/* nav needs to be implemented */}
+      {/* <View style={styles.top}>
         <TouchableOpacity
           onPress={() => navigation.navigate("Inbox", { screen: "Messages" })}
         >
@@ -27,36 +26,9 @@ export default function NewMessageScreen({ navigation, route }) {
         </TouchableOpacity>
         <Text style={styles.title}>TradeDis</Text>
         <Text style={styles.secondaryText}>Avatar</Text>
-      </View>
+      </View> */}
       <View style={styles.main}>
-        <Card>
-          <Card.Title>New Message</Card.Title>
-          <Card.Divider />
-          <View style={styles.form}>
-            <TextInput
-              placeholder="Recipient"
-              style={styles.formInput}
-              onChangeText={(rec) =>
-                setRecipient(rec)
-              }
-              value={recipient}
-            />
-            <TextInput
-              placeholder="Message"
-              style={styles.formInput}
-              onChangeText={(msg) =>
-                setMessage(msg)
-              }
-              value={message}
-            />
-            <TouchableOpacity
-              style={styles.sendButton}
-              onPress={() => sendMessage()}
-            >
-              <Text style={styles.buttonText}>Send</Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
+
       </View>
     </View>
   );
