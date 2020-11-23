@@ -2,12 +2,12 @@ import * as React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { API_URL } from "@env";
+import { TextInput, Button } from 'react-native-paper';
 
 import {
     StyleSheet,
     View,
     Text,
-    TextInput,
     Switch,
     TouchableOpacity
 } from "react-native";
@@ -21,6 +21,7 @@ interface User {
 }
 
 export default function SignUpScreen({ navigation }: any) {
+    const [isLoadingComplete, setLoadingComplete] = React.useState(true);
     const [user, setUser] = useState<User>({
         username: "",
         first_name: "",
@@ -33,12 +34,14 @@ export default function SignUpScreen({ navigation }: any) {
     const [response, setResponse] = useState({ status: "pending", message: "" });
 
     const createUser = () => {
+        setLoadingComplete(false)
         console.log(user);
         axios
             .post(`http://192.168.31.138:3000/api/v1/users`, user)
             .then(resp => {
                 setResponse({ status: 'success', message: `User ${resp.data.username} Successfully created!` })
                 navigation.navigate('Login', { message: `User ${resp.data.username} Successfully created! Plesae login here.` })
+                setLoadingComplete(true)
             })
             .catch(err => {
                 const { errors } = err.response.data
@@ -46,6 +49,7 @@ export default function SignUpScreen({ navigation }: any) {
                 const message = Object.values(errors).map((field: any) => field.message).join(' \n ')
                 console.log(message)
                 setResponse({ status: 'error', message })
+                setLoadingComplete(true)
             });
     };
 
@@ -61,6 +65,7 @@ export default function SignUpScreen({ navigation }: any) {
             )}
             <View style={styles.form}>
                 <TextInput
+                    label="Username"
                     placeholder="Username"
                     style={styles.formInput}
                     onChangeText={username =>
@@ -69,6 +74,7 @@ export default function SignUpScreen({ navigation }: any) {
                     value={user.username}
                 />
                 <TextInput
+                    label="First Name"
                     placeholder="First Name"
                     style={styles.formInput}
                     onChangeText={first_name =>
@@ -77,6 +83,7 @@ export default function SignUpScreen({ navigation }: any) {
                     value={user.first_name}
                 />
                 <TextInput
+                    label="Last Name"
                     placeholder="Last Name"
                     style={styles.formInput}
                     onChangeText={last_name =>
@@ -85,6 +92,7 @@ export default function SignUpScreen({ navigation }: any) {
                     value={user.last_name}
                 />
                 <TextInput
+                    label="Email"
                     placeholder="Email"
                     style={styles.formInput}
                     onChangeText={email =>
@@ -93,6 +101,7 @@ export default function SignUpScreen({ navigation }: any) {
                     value={user.email}
                 />
                 <TextInput
+                    label="Password"
                     placeholder="Password"
                     style={styles.formInput}
                     secureTextEntry={true}
@@ -101,23 +110,43 @@ export default function SignUpScreen({ navigation }: any) {
                     }
                     value={user.password}
                 />
-                <TouchableOpacity
-                    style={styles.postButton}
-                    onPress={() => createUser()}
-                >
-                    <Text style={styles.postText}>Sign Up</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.signupButton}
+                <Button
+                    loading={!isLoadingComplete}
+                    color="rgba(235, 87, 87, 1)"
+                    mode="contained"
+                    contentStyle={styles.buttonContentStyle}
+                    style={styles.buttonContainer}
+                    onPress={() => createUser()}>
+                    <Text style={styles.postText}> Sign Up  </Text>
+                </Button>
+                <Button
+                    color="gray"
+                    mode="contained"
+                    contentStyle={styles.buttonContentStyle}
+                    style={styles.buttonContainer}
                     onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.postText}> Log in  </Text>
-                </TouchableOpacity>
+                    <Text style={styles.postText}> Log In  </Text>
+                </Button>
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    buttonContentStyle: {
+        // height: 40,
+        width: 300,
+    },
+    buttonContainer: {
+        marginTop: 40,
+        borderRadius: 15,
+        shadowOffset: {
+            width: 0.5,
+            height: 4,
+        },
+        shadowOpacity: 0.3,
+        elevation: 2,
+    },
     container: {
         flex: 1,
         alignItems: "center",
@@ -150,8 +179,8 @@ const styles = StyleSheet.create({
     formInput: {
         width: "90%",
         height: 60,
-        borderColor: "gray",
-        borderBottomWidth: 1
+        marginTop: 20,
+        backgroundColor: "transparent",
     },
     switchContainer: {
         flexDirection: "row",
