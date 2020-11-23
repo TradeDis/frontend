@@ -16,11 +16,56 @@ export const Posting = ({ post }) => {
       <TouchableOpacity
         onPress={() => navigation.navigate("Post", { post: post })}
       >
-        <View style={styles.postingContainer}>
-          <Text style={styles.postTitle}>{post.title}</Text>
-          <Text style={styles.postContent}>{post.content}</Text>
-          <Text style={styles.location}>{post.location}</Text>
-          <Text style={styles.postType}>
+        <View
+          style={[
+            styles.postingContainer,
+            {
+              backgroundColor: post.status === "inactive" ? "#d3d3d3" : "white"
+            }
+          ]}
+        >
+          <Text
+            style={[
+              styles.postTitle,
+              {
+                textDecorationLine:
+                  post.status === "inactive" ? "line-through" : "none"
+              }
+            ]}
+          >
+            {post.title}
+          </Text>
+          <Text
+            style={[
+              styles.postContent,
+              {
+                textDecorationLine:
+                  post.status === "inactive" ? "line-through" : "none"
+              }
+            ]}
+          >
+            {post.content}
+          </Text>
+          <Text
+            style={[
+              styles.location,
+              {
+                textDecorationLine:
+                  post.status === "inactive" ? "line-through" : "none"
+              }
+            ]}
+          >
+            {post.location}
+          </Text>
+          <Text
+            style={[
+              styles.postType,
+              {
+                textDecorationLine:
+                  post.status === "inactive" ? "line-through" : "none"
+              }
+            ]}
+          >
             {post.requesting ? "Request" : "Trade"}
           </Text>
         </View>
