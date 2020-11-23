@@ -397,12 +397,11 @@ const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
     }
     setSelectedImage({ localURI: picker.uri });
   }
-//once all posts have a user_id this filter will work
+
   const filterPosts = () => {
     const user_id = user.user_id;
     console.log(user_id)
-    console.log("hi")
-    
+        
     const filtered = filteredPosts.filter(post => post.post_id === user_id)
     setFilteredPosts(filtered)
 
