@@ -1,7 +1,7 @@
 //User profile Screen, includes Reviews, Feed, User info, a Settings button in top right corner and Back button on the left
 
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Component } from "react";
 import {
   StyleSheet,
@@ -11,7 +11,8 @@ import {
   TextInput,
   Dimensions,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from "react-native";
 import { Text, View } from "../components/Themed";
 import CustomRow from "../components/UserPostRow";
@@ -21,6 +22,9 @@ import axios from "axios";
 import * as ImagePicker from "expo-image-picker";
 import { API_URL } from "@env";
 import BottomNavigation from "../components/BottomNavigation";
+import { AuthContext } from "../navigation/AuthProvider";
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +34,10 @@ const styles = StyleSheet.create({
   },
   settingsButton: {
     backgroundColor: "rgba(52, 52, 52, 0)",
-    marginLeft: 300
+    alignSelf: 'flex-end',
+    marginLeft: 15,
+    marginTop: 35,
+    position: 'absolute'
   },
   profileImage: {
     marginTop: -120,
@@ -70,15 +77,17 @@ const styles = StyleSheet.create({
     marginHorizontal: -120
   },
   customListView: {
-    width: 300,
-    marginBottom: 380,
+    flexDirection: "row",
+    width:'100%',
     backgroundColor: "rgba(242, 242, 242, 1)",
+    marginBottom: 350,
+    padding: 5
   },
   feedList: {
-    marginHorizontal: -50,
-    marginTop: 10,
-    marginBottom: -40,
-    backgroundColor: "rgba(52, 52, 52, 0.0)"
+    width: '100%',
+    backgroundColor: "rgba(242, 242, 242, 1)",
+    padding: 5,
+    alignSelf: 'center'
   },
   userInfoContainer: {
     flex: 1,
@@ -208,16 +217,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 17.5
   },
-  search: {
-    height: 60,
-    borderColor: "black",
-    borderWidth: 2,
-    marginHorizontal: 20,
-    marginTop: 30,
-    borderRadius: 50,
-    padding: 10,
-    backgroundColor: "white"
-  },
   feed: {
     flex: 7,
   },
@@ -234,6 +233,13 @@ const styles = StyleSheet.create({
   },
   postings: {
     flexDirection: "row",
+  },
+  backButton: {
+    backgroundColor: 'rgba(235, 87, 87, 0)',
+    alignSelf: "baseline",
+    marginLeft: 15,
+    marginTop: 35,
+    position: 'absolute'
   }
 });
 
@@ -288,11 +294,13 @@ interface Post {
   requesting: boolean;
   content: string;
   tags: string[];
+  created_by: {
+    user_id: number;
+  };
 }
 
-
 //trying to use useState
-const UserProfileScreen = ({ navigation }: any) => {
+export default function UserProfileScreen({ navigation }: any) {
   const [feed, setFeedVisible] = useState(true);
   const [userInfo, setUserInfoVisible] = useState(false); //setting intial value to be false so we see feed
   const [userReviews, setUserReviewsVisible] = useState(false); //setting intial value to be false so we see feed
@@ -315,16 +323,18 @@ const UserProfileScreen = ({ navigation }: any) => {
     setUserReviewsVisible(true);
   };
 
-  const [user, setUser] = useState<User>();
+  const { user, setUser } = useContext(AuthContext);
   const [status, setStatus] = useState("pending");
-  const [post, setPostData] = useState<Post[]>([]);
+  const [posts, setPostData] = useState<Post[]>([]);
   const [userToUpdate, setUserToUpdate] = useState<UserToUpdate>({
-    user_id: 31,
+    user_id: user.user_id,
     username: "",
     email: "",
     password: "",
     avatar: "",
   });
+const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+
 
   useEffect(() => {
     getUserData();
@@ -333,7 +343,7 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   const getUserData = () => {
     axios
-      .get("http://192.168.31.138:3000/api/v1/users/31")
+      .get(`http://localhost:3000/api/v1/users/${user.user_id}`)
       .then(resp => {
         setUser(resp.data)
         setUserToUpdate(resp.data)
@@ -347,9 +357,11 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   const getPostData = () => {
     axios
-      .get("http://192.168.31.138:3000/api/v1/posts")
+      .get("http://localhost:3000/api/v1/posts")
       .then(resp => {
         setPostData(resp.data)
+        setFilteredPosts(resp.data)
+        filterPosts()
       })
       .catch(err => {
         console.log(err);
@@ -359,7 +371,7 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   const updateUser = () => {
     axios
-      .put("http://192.168.31.138:3000/api/v1/users/31", userToUpdate)
+      .put(`http://localhost:3000/api/v1/users/${user.user_id}`, userToUpdate)
       .then(resp => {
         getUserData()
       })
@@ -385,25 +397,29 @@ const UserProfileScreen = ({ navigation }: any) => {
     }
     setSelectedImage({ localURI: picker.uri });
   }
+//once all posts have a user_id this filter will work
+  const filterPosts = () => {
+    const user_id = user.user_id;
+    console.log(user_id)
+    console.log("hi")
+    
+    const filtered = filteredPosts.filter(post => post.post_id === user_id)
+    setFilteredPosts(filtered)
+
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
 
       <View
         style={{
           backgroundColor: "rgba(235, 87, 87, 1)",
           width: "100%",
           height: "30%",
-          borderBottomLeftRadius: 35,
-          borderBottomRightRadius: 35
+          borderBottomLeftRadius: 30,
+          borderBottomRightRadius: 30
         }}
       >
-        <View style={styles.settingsButton}>
-          <TouchableOpacity onPress={() => navigation.navigate("UserSetting")}>
-            <Text style={styles.topSecondaryText}>Setting</Text>
-          </TouchableOpacity>
-        </View>
-
         {
           userInfo && (
             <View style={styles.settingsButton}>
@@ -415,6 +431,13 @@ const UserProfileScreen = ({ navigation }: any) => {
             </View>
           )
         }
+        <View style={styles.backButton}>
+          <Button
+            title="Back"
+            onPress={() => { navigation.navigate('Home') }}
+            color="white"
+          />
+        </View>
       </View >
       <View style={styles.profileImage}>
         {
@@ -448,22 +471,16 @@ const UserProfileScreen = ({ navigation }: any) => {
       </View>
       <SafeAreaView>
         {//shows when feed is true
-          feed && post && (
+          feed && posts && (
             <View style={styles.customListView}>
-              <FlatList
-                style={styles.feedList}
-                data={post}
-                renderItem={({ item }) => (
+              <ScrollView>
+                {posts.map(filteredPosts => (
                   <CustomRow
-                    title={item.title}
-                    content={item.content}
-                    requesting={item.requesting}
-                    tags={item.tags}
-                    uri={selectedImage?.localURI}
-                    keyExtractor={(item: { id: any; }) => item.id}
-                  />
-                )}
-              />
+                    post={filteredPosts}
+                    key={filteredPosts.post_id}
+                  ></CustomRow>
+                ))}
+              </ScrollView>
             </View>
           )}
         {// shows when userInfo is true
@@ -531,15 +548,21 @@ const UserProfileScreen = ({ navigation }: any) => {
                     ratings={item.rating}
                     title={item.title}
                     description={item.description}
+                    //these are inplace for when the data base is populated with reviews, for now its hard coded
+                  // ratings={item.reviews.rating}
+                  // title={item.reviews.review}
+                  // description={item.reviews.username}
                   />
                 )}
               />
             </View>
           )}
       </SafeAreaView>
-      <BottomNavigation navigation={navigation}></BottomNavigation>
-    </SafeAreaView >
+      {/* <BottomNavigation navigation={navigation}></BottomNavigation> */}
+    </View >
+    
   );
+  
 };
 
-export default UserProfileScreen;
+export getData

@@ -72,10 +72,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#EB5757",
     justifyContent: "space-evenly",
     alignItems: "center",
+    borderBottomEndRadius: 30,
+    borderBottomLeftRadius: 30
   },
   main: {
     flex: 8,
     marginHorizontal: 15,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
   },
   title: {
     fontSize: 35,
@@ -95,15 +104,23 @@ const styles = StyleSheet.create({
     height: 60,
     borderColor: "gray",
     borderBottomWidth: 1,
+    
   },
   sendButton: {
     width: "30%",
-    height: 45,
     backgroundColor: "#EB5757",
     marginTop: 40,
-    borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
+    height: 40,
+    borderRadius: 15,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
   },
   buttonText: {
     color: "#fff",

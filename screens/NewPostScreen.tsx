@@ -12,6 +12,8 @@ import {
 } from "react-native";
 import Tags from "react-native-tags";
 import { API_URL } from "@env";
+import { useContext } from "react";
+import { AuthContext } from "../navigation/AuthProvider";
 
 interface Post {
   post_id: string;
@@ -27,18 +29,23 @@ interface Post {
 }
 
 export default function NewPostScreen({ navigation }) {
+  
+  const { user, setUser } = useContext(AuthContext);
   const [post, setPost] = useState<Post>({
     title: "",
     post_id: "",
     requesting: true,
     content: "",
     location: "",
-    created_by: {},
+    created_by: {
+      user_id: user.user_id
+    },
     date: new Date(),
     status: "active",
     tags: [],
     comments: []
   });
+  
   const [status, setStatus] = useState("pending");
   const [displayMessage, setDisplayMessage] = useState("");
 
@@ -157,12 +164,15 @@ const styles = StyleSheet.create({
     flex: 2,
     flexDirection: "row",
     backgroundColor: "#EB5757",
-    justifyContent: "space-evenly",
-    alignItems: "center"
+    justifyContent: "space-around",
+    alignItems: "center",
+    borderBottomEndRadius: 30,
+    borderBottomLeftRadius: 30
   },
   title: {
     fontSize: 30,
-    color: "#fff"
+    color: "#fff",
+    marginLeft:15
   },
   topSecondaryText: {
     color: "#fff",
@@ -182,19 +192,30 @@ const styles = StyleSheet.create({
   switchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 20
+    justifyContent: "space-around",
+    marginTop: 20,
+    marginLeft: 20
   },
   switch: {
-    marginHorizontal: 20
+    marginLeft: 5,
+    marginRight: 5,
+    alignContent: "center"
   },
   postButton: {
     width: "30%",
     height: 45,
     backgroundColor: "#EB5757",
     marginTop: 40,
-    borderRadius: 50,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    borderRadius: 15,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
   },
   postText: {
     color: "#fff",

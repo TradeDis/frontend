@@ -114,16 +114,19 @@ const styles = StyleSheet.create({
         flex: 2,
         width: "100%",
         backgroundColor: "#EB5757",
-        justifyContent: "center"
+        justifyContent: "center",
+        borderBottomEndRadius: 30,
+        borderBottomLeftRadius: 30
     },
     topElements: {
         flexDirection: "row",
         justifyContent: "space-evenly",
-        alignItems: "center"
+        alignItems: "center",
+        marginBottom: -25
     },
     title: {
         fontSize: 35,
-        color: "#fff"
+        color: "#fff",
     },
     topSecondaryText: {
         color: "#fff",
@@ -150,10 +153,11 @@ const styles = StyleSheet.create({
     },
     postButtonContainer: {
         height: 40,
-        width: '35%',
+        width: '30%',
         marginTop: 80,
         borderRadius: 15,
         alignItems: "center",
+        justifyContent:"center",
         backgroundColor: 'rgba(235, 87, 87, 1)',
         shadowColor: 'black',
         shadowOffset: {
@@ -165,10 +169,11 @@ const styles = StyleSheet.create({
     },
     signupButtonContainer: {
         height: 40,
-        width: '35%',
+        width: '30%',
         marginTop: 20,
         borderRadius: 15,
         alignItems: "center",
+        justifyContent:"center",
         backgroundColor: 'gray',
         shadowColor: 'black',
         shadowOffset: {

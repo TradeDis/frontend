@@ -15,10 +15,9 @@ import InboxScreen from "../screens/InboxScreen";
 import ConversationScreen from "../screens/ConversationScreen";
 import NewMessageScreen from "../screens/NewMessageScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
-import UserProfileSettingsScreen from "../screens/UserProfileSettingsScreen";
+import EditPostScreen from "../screens/EditPostScreen";
 
 import PostScreen from "../screens/PostScreen";
-// import UserProfileSettingsScreen from '../screens/UserProfileSettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import HomeStack from "./HomeStack";
 
@@ -38,11 +37,9 @@ export default function HomeFeedStackNavigator() {
       <HomeFeedStack.Screen name='Home' component={HomeFeedScreen} />
       <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
       <HomeFeedStack.Screen name='Post' component={PostScreen} />
-      <HomeFeedStack.Screen name='User' component={UserStack} />
-      <HomeFeedStack.Screen
-        name='NewPost'
-        component={NewPostStack}
-      />
+      <HomeFeedStack.Screen name='User' component={UserProfileScreen} />
+      <HomeFeedStack.Screen name='NewPost'component={NewPostStack}/>
+      <HomeFeedStack.Screen name='EditPostScreen'component={EditPostScreen}/>
     </HomeFeedStack.Navigator>
   )
 };
@@ -53,10 +50,7 @@ function UserStack() {
   return (
     <UserModalStack.Navigator mode='modal' headerMode='none'>
       <UserModalStack.Screen name='User' component={UserProfileScreen} />
-      <UserModalStack.Screen
-        name='UserSetting'
-        component={UserProfileSettingsScreen}
-      />
+      <UserModalStack.Screen name='EditPostScreen'component={EditPostScreen}/>
     </UserModalStack.Navigator>
   );
 }

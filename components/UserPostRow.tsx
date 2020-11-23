@@ -1,94 +1,60 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: 'row',
-        paddingBottom: 16,
-        paddingTop: 30,
-        paddingLeft: 30,
-        paddingRight: 12,
-        marginLeft: 16,
-        marginRight: 16,
-        marginTop: 8,
-        marginBottom: 2,
-        borderRadius: 5,
-        backgroundColor: '#FFF',
-        borderColor: 'lightgray',
-        borderWidth: 0.2,
-        shadowColor: "black",
-        shadowOpacity: 0.2,
+        width: '90%',
+        height: 95,
+        borderRadius: 15,
+        margin: 5,
+        padding: 8,
+        shadowColor: 'black',
         shadowOffset: {
-            width: 0,
-            height: 5,
+            width: 1.5,
+            height: 2.5,
         },
-        elevation: 2,
+        shadowOpacity: 0.5,
+        elevation: 20,
+        backgroundColor: 'white',
+        alignSelf: 'center'
     },
     title: {
         fontSize: 16,
         fontWeight: "bold",
         color: '#000',
-        marginTop: -20
-    },
-    container_text: {
-        flex: 1,
-        flexDirection: 'column',
-        marginLeft: 12,
-        justifyContent: 'center',
+        padding: 8,
+        position: 'absolute'
     },
     content: {
         fontSize: 13,
-        marginTop: 10
-    },
-    photo: {
-        marginLeft: -12,
-        height: 50,
-        width: 50,
-        borderRadius: 50 / 2,
-        shadowColor: "black",
-        shadowOpacity: 0.3,
-        shadowOffset: {
-            width: 0,
-            height: 10,
-        },
-    },
-    tagContainer: {
-        marginRight: -45,
-        marginTop: -12
+        padding: 12
     },
     tags: {
         color: 'grey',
-    },
-    requestTypeContainer: {
-        marginRight: 5,
-        marginTop: 50
+        alignSelf: 'flex-end',
+
     },
     requestText: {
-        color: 'grey'
+        color: 'grey',
+        alignSelf: 'flex-end',
     }
 });
 
-const UserPostRow = (props: any) => {
+const UserPostRow = ({ post }) => {
+    const navigation = useNavigation();
     return (
-        <View style={styles.container}>
-            <Image source={{uri:props.uri}} style={styles.photo} />
-            <View style={styles.container_text}>
-                <Text style={styles.title}>
-                    {props.title}
-                </Text>
-                <Text style={styles.content}>
-                    {props.content}
-                </Text>
-            </View>
-            <View style={styles.tagContainer}>
-                <Text style={styles.tags}>{props.tags}</Text>
-            </View>
-            <View style={styles.requestTypeContainer}>
-                <Text style={styles.requestText}>{props.requesting ? "Request" : "Trade"}
-                </Text>
-            </View>
+        <View>
+            <TouchableOpacity onPress={() => navigation.navigate("EditPostScreen", { post: post })}>
+                <View style={styles.container}>
+                    <Text style={styles.tags}>{post.tags}</Text>
+                    <Text style={styles.title}>{post.title}</Text>
+                    <Text style={styles.content}>{post.content}</Text>
+                    <Text style={styles.requestText}>{post.requesting ? "Request" : "Trade"}</Text>
+                </View>
+            </TouchableOpacity>
         </View>
     )
 }

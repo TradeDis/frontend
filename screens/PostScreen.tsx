@@ -70,7 +70,7 @@ export default function PostScreen({ navigation, route }) {
           </View>
         </View>
       </View>
-      <BottomNavigation navigation={navigation}></BottomNavigation>
+      {/* <BottomNavigation navigation={navigation}></BottomNavigation> */}
     </View>
   );
 }
@@ -85,6 +85,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#EB5757",
     justifyContent: "space-evenly",
     alignItems: "center",
+    borderBottomEndRadius: 30,
+    borderBottomStartRadius: 30,
   },
   main: {
     flex: 8,
@@ -145,15 +147,24 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   propose: {
-    width: "90%",
-    height: 40,
-    borderRadius: 20,
+    width: "70%",
     backgroundColor: "#EB5757",
     justifyContent: "center",
     alignItems: "center",
+    height: 45,
+    marginVertical: 200,
+    borderRadius: 15,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
+    position: 'absolute'
   },
   proposeText: {
-    fontSize: 17.5,
+    fontSize: 19,
     color: "white",
   },
   detailsText: {

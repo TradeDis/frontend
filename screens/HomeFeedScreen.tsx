@@ -86,7 +86,8 @@ export default function HomeFeedScreen({ navigation }) {
           </TouchableOpacity>
           <Text style={styles.title}>TradeDis</Text>
           <TouchableOpacity onPress={() => navigation.navigate("User")}>
-            <Text style={styles.topSecondaryText}>Logged In as {user.username}</Text>
+            {/* {user.username} */}
+            <Text style={styles.topSecondaryText}>Logged In as </Text>
           </TouchableOpacity>
 
         </View>
@@ -175,14 +176,14 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#EB5757",
     justifyContent: "center",
-    borderBottomEndRadius: 35,
-    borderBottomStartRadius: 35,
+    borderBottomEndRadius: 30,
+    borderBottomStartRadius: 30,
     marginBottom: 20
   },
   topElements: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    backgroundColor: "#EB5757"
+    backgroundColor: "#EB5757" 
   },
   title: {
     fontSize: 35,
