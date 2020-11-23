@@ -53,11 +53,9 @@ export default function ConversationScreen({ route }) {
     _id: authuser.user_id
   }
 
-
-
   function refresh() {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/conversations/${conversation.conversation_id}/messages`)
+      .get(`http://172.20.10.7:3000/api/v1/conversations/${conversation.conversation_id}/messages`)
       .then(resp => {
         resp.data.map(data => {
           data.user._id = data.user.user_id
@@ -73,7 +71,7 @@ export default function ConversationScreen({ route }) {
   }
 
   useEffect(() => {
-    const _socket = io(`https://tradis.herokuapp.com`);
+    const _socket = io(`http://172.20.10.7:3000`);
     console.log("connecting...")
     _socket.on('connect', () => {
       setSocket(_socket)
@@ -114,7 +112,7 @@ export default function ConversationScreen({ route }) {
     })
 
     axios
-      .post(`http://192.168.31.138:3000/api/v1/conversations/${conversation.conversation_id}/messages?socket_id=${socket.id}`, newMessage)
+      .post(`http://172.20.10.7:3000/api/v1/conversations/${conversation.conversation_id}/messages?socket_id=${socket.id}`, newMessage)
       .then(resp => {
         // console.log(resp.data)
         // has to map it over
