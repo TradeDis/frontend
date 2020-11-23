@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Keyboard, Switch, TextInput } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard, Switch, TextInput, ScrollView } from "react-native";
 import Tag from "../components/Tag";
 import { useNavigation } from '@react-navigation/native';
 import BottomNavigation from "../components/BottomNavigation";
@@ -12,13 +12,13 @@ export default function PostScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        {/* nav needs to be implemented */}
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.secondaryText}>Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>TradeDis</Text>
         <Text style={styles.secondaryText}>Avatar</Text>
       </View>
+      <ScrollView style={styles.body}>
       <View style={styles.main}>
         <View style={styles.basicInfo}>
           <Text style={styles.postTitle}>{post.title}</Text>
@@ -64,12 +64,13 @@ export default function PostScreen({ navigation, route }) {
           <View style={styles.userDetails}>
             <View style={styles.avatar}>{/*avatar will be put here*/}</View>
             <View style={styles.user}>
-              <Text style={styles.fullName}>{post.created_by.fullname}</Text>
+              <Text style={styles.fullName}>{post.created_by.full_name}</Text>
               <Text style={styles.username}>{post.created_by.username}</Text>
             </View>
           </View>
         </View>
       </View>
+      </ScrollView>
       <BottomNavigation navigation={navigation}></BottomNavigation>
     </View>
   );
@@ -80,11 +81,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   top: {
-    flex: 2,
+    flex: 0.2,
     flexDirection: "row",
     backgroundColor: "#EB5757",
     justifyContent: "space-evenly",
     alignItems: "center",
+  },
+  body: {
+    flex: 1
   },
   main: {
     flex: 8,
@@ -105,6 +109,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
   details: {
+    flex: 4,
     margin: 15,
     marginTop: 0,
     paddingVertical: 15,
