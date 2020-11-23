@@ -3,11 +3,25 @@ import { StyleSheet, View, Text, TouchableOpacity, Keyboard, Switch, TextInput, 
 import Tag from "../components/Tag";
 import { useNavigation } from '@react-navigation/native';
 import BottomNavigation from "../components/BottomNavigation";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import axios from 'axios';
+import { AuthContext } from "../navigation/AuthProvider";
 
 export default function PostScreen({ navigation, route }) {
   const [post, setPost] = useState(route.params?.post);
-  console.log(post)
+  const { user, setUser } = useContext(AuthContext);
+
+  const updateStatus = status => {
+    post.status = status;
+    axios
+      .put(`http://192.168.2.91:3000/api/v1/posts/${post.post_id}`, post)
+      .then(resp => {
+        setPost(prevState => ({ ...prevState, status: status }));
+      })
+      .catch(err => {
+        console.log("Error updating post status.")
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -21,7 +35,47 @@ export default function PostScreen({ navigation, route }) {
       <ScrollView style={styles.body}>
       <View style={styles.main}>
         <View style={styles.basicInfo}>
+        <View style={styles.topInfo}>
           <Text style={styles.postTitle}>{post.title}</Text>
+          {user.user_id == post.created_by.user_id &&
+          <View style={styles.switch}>
+              <TouchableOpacity onPress={() => updateStatus("active")}>
+                <View
+                  style={{
+                    flex: 1,
+                    padding: 5,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                    borderTopLeftRadius: 17.5,
+                    borderBottomLeftRadius: 17.5,
+                    backgroundColor:
+                      post.status === "active" ? "#EB5757" : "#d3d3d3"
+                  }}
+                >
+                  <Text style={{color: post.status === "active" ? "white" : "black"}}>Active</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => updateStatus("inactive")}>
+                <View
+                  style={{
+                    flex: 1,
+                    padding: 5,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                    borderTopRightRadius: 17.5,
+                    borderBottomRightRadius: 17.5,
+                    backgroundColor:
+                      post.status === "active" ? "#d3d3d3" : "#EB5757"
+                  }}
+                >
+                  <Text style={{color: post.status === "active" ? "black" : "white"}}>Inactive</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            }
+          </View>
           <Text style={styles.type}>
             {post.requesting ? "Request" : "Trade"}
           </Text>
@@ -120,6 +174,18 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 15,
     marginTop: 0,
+  },
+  topInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  switch: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 120,
+    height: 35
   },
   postTitle: {
     fontSize: 30,

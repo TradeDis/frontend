@@ -6,8 +6,7 @@ import {
   View,
   TouchableOpacity
 } from "react-native";
-import { useNavigation } from '@react-navigation/native';
-
+import { useNavigation } from "@react-navigation/native";
 
 export const Posting = ({ post }) => {
   const navigation = useNavigation();
@@ -28,7 +27,7 @@ export const Posting = ({ post }) => {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   postingContainer: {
@@ -37,14 +36,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     margin: 5,
     padding: 8,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: {
       width: 1.5,
-      height: 2.5,
+      height: 2.5
     },
     shadowOpacity: 0.5,
     elevation: 20,
-    backgroundColor: 'white'
+    backgroundColor: "white"
   },
   postTitle: {
     fontWeight: "bold",
