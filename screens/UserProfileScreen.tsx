@@ -564,5 +564,3 @@ const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   );
   
 };
-
-export getData
