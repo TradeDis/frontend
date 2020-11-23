@@ -87,7 +87,7 @@ export default function InboxScreen({ navigation }) {
                 </ListItem.Subtitle> */}
                   <ListItem.Subtitle numberOfLines={1} style={{ color: "gray" }}>
                     <Text>
-                      {c.latestMessage ? c.latestMessage.user.name + ": " + c.latestMessage.text : ''}
+                      {c.latestMessage ? (c.latestMessage.user.name == user.first_name + " " + user.last_name ? "You" : c.latestMessage.user.name) + ": " + c.latestMessage.text : ''}
                     </Text>
                   </ListItem.Subtitle>
                 </ListItem.Content>

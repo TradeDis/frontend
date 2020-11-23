@@ -17,7 +17,7 @@ export default function PostScreen({ navigation, route }) {
   const [visible, setVisible] = React.useState(false);
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
-  const [messageForm, setMessageForm] = React.useState('');
+  const [messageForm, setMessageForm] = React.useState('Hi there 👋 I am interseted in this posting!');
   const [isMessageFormLoading, setisMessageFormLoading] = React.useState(false);
   const [isLoadingComplete, setLoadingComplete] = React.useState(true);
 
@@ -61,7 +61,7 @@ export default function PostScreen({ navigation, route }) {
             "user_id": user.user_id,
             "name": user.first_name + ' ' + user.last_name,
           },
-          text: `Welcome to your first message with ${post.created_by.full_name} about ${post.title}`,
+          text: `Welcome to your first message with ${post.created_by.first_name + " " + post.created_by.last_name} about ${post.title}`,
           system: true
         }
         axios
@@ -119,6 +119,7 @@ export default function PostScreen({ navigation, route }) {
               placeholder="Leave a message ..."
               style={styles.formInput}
               value={messageForm}
+              multiline={true}
               onChangeText={text => setMessageForm(text)}
             />
             <Button mode="contained" loading={isMessageFormLoading} color="rgba(235, 87, 87, 1)"
@@ -170,13 +171,13 @@ export default function PostScreen({ navigation, route }) {
             </View>
 
             <Button
-              icon="hint"
+              icon="swap-horizontal-circle"
               loading={!isLoadingComplete}
               color="rgba(235, 87, 87, 1)"
               mode="contained"
               style={styles.buttonContainer}
               onPress={() => showModal()}>
-              <Text style={styles.postText}> Purpose Trade  </Text>
+              <Text style={styles.postText}>Propose Trade</Text>
             </Button>
           </View>
         </View>
