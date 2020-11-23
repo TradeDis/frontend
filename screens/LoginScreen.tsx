@@ -5,10 +5,12 @@ import {
     StyleSheet,
     View,
     Text,
-    TextInput,
     Switch,
     TouchableOpacity
 } from "react-native";
+
+import { TextInput, Button } from 'react-native-paper';
+
 import { useEffect } from "react";
 import { API_URL } from "@env";
 import { AuthContext } from "../navigation/AuthProvider";
@@ -69,6 +71,8 @@ export default function LoginScreen({ route, navigation }: any) {
             )}
             <View style={styles.form}>
                 <TextInput
+                    mode="none"
+                    label="Email"
                     placeholder="Email"
                     style={styles.formInput}
                     onChangeText={email =>
@@ -77,6 +81,7 @@ export default function LoginScreen({ route, navigation }: any) {
                     value={user.email}
                 />
                 <TextInput
+                    label="Password"
                     placeholder="Password"
                     style={styles.formInput}
                     secureTextEntry={true}
@@ -85,26 +90,33 @@ export default function LoginScreen({ route, navigation }: any) {
                     }
                     value={user.password}
                 />
-                {isLoadingComplete ? <>
-                    <TouchableOpacity
-                        style={styles.postButtonContainer}
-                        onPress={() => login()}>
-                        <Text style={styles.postText}> Log in  </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.signupButtonContainer}
-                        onPress={() => navigation.navigate('Signup')}>
-                        <Text style={styles.postText}> Sign up  </Text>
-                    </TouchableOpacity>
-                </>
-                    : <Loading />}
-
+                <Button
+                    loading={!isLoadingComplete}
+                    color="rgba(235, 87, 87, 1)"
+                    mode="contained"
+                    contentStyle={styles.buttonContentStyle}
+                    style={styles.buttonContainer}
+                    onPress={() => login()}>
+                    <Text style={styles.postText}> Log in  </Text>
+                </Button>
+                <Button
+                    color="gray"
+                    mode="contained"
+                    contentStyle={styles.buttonContentStyle}
+                    style={styles.buttonContainer}
+                    onPress={() => navigation.navigate('Signup')}>
+                    <Text style={styles.postText}> Sign up  </Text>
+                </Button>
             </View>
-        </View>
+        </View >
     );
 }
 
 const styles = StyleSheet.create({
+    buttonContentStyle: {
+        // height: 40,
+        width: 300,
+    },
     container: {
         flex: 1,
         alignItems: "center",
@@ -137,8 +149,8 @@ const styles = StyleSheet.create({
     formInput: {
         width: "90%",
         height: 60,
-        borderColor: "gray",
-        borderBottomWidth: 1
+        marginTop: 20,
+        backgroundColor: "transparent",
     },
     switchContainer: {
         flexDirection: "row",
@@ -148,32 +160,12 @@ const styles = StyleSheet.create({
     switch: {
         marginHorizontal: 20
     },
-    postButtonContainer: {
-        height: 40,
-        width: '35%',
-        marginTop: 80,
+    buttonContainer: {
+        marginTop: 40,
         borderRadius: 15,
-        alignItems: "center",
-        backgroundColor: 'rgba(235, 87, 87, 1)',
-        shadowColor: 'black',
         shadowOffset: {
-            width: 0,
-            height: 5,
-        },
-        shadowOpacity: 0.3,
-        elevation: 2,
-    },
-    signupButtonContainer: {
-        height: 40,
-        width: '35%',
-        marginTop: 20,
-        borderRadius: 15,
-        alignItems: "center",
-        backgroundColor: 'gray',
-        shadowColor: 'black',
-        shadowOffset: {
-            width: 0,
-            height: 5,
+            width: 0.5,
+            height: 4,
         },
         shadowOpacity: 0.3,
         elevation: 2,
