@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
-import { Alert } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'react-native-paper';
 import InboxScreen from '../screens/InboxScreen';
 // import AddConversationScreen from '../screens/AddConversationScreen';
 import ConversationScreen from '../screens/ConversationScreen';
 import NewMessageScreen from '../screens/NewMessageScreen';
-// import { AuthContext } from './AuthProvider';
+import { Button, Menu, Divider, Provider } from 'react-native-paper';
+import { AuthContext } from "./AuthProvider"
 
 const ChatAppStack = createStackNavigator();
 const ModalStack = createStackNavigator();
@@ -16,7 +16,7 @@ const ModalStack = createStackNavigator();
  */
 
 function ChatApp() {
-  // const { logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <ChatAppStack.Navigator
@@ -33,25 +33,23 @@ function ChatApp() {
       <ChatAppStack.Screen
         name='Inbox'
         component={InboxScreen}
-        options={({ navigation }) => ({
-          title: 'Inbox',
-          headerRight: () => (
-            <IconButton
-              icon='message-plus'
-              size={28}
-              color='#ffffff'
-              onPress={() => navigation.navigate('AddRoom')}
-            />
+        options={({ navigation, route }) => ({
+          title: "Inbox",
+          headerLeft: () => (
+            <Button color="white" mode="text" onPress={() => navigation.goBack()}>Back</Button>
           ),
-          // headerLeft: () => (
-          //   <IconButton
-          //     icon='logout-variant'
-          //     size={28}
-          //     color='#ffffff'
-          //     onPress={() => logout()}
-          //   />
-          // )
+          headerRight: () => (
+            <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User")}>User</Button>
+          )
         })}
+      // headerLeft: () => (
+      //   <IconButton
+      //     icon='logout-variant'
+      //     size={28}
+      //     color='#ffffff'
+      //     onPress={() => logout()}
+      //   />
+      // )
       />
       <ChatAppStack.Screen
         name='Room'
