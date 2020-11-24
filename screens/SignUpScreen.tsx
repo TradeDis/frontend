@@ -37,7 +37,7 @@ export default function SignUpScreen({ navigation }: any) {
         setLoadingComplete(false)
         console.log(user);
         axios
-            .post(`https://tradis.herokuapp.com/api/v1/users`, user)
+            .post(`http://192.168.31.138:3000/api/v1/users`, user)
             .then(resp => {
                 setResponse({ status: 'success', message: `User ${resp.data.username} Successfully created!` })
                 navigation.navigate('Login', { message: `User ${resp.data.username} Successfully created! Plesae login here.` })
@@ -156,12 +156,15 @@ const styles = StyleSheet.create({
         flex: 2,
         width: "100%",
         backgroundColor: "#EB5757",
-        justifyContent: "center"
+        justifyContent: "center",
+        borderBottomEndRadius: 30,
+        borderBottomLeftRadius: 30
     },
     topElements: {
         flexDirection: "row",
         justifyContent: "space-evenly",
-        alignItems: "center"
+        alignItems: "center",
+        marginBottom: -25
     },
     title: {
         fontSize: 35,
@@ -192,21 +195,35 @@ const styles = StyleSheet.create({
     },
     postButton: {
         width: "30%",
-        height: 45,
         backgroundColor: "#EB5757",
         marginTop: 40,
-        borderRadius: 50,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        height: 40,
+        borderRadius: 15,
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.3,
+        elevation: 2,
     },
     signupButton: {
         width: "30%",
-        height: 45,
-        backgroundColor: "#ccc",
+        backgroundColor: "#cccd",
         marginTop: 40,
-        borderRadius: 50,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        height: 40,
+        borderRadius: 15,
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.3,
+        elevation: 2,
     },
     postText: {
         color: "#fff",

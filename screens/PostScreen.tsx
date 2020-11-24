@@ -72,7 +72,7 @@ export default function PostScreen({ navigation, route }) {
       system: true
     }
     axios
-      .post(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}/propose`, {
+      .post(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}/propose`, {
         conversation,
         systemMessage,
         firstMessage,
@@ -264,6 +264,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#EB5757",
     justifyContent: "space-evenly",
     alignItems: "center",
+    borderBottomEndRadius: 30,
+    borderBottomStartRadius: 30,
   },
   body: {
     flex: 1
@@ -331,15 +333,24 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   propose: {
-    width: "90%",
-    height: 40,
-    borderRadius: 20,
+    width: "70%",
     backgroundColor: "#EB5757",
     justifyContent: "center",
     alignItems: "center",
+    height: 45,
+    marginVertical: 200,
+    borderRadius: 15,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
+    position: 'absolute'
   },
   proposeText: {
-    fontSize: 17.5,
+    fontSize: 19,
     color: "white",
   },
   detailsText: {

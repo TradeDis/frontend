@@ -40,7 +40,7 @@ export default function LoginScreen({ route, navigation }: any) {
         setLoadingComplete(false);
         console.log(API_URL);
         axios
-            .post(`https://tradis.herokuapp.com/api/v1/users/login`, user)
+            .post(`http://192.168.31.138:3000/api/v1/users/login`, user)
             .then(resp => {
                 const { result: isAuth, user } = resp.data;
                 if (isAuth) {
@@ -131,16 +131,19 @@ const styles = StyleSheet.create({
         flex: 2,
         width: "100%",
         backgroundColor: "#EB5757",
-        justifyContent: "center"
+        justifyContent: "center",
+        borderBottomEndRadius: 30,
+        borderBottomLeftRadius: 30
     },
     topElements: {
         flexDirection: "row",
         justifyContent: "space-evenly",
-        alignItems: "center"
+        alignItems: "center",
+        marginBottom: -25
     },
     title: {
         fontSize: 35,
-        color: "#fff"
+        color: "#fff",
     },
     topSecondaryText: {
         color: "#fff",
