@@ -94,7 +94,7 @@ export default function LoginScreen({ route, navigation }: any) {
                     <TouchableOpacity
                         style={styles.signupButtonContainer}
                         onPress={() => navigation.navigate('Signup')}>
-                        <Text style={styles.postText}> Sign up  </Text>
+                        <Text style={styles.postText}> Sign up   </Text>
                     </TouchableOpacity>
                 </>
                     : <Loading />}
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         marginTop: 80,
         borderRadius: 15,
         alignItems: "center",
-        justifyContent:"center",
+        justifyContent: "center",
         backgroundColor: 'rgba(235, 87, 87, 1)',
         shadowColor: 'black',
         shadowOffset: {
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 15,
         alignItems: "center",
-        justifyContent:"center",
+        justifyContent: "center",
         backgroundColor: 'gray',
         shadowColor: 'black',
         shadowOffset: {

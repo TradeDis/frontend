@@ -27,7 +27,7 @@ export default function EditPostScreen({ navigation, route }) {
 
     const updatePost = () => {
         axios
-            .put(`http://localhost:3000/api/v1/posts/${post.post_id}`, updatedPost)
+            .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, updatedPost)
             .then(resp => {
                 setPostToUpdate(resp.data)
             })

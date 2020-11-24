@@ -73,7 +73,7 @@ export default function ConversationScreen({ route }) {
   }
 
   useEffect(() => {
-    const _socket = io(`https://tradis.herokuapp.com`);
+    const _socket = io(`http://192.168.31.138:3000/`);
     console.log("connecting...")
     _socket.on('connect', () => {
       setSocket(_socket)

@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   customListView: {
     flexDirection: "row",
-    width:'100%',
+    width: '100%',
     backgroundColor: "rgba(242, 242, 242, 1)",
     marginBottom: 350,
     padding: 5
@@ -333,7 +333,7 @@ export default function UserProfileScreen({ navigation }: any) {
     password: "",
     avatar: "",
   });
-const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
 
 
   useEffect(() => {
@@ -343,7 +343,7 @@ const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
 
   const getUserData = () => {
     axios
-      .get(`http://localhost:3000/api/v1/users/${user.user_id}`)
+      .get(`http://192.168.31.138:3000/api/v1/users/${user.user_id}`)
       .then(resp => {
         setUser(resp.data)
         setUserToUpdate(resp.data)
@@ -357,7 +357,7 @@ const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
 
   const getPostData = () => {
     axios
-      .get("http://localhost:3000/api/v1/posts")
+      .get("http://192.168.31.138:3000/api/v1/posts")
       .then(resp => {
         setPostData(resp.data)
         setFilteredPosts(resp.data)
@@ -371,7 +371,7 @@ const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
 
   const updateUser = () => {
     axios
-      .put(`http://localhost:3000/api/v1/users/${user.user_id}`, userToUpdate)
+      .put(`http://192.168.31.138:3000/api/v1/users/${user.user_id}`, userToUpdate)
       .then(resp => {
         getUserData()
       })
@@ -401,7 +401,7 @@ const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const filterPosts = () => {
     const user_id = user.user_id;
     console.log(user_id)
-        
+
     const filtered = filteredPosts.filter(post => post.post_id === user_id)
     setFilteredPosts(filtered)
 
@@ -547,7 +547,7 @@ const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
                     ratings={item.rating}
                     title={item.title}
                     description={item.description}
-                    //these are inplace for when the data base is populated with reviews, for now its hard coded
+                  //these are inplace for when the data base is populated with reviews, for now its hard coded
                   // ratings={item.reviews.rating}
                   // title={item.reviews.review}
                   // description={item.reviews.username}
@@ -559,7 +559,7 @@ const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
       </SafeAreaView>
       {/* <BottomNavigation navigation={navigation}></BottomNavigation> */}
     </View >
-    
+
   );
-  
+
 };

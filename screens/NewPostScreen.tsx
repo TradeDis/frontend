@@ -29,7 +29,7 @@ interface Post {
 }
 
 export default function NewPostScreen({ navigation }) {
-  
+
   const { user, setUser } = useContext(AuthContext);
   const [post, setPost] = useState<Post>({
     title: "",
@@ -45,7 +45,7 @@ export default function NewPostScreen({ navigation }) {
     tags: [],
     comments: []
   });
-  
+
   const [status, setStatus] = useState("pending");
   const [displayMessage, setDisplayMessage] = useState("");
 
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     color: "#fff",
-    marginLeft:15
+    marginLeft: 15
   },
   topSecondaryText: {
     color: "#fff",
@@ -211,8 +211,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     shadowColor: 'black',
     shadowOffset: {
-        width: 0,
-        height: 5,
+      width: 0,
+      height: 5,
     },
     shadowOpacity: 0.3,
     elevation: 2,

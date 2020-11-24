@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   topElements: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    backgroundColor: "#EB5757" 
+    backgroundColor: "#EB5757"
   },
   title: {
     fontSize: 35,
