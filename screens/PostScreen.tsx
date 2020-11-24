@@ -11,7 +11,6 @@ import axios from "axios";
 
 export default function PostScreen({ navigation, route }) {
   const [snackVisible, setsnackVisible] = React.useState(false);
-
   const onToggleSnackBar = () => setsnackVisible(!visible);
   const onDismissSnackBar = () => setsnackVisible(false);
   const [visible, setVisible] = React.useState(false);
@@ -26,13 +25,20 @@ export default function PostScreen({ navigation, route }) {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: 'white', padding: 20, margin: 40 };
+  const isOwner = user.user_id == post.created_by.user_id
 
+  let isInquired = false;
+  post.proposers.forEach(function (pro) {
+    if (pro.user_id == user.user_id) {
+      isInquired = true;
+    }
+  });
   console.log(post)
   const LeftContent = props => <Avatar.Icon {...props} icon="message" />
 
   const createConversation = () => {
     setisMessageFormLoading(true)
-    const payload = {
+    const conversation = {
       "members": [{
         "user_id": user.user_id,
         "name": user.first_name + ' ' + user.last_name,
@@ -50,61 +56,36 @@ export default function PostScreen({ navigation, route }) {
         }
       }
     }
+    const firstMessage = {
+      user: {
+        "user_id": user.user_id,
+        "name": user.first_name + ' ' + user.last_name,
+      },
+      text: messageForm,
+    }
+    const systemMessage = {
+      user: {
+        "user_id": user.user_id,
+        "name": user.first_name + ' ' + user.last_name,
+      },
+      text: `Welcome to your first message with ${post.created_by.first_name + " " + post.created_by.last_name} about ${post.title}`,
+      system: true
+    }
     axios
-      .post(`http://192.168.31.138:3000/api/v1/conversations`, payload)
+      .post(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}/propose`, {
+        conversation,
+        systemMessage,
+        firstMessage,
+        proposer: user
+      })
       .then(resp => {
-        const { conversation_id } = resp.data
         console.log(resp.data)
-        const system = {
-          conversation_id: conversation_id,
-          user: {
-            "user_id": user.user_id,
-            "name": user.first_name + ' ' + user.last_name,
-          },
-          text: `Welcome to your first message with ${post.created_by.first_name + " " + post.created_by.last_name} about ${post.title}`,
-          system: true
-        }
-        axios
-          .post(`http://192.168.31.138:3000/api/v1/conversations/${conversation_id}/messages`, system)
-          .then(resp => {
-            const firstMessage = {
-              conversation_id: conversation_id,
-              user: {
-                "user_id": user.user_id,
-                "name": user.first_name + ' ' + user.last_name,
-              },
-              text: messageForm,
-            }
-            axios
-              .post(`http://192.168.31.138:3000/api/v1/conversations/${conversation_id}/messages`, firstMessage)
-              .then(resp => {
-                // resp.data.map(data => {
-                //   data.user._id = data.user.user_id
-                // })
-                console.log(resp.data)
-                navigation.navigate("Inbox")
-              })
-              .catch(err => {
-                const { errors } = err.response.data
-                // const message = Object.values(errors).map((field: any) => field.message).join(' / ')
-                // setResponse({ status: 'error', message })
-
-              }).finally(() => setisMessageFormLoading(false))
-          })
-          .catch(err => {
-            setisMessageFormLoading(false)
-            const { errors } = err.response.data
-            // const message = Object.values(errors).map((field: any) => field.message).join(' / ')
-            // setResponse({ status: 'error', message })
-          })
+        navigation.navigate("Inbox")
       })
       .catch(err => {
-
         const { errors } = err.response.data
         console.log(errors)
-        // const message = Object.values(errors).map((field: any) => field.message).join(' / ')
-        // setResponse({ status: 'error', message })
-      })
+      }).finally(() => { setisMessageFormLoading(false) })
   }
 
   return (
@@ -152,7 +133,7 @@ export default function PostScreen({ navigation, route }) {
             </Text>
             <Text style={styles.date}>
               {post.date
-                ? "Posted on " + post.date.toLocaleString()
+                ? "Posted on " + post.date.toString()
                 : "No date available"}
             </Text>
             <View style={styles.details}>
@@ -160,7 +141,7 @@ export default function PostScreen({ navigation, route }) {
               <Text style={styles.content}>{post.content}</Text>
             </View>
             <View style={styles.userInfo}>
-              <Text style={styles.userInfoText}>User Information</Text>
+              <Text style={styles.userInfoText}>Creater Information</Text>
               <View style={styles.userDetails}>
                 <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${post.created_by.first_name + post.created_by.last_name}` }} />
                 <View style={styles.user}>
@@ -169,16 +150,30 @@ export default function PostScreen({ navigation, route }) {
                 </View>
               </View>
             </View>
-
-            <Button
+            {isOwner ?
+              <View style={styles.userInfo}>
+                <Text style={styles.userInfoText}>Inquries</Text>
+                {post.proposers.map(pro => (
+                  <View style={styles.userDetails} key={pro.user_id}>
+                    <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${pro.first_name + pro.last_name}` }} />
+                    <View style={styles.user}>
+                      <Text style={styles.fullName}>{pro.first_name + " " + pro.last_name}</Text>
+                      <Text style={styles.username}>{pro.username}</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+              : null}
+            {!isOwner ? <Button
+              disabled={isInquired}
               icon="swap-horizontal-circle"
               loading={!isLoadingComplete}
               color="rgba(235, 87, 87, 1)"
               mode="contained"
               style={styles.buttonContainer}
               onPress={() => showModal()}>
-              <Text style={styles.postText}>Propose Trade</Text>
-            </Button>
+              <Text style={styles.postText}>{!isInquired ? "Propose Trade" : "Proposed"}</Text>
+            </Button> : <></>}
           </View>
         </View>
         <Snackbar

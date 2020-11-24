@@ -46,6 +46,8 @@ export default function HomeFeedScreen({ navigation }) {
   }, []);
 
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [inquiredPosts, setInquiredPosts] = useState<Post[]>([]);
+
 
   useEffect(() => {
     // whenever screen is focused
@@ -58,11 +60,24 @@ export default function HomeFeedScreen({ navigation }) {
   //retrive posts from DB
   const fetchPosts = () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/posts`)
+      .get(`https://tradis.herokuapp.com/api/v1/posts`)
       .then(resp => {
-        setPosts(resp.data);
         const myPost = resp.data.filter(post => post.created_by.user_id == user.user_id)
         setFilteredPosts(myPost);
+        let inquired = []
+        resp.data.map(post => {
+          if (post.proposers.length > 0) {
+            post.proposers.forEach(function (item) {
+              if (item.user_id == user.user_id) {
+                console.log("match")
+                inquired.push(post)
+              }
+            });
+          }
+        })
+        console.log(inquired)
+        setInquiredPosts(inquired)
+        setPosts(resp.data);
       })
       .catch(err => {
         console.log(err);
@@ -150,12 +165,12 @@ export default function HomeFeedScreen({ navigation }) {
             <Text style={styles.postingSubtitle}>Inquired</Text>
             {error ? (
               <Text>Error retrieving posts</Text>
-            ) : posts.length === 0 ? (
+            ) : inquiredPosts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
                   <View style={styles.postings}>
                     <ScrollView horizontal={true}>
-                      {posts.map(post => (
+                      {inquiredPosts.map(post => (
                         <Posting
                           key={post.post_id}
                           post={post}
@@ -242,7 +257,7 @@ const styles = StyleSheet.create({
   },
   feed: {
     flex: 9,
-    // paddingBottom: 100,
+    paddingBottom: 120,
   },
   newPostingsContainer: {
     margin: 10,
