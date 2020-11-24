@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import {
+  StyleSheet, View, Text, TouchableOpacity, ScrollView, RefreshControl,
+} from "react-native";
 import { Card, ListItem, Avatar } from "react-native-elements";
 import Loading from '../components/Loading';
 import useStatsBar from '../hooks/useStatusBar';
@@ -7,7 +9,7 @@ import axios from "axios";
 import { API_URL } from "@env"
 import BottomNavigation from '../components/BottomNavigation';
 import { AuthContext } from '../navigation/AuthProvider';
-
+import { TextInput, Button } from 'react-native-paper';
 
 export default function InboxScreen({ navigation }) {
   useStatsBar('light-content');
@@ -15,51 +17,33 @@ export default function InboxScreen({ navigation }) {
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user, setUser } = useContext(AuthContext);
-  console.log(user)
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    loadConversations()
+  }, []);
+
+  const loadConversations = async () => {
+    axios
+      .get(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}/conversations`)
+      .then(resp => {
+        // console.log(resp.data)
+        setConversations(resp.data)
+      })
+      .catch(err => {
+        const { errors } = err.response.data
+      }).finally(() => {
+        setLoading(false)
+        setRefreshing(false);
+      })
+  }
+
   /**
    * Fetch threads from Firestore
    */
   useEffect(() => {
-    // setConversations([{
-    //   _id: 123,
-    //   // give defaults
-    //   name: '123',
-
-    //   latestMessage: {
-    //     text: '123'
-    //   }
-    // }, {
-    //   _id: 125,
-    //   // give defaults
-    //   name: '123',
-
-    //   latestMessage: {
-    //     text: '123'
-    //   }
-    // }, {
-    //   _id: 126,
-    //   // give defaults
-    //   name: '123',
-
-    //   latestMessage: {
-    //     text: '123'
-    //   },
-    // }
-    // ]);
-
-    axios
-      .get(`http://192.168.31.138:3000/api/v1/users/${user.user_id}/conversations`)
-      .then(resp => {
-        console.log(resp.data)
-        setConversations(resp.data)
-        setLoading(false)
-      })
-      .catch(err => {
-        const { errors } = err.response.data
-        // const message = Object.values(errors).map((field: any) => field.message).join(' / ')
-        // setResponse({ status: 'error', message })
-      });
-
+    loadConversations()
   }, []);
 
   if (loading) {
@@ -69,36 +53,63 @@ export default function InboxScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.main}>
-        <Card>
-          <View style={styles.head}>
-            <TouchableOpacity onPress={() => navigation.navigate("NewMessage")}>
-              <Text style={styles.newMessage}>New</Text>
-            </TouchableOpacity>
-            <Card.Title>INBOX</Card.Title>
-            <Text style={styles.filter}>Filter</Text>
-          </View>
-          <Card.Divider />
-          {conversations.map((c, i) => (
-            <ListItem key={i} bottomDivider onPress={() => navigation.navigate('Room', { conversation: c })}>
-              <Avatar source={{ uri: "https://gravatar.com/avatar/a43bffa6b4c3516d30784cdce14557cc?s=400&d=robohash&r=x" }} />
-              <ListItem.Content>
-                <ListItem.Title style={{ fontWeight: "bold" }}>
-                  {c.members.map(member => member.name).join(' & ')}
-                </ListItem.Title>
-                <ListItem.Subtitle numberOfLines={1}>
-                  <Text>{c.post} {c.name}</Text>
-                </ListItem.Subtitle>
-              </ListItem.Content>
-            </ListItem>
-          ))}
-        </Card>
+        <View style={styles.head}>
+          <TouchableOpacity onPress={() => navigation.navigate("NewMessage")}>
+            <Button mode="contained" icon="plus" style={styles.newMessage}>New</Button>
+          </TouchableOpacity>
+          {/* <Card.Title>INBOX</Card.Title> */}
+          <Button icon="filter" mode="contained" style={styles.filter}>Filter</Button>
+        </View>
+        <ScrollView style={styles.scrollView}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          {conversations.map((c, i) => {
+            let non_me = c.members.filter(m => m.user_id != user.user_id)
+            if (non_me.length < 1) {
+              non_me = [{
+                ...user,
+                name: user.first_name + " " + user.last_name
+              }]
+            }
+            return (
+              <ListItem key={i} bottomDivider onPress={() => navigation.navigate('Room', { conversation: c })}>
+                <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${non_me[0].name}` }} />
+                <ListItem.Content>
+                  <ListItem.Title style={{ fontWeight: "bold" }}>
+                    {c.name}
+                  </ListItem.Title>
+                  {/* <ListItem.Subtitle numberOfLines={1}>
+                  <Text>
+                    {c.members.map(member => member.name).join(' & ')}
+                  </Text>
+                </ListItem.Subtitle> */}
+                  <ListItem.Subtitle numberOfLines={1} style={{ color: "gray" }}>
+                    <Text>
+                      {c.latestMessage ? (c.latestMessage.user.name == user.first_name + " " + user.last_name ? "You" : c.latestMessage.user.name) + ": " + c.latestMessage.text : ''}
+                    </Text>
+                  </ListItem.Subtitle>
+                </ListItem.Content>
+              </ListItem>
+            )
+          })}
+        </ScrollView>
       </View>
-      <BottomNavigation navigation={navigation}></BottomNavigation>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    marginVertical: 10,
+  },
+  card: {
+    width: 100,
+    height: 80,
+    marginBottom: 30,
+    marginVertical: 40
+  },
   container: {
     flex: 1,
   },
@@ -112,6 +123,9 @@ const styles = StyleSheet.create({
   main: {
     flex: 8,
     marginHorizontal: 15,
+    height: 100,
+    marginTop: 35,
+    marginBottom: 39,
   },
   title: {
     fontSize: 35,
@@ -128,16 +142,14 @@ const styles = StyleSheet.create({
   },
   newMessage: {
     color: "#fff",
-    backgroundColor: "#EB5757",
+    // backgroundColor: "#EB5757",
     borderRadius: 5,
     margin: 10,
-    padding: 10,
   },
   filter: {
-    color: "#fff",
-    backgroundColor: "#EB5757",
+    // color: "#fff",
+    // backgroundColor: "#EB5757",
     borderRadius: 5,
     margin: 10,
-    padding: 10,
   }
 });

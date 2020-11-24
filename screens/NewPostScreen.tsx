@@ -5,7 +5,6 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   Switch,
   TouchableOpacity,
   Keyboard
@@ -14,6 +13,7 @@ import Tags from "react-native-tags";
 import { API_URL } from "@env";
 import { useContext } from "react";
 import { AuthContext } from "../navigation/AuthProvider";
+import { TextInput, Button } from 'react-native-paper';
 
 interface Post {
   post_id: string;
@@ -48,19 +48,25 @@ export default function NewPostScreen({ navigation }) {
 
   const [status, setStatus] = useState("pending");
   const [displayMessage, setDisplayMessage] = useState("");
+  const { user } = React.useContext(AuthContext);
+  const [isLoadingComplete, setLoadingComplete] = React.useState(true);
 
   const createPosting = () => {
+    setLoadingComplete(false)
     Keyboard.dismiss(); //close keyboard on mobile devices
     setStatus("pending");
     if (!post.title || !post.content || !post.location) {
       //error checking to ensure all fields are present
       setStatus("error");
       setDisplayMessage("One or more required fields missing");
+      setLoadingComplete(true)
       return;
     }
+
+    post.created_by = user
     //perform api request to create new post
     axios
-      .post(`http://192.168.31.138:3000/api/v1/posts`, post)
+      .post(`https://tradis.herokuapp.com/api/v1/posts`, post)
       .then(resp => {
         setStatus("success");
         setDisplayMessage("Successfully created post");
@@ -70,12 +76,14 @@ export default function NewPostScreen({ navigation }) {
       .catch(err => {
         setStatus("error");
         setDisplayMessage(err);
-      });
+      }).finally(
+        () => setLoadingComplete(true)
+      )
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.top}>
+      {/* <View style={styles.top}>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Text style={styles.topSecondaryText}>Back</Text>
         </TouchableOpacity>
@@ -83,9 +91,10 @@ export default function NewPostScreen({ navigation }) {
           <Text style={styles.title}>Create Post</Text>
         </View>
         <Text style={styles.topSecondaryText}>Camera</Text>
-      </View>
+      </View> */}
       <View style={styles.form}>
         <TextInput
+          label="Title"
           placeholder="Title"
           style={styles.formInput}
           onChangeText={title =>
@@ -94,6 +103,7 @@ export default function NewPostScreen({ navigation }) {
           value={post.title}
         />
         <TextInput
+          label="Content"
           placeholder="Content"
           style={styles.formInput}
           onChangeText={content =>
@@ -102,6 +112,7 @@ export default function NewPostScreen({ navigation }) {
           value={post.content}
         />
         <TextInput
+          label="Location"
           placeholder="Location"
           style={styles.formInput}
           onChangeText={location =>
@@ -135,12 +146,14 @@ export default function NewPostScreen({ navigation }) {
           />
           <Text style={styles.switchOptions}>Requesting</Text>
         </View>
-        <TouchableOpacity
-          style={styles.postButton}
-          onPress={() => createPosting()}
-        >
-          <Text style={styles.postText}>Post!</Text>
-        </TouchableOpacity>
+        <Button
+          loading={!isLoadingComplete}
+          color="rgba(235, 87, 87, 1)"
+          mode="contained"
+          style={styles.buttonContainer}
+          onPress={() => createPosting()}>
+          <Text style={styles.postText}> Post </Text>
+        </Button>
         {(status === "success" || status === "error") && (
           <Text
             style={{
@@ -157,6 +170,16 @@ export default function NewPostScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    marginTop: 40,
+    borderRadius: 15,
+    shadowOffset: {
+      width: 0.5,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    elevation: 2,
+  },
   container: {
     flex: 1
   },
@@ -186,8 +209,8 @@ const styles = StyleSheet.create({
   formInput: {
     width: "90%",
     height: 60,
-    borderColor: "gray",
-    borderBottomWidth: 1
+    marginTop: 20,
+    backgroundColor: "transparent",
   },
   switchContainer: {
     flexDirection: "row",

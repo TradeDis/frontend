@@ -5,14 +5,16 @@ import {
     StyleSheet,
     View,
     Text,
-    TextInput,
     Switch,
     TouchableOpacity
 } from "react-native";
+
+import { TextInput, Button } from 'react-native-paper';
+
 import { useEffect } from "react";
 import { API_URL } from "@env";
 import { AuthContext } from "../navigation/AuthProvider";
-import Loading from '../components/Loading';
+import Loading from "../components/Loading";
 
 interface User {
     email: string;
@@ -23,37 +25,42 @@ export default function LoginScreen({ route, navigation }: any) {
     const [response, setResponse] = useState({ status: "pending", message: "" });
     const [isLoadingComplete, setLoadingComplete] = React.useState(true);
     useEffect(() => {
-        const { message } = route.params || '';
-        setResponse({ status: 'success', message })
-    }, [route])
+        const { message } = route.params || "";
+        setResponse({ status: "success", message });
+    }, [route]);
 
     const [user, setUserForm] = useState<User>({
-        email: '',
-        password: ''
+        email: "",
+        password: ""
     });
 
     const { user: userAuth, setUser: setUserAuth } = useContext(AuthContext);
 
     const login = () => {
-        setLoadingComplete(false)
-        console.log(API_URL)
+        setLoadingComplete(false);
+        console.log(API_URL);
         axios
-            .post(`http://192.168.31.138:3000/api/v1/users/login`, user)
+            .post(`https://tradis.herokuapp.com/api/v1/users/login`, user)
             .then(resp => {
-                const { result: isAuth, user } = resp.data
+                const { result: isAuth, user } = resp.data;
                 if (isAuth) {
-                    setResponse({ status: 'success', message: `User ${user.username} logged in successfully!` })
-                    setUserAuth(user)
+                    setResponse({
+                        status: "success",
+                        message: `User ${user.username} logged in successfully!`
+                    });
+                    setUserAuth(user);
                 } else {
-                    setResponse({ status: 'error', message: `Wrong email or password!` })
+                    setResponse({ status: "error", message: `Wrong email or password!` });
                 }
-                setLoadingComplete(true)
+                setLoadingComplete(true);
             })
             .catch(err => {
-                const { errors } = err.response.data
-                const message = Object.values(errors).map((field: any) => field.message).join(' / ')
-                setResponse({ status: 'error', message })
-                setLoadingComplete(true)
+                const { errors } = err.response.data;
+                const message = Object.values(errors)
+                    .map((field: any) => field.message)
+                    .join(" / ");
+                setResponse({ status: "error", message });
+                setLoadingComplete(true);
             });
     };
 
@@ -69,6 +76,8 @@ export default function LoginScreen({ route, navigation }: any) {
             )}
             <View style={styles.form}>
                 <TextInput
+                    mode="none"
+                    label="Email"
                     placeholder="Email"
                     style={styles.formInput}
                     onChangeText={email =>
@@ -77,6 +86,7 @@ export default function LoginScreen({ route, navigation }: any) {
                     value={user.email}
                 />
                 <TextInput
+                    label="Password"
                     placeholder="Password"
                     style={styles.formInput}
                     secureTextEntry={true}
@@ -85,26 +95,33 @@ export default function LoginScreen({ route, navigation }: any) {
                     }
                     value={user.password}
                 />
-                {isLoadingComplete ? <>
-                    <TouchableOpacity
-                        style={styles.postButtonContainer}
-                        onPress={() => login()}>
-                        <Text style={styles.postText}> Log in  </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.signupButtonContainer}
-                        onPress={() => navigation.navigate('Signup')}>
-                        <Text style={styles.postText}> Sign up   </Text>
-                    </TouchableOpacity>
-                </>
-                    : <Loading />}
-
+                <Button
+                    loading={!isLoadingComplete}
+                    color="rgba(235, 87, 87, 1)"
+                    mode="contained"
+                    contentStyle={styles.buttonContentStyle}
+                    style={styles.buttonContainer}
+                    onPress={() => login()}>
+                    <Text style={styles.postText}> Log in  </Text>
+                </Button>
+                <Button
+                    color="gray"
+                    mode="contained"
+                    contentStyle={styles.buttonContentStyle}
+                    style={styles.buttonContainer}
+                    onPress={() => navigation.navigate('Signup')}>
+                    <Text style={styles.postText}> Sign up  </Text>
+                </Button>
             </View>
-        </View>
+        </View >
     );
 }
 
 const styles = StyleSheet.create({
+    buttonContentStyle: {
+        // height: 40,
+        width: 300,
+    },
     container: {
         flex: 1,
         alignItems: "center",
@@ -140,8 +157,8 @@ const styles = StyleSheet.create({
     formInput: {
         width: "90%",
         height: 60,
-        borderColor: "gray",
-        borderBottomWidth: 1
+        marginTop: 20,
+        backgroundColor: "transparent",
     },
     switchContainer: {
         flexDirection: "row",
@@ -151,34 +168,12 @@ const styles = StyleSheet.create({
     switch: {
         marginHorizontal: 20
     },
-    postButtonContainer: {
-        height: 40,
-        width: '30%',
-        marginTop: 80,
+    buttonContainer: {
+        marginTop: 40,
         borderRadius: 15,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: 'rgba(235, 87, 87, 1)',
-        shadowColor: 'black',
         shadowOffset: {
-            width: 0,
-            height: 5,
-        },
-        shadowOpacity: 0.3,
-        elevation: 2,
-    },
-    signupButtonContainer: {
-        height: 40,
-        width: '30%',
-        marginTop: 20,
-        borderRadius: 15,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: 'gray',
-        shadowColor: 'black',
-        shadowOffset: {
-            width: 0,
-            height: 5,
+            width: 0.5,
+            height: 4,
         },
         shadowOpacity: 0.3,
         elevation: 2,
