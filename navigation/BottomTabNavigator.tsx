@@ -22,10 +22,12 @@ import PostScreen from "../screens/PostScreen";
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import HomeStack from "./HomeStack";
 
-import { StyleSheet, View, Button, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 import { ScreenStackHeaderRightView } from 'react-native-screens';
 import Navigation from '.';
 import { IconButton } from "react-native-paper";
+import { Button, Menu, Divider, Provider } from 'react-native-paper';
+import { AuthContext } from "./AuthProvider";
 
 const BottomTab = createBottomTabNavigator<any>();
 const HomeFeedStack = createStackNavigator();
@@ -35,10 +37,8 @@ const HomeFeedStack = createStackNavigator();
 export default function HomeFeedStackNavigator() {
   return (
     <HomeFeedStack.Navigator headerMode='none'>
-      <HomeFeedStack.Screen name='Home' component={HomeFeedScreen} />
+      <HomeFeedStack.Screen name='Home' component={PostStackNavigator} />
       <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
-      <HomeFeedStack.Screen name='Post' component={PostScreen} />
-      <HomeFeedStack.Screen name='User' component={UserStack} />
       <HomeFeedStack.Screen
         name='NewPost'
         component={NewPostStack}
@@ -78,7 +78,7 @@ function NewPostStack() {
 }
 
 
-const ChatAppStack = createStackNavigator();
+const PostStack = createStackNavigator();
 const ModalStack = createStackNavigator();
 
 /**
@@ -86,63 +86,85 @@ const ModalStack = createStackNavigator();
  */
 
 function Post() {
+  const [visible, setVisible] = React.useState(false);
+  const { user, setUser } = React.useContext(AuthContext);
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false)
   // const { logout } = useContext(AuthContext);
 
   return (
-    <ChatAppStack.Navigator
-      headerMode='none'
+    <PostStack.Navigator
+      // headerMode='none'
       screenOptions={{
         headerStyle: {
           backgroundColor: '#EB5757'
         },
         headerTintColor: '#ffffff',
         headerTitleStyle: {
-          fontSize: 22
+          fontSize: 23
         }
       }}
     >
-      {/* <ChatAppStack.Screen
-        name='Inbox'
-        component={InboxScreen}
-        options={({ navigation }) => ({
-          title: 'Inbox',
-          headerRight: () => (
-            <IconButton
-              icon='message-plus'
-              size={28}
-              color='#ffffff'
-              onPress={() => navigation.navigate('AddRoom')}
-            />
-          ),
-          // headerLeft: () => (
-          //   <IconButton
-          //     icon='logout-variant'
-          //     size={28}
-          //     color='#ffffff'
-          //     onPress={() => logout()}
-          //   />
-          // )
-        })}
-      /> */}
-      <ChatAppStack.Screen
+
+      <PostStack.Screen name='Home' component={HomeFeedScreen} options={({ navigation }) => ({
+        title: 'Home',
+        headerLeft: () => (
+          <Menu
+            style={styles.menuStyle}
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={<Button color="white" icon="menu" mode="text" onPress={openMenu}>Menu</Button>}>
+            <Menu.Item icon="account" onPress={() => navigation.navigate("User")} title={`Logged In as ${user.username}`} />
+            <Divider />
+            <Menu.Item icon="logout" onPress={() => setUser(null)} title="Logout" />
+            {/* <Menu.Item onPress={() => { }} title="Item 3" /> */}
+          </Menu>
+        ),
+        headerRight: () => (
+          <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User")}>User</Button>
+        )
+      })} />
+
+      <PostStack.Screen name='User' component={UserStack} options={({ navigation, route }) => ({
+        title: `User ${user.first_name}`,
+        headerRight: () => (
+          <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User")}>User</Button>
+        )
+      })} />
+
+      <PostStack.Screen
         name='Post'
         component={PostScreen}
+        options={({ navigation, route }) => ({
+          title: `Posting for ${route.params.post.title}`,
+          headerRight: () => (
+            <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User")}>User</Button>
+          )
+        })}
       />
-    </ChatAppStack.Navigator>
+      <PostStack.Screen
+        name='NewPost'
+        component={NewPostScreen}
+        options={({ navigation, route }) => ({
+          title: "New Posting",
+          headerRight: () => (
+            <Button color="white" icon="camera" mode="text" onPress={() => { }}>Camera</Button>
+          )
+        })}
+      />
+    </PostStack.Navigator>
   );
 }
 
-function PostStack() {
+function PostStackNavigator() {
   return (
     <ModalStack.Navigator mode='modal' headerMode='none'>
-      {/* <ModalStack.Screen name='Home' component={Post} /> */}
-      <ModalStack.Screen
-        name='Post'
-        component={PostScreen}
-      />
+      <ModalStack.Screen name='HomeApp' component={Post} />
     </ModalStack.Navigator>
   );
 }
+
 
 // function BottomTabNavigator() {
 //   const colorScheme = useColorScheme();
@@ -233,9 +255,82 @@ function TabOneNavigator() {
 }
 
 const styles = StyleSheet.create({
-  leftBarButton: {
-    color: "white",
-    marginLeft: 12
+  menuStyle: {
+    marginTop: 50
+  },
+  postingContainer: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    borderWidth: 2,
+    margin: 5,
+    padding: 5
+  },
+  postTitle: {
+    fontWeight: "bold",
+    fontSize: 20
+  },
+  postContent: {
+    marginVertical: 3
+  },
+  postType: {
+    position: "absolute",
+    right: 5,
+    bottom: 5
+  },
+  location: {
+    fontWeight: "bold"
+  },
+  container: {
+    flex: 1
+  },
+  top: {
+    flex: 3,
+    width: "100%",
+    backgroundColor: "#EB5757",
+    justifyContent: "center",
+    borderBottomEndRadius: 35,
+    borderBottomStartRadius: 35,
+    marginBottom: 40
+  },
+  topElements: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#EB5757"
+  },
+  title: {
+    fontSize: 35,
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  topSecondaryText: {
+    color: "#fff",
+    fontSize: 17.5
+  },
+  search: {
+    height: 50,
+    marginHorizontal: 20,
+    marginTop: 30,
+    borderRadius: 50,
+    padding: 10,
+    backgroundColor: "white"
+  },
+  feed: {
+    flex: 7,
+  },
+  newPostingsContainer: {
+    margin: 15,
+  },
+  trendingContainer: {
+    margin: 15
+  },
+  postingSubtitle: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "black"
+  },
+  postings: {
+    flexDirection: "row",
   }
 });
 
