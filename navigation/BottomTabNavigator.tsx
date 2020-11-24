@@ -40,7 +40,6 @@ export default function HomeFeedStackNavigator() {
       <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
       <HomeFeedStack.Screen name='Post' component={PostScreen} />
       <HomeFeedStack.Screen name='User' component={UserProfileScreen} />
-      <HomeFeedStack.Screen name='EditPostScreen' component={EditPostScreen} />
       <HomeFeedStack.Screen
         name='NewPost'
         component={NewPostStack}
@@ -49,13 +48,24 @@ export default function HomeFeedStackNavigator() {
   )
 };
 
+// const PostModalStack = createStackNavigator();
+
+// function PostStack() {
+//   return (
+//     <UserModalStack.Navigator mode='modal' headerMode='none'>
+//       <UserModalStack.Screen name='User' component={UserProfileScreen} />
+//       {/* <UserModalStack.Screen name='EditPostScreen' component={EditPostScreen} /> */}
+//     </UserModalStack.Navigator>
+//   );
+// }
+
 const UserModalStack = createStackNavigator();
 
 function UserStack() {
   return (
     <UserModalStack.Navigator mode='modal' headerMode='none'>
       <UserModalStack.Screen name='User' component={UserProfileScreen} />
-      <UserModalStack.Screen name='EditPostScreen' component={EditPostScreen} />
+      {/* <UserModalStack.Screen name='EditPostScreen' component={EditPostScreen} /> */}
     </UserModalStack.Navigator>
   );
 }
@@ -145,6 +155,16 @@ function Post() {
       <PostStack.Screen
         name='NewPost'
         component={NewPostScreen}
+        options={({ navigation, route }) => ({
+          title: "New Posting",
+          headerRight: () => (
+            <Button color="white" icon="camera" mode="text" onPress={() => { }}>Camera</Button>
+          )
+        })}
+      />
+      <PostStack.Screen
+        name='EditPostScreen'
+        component={EditPostScreen}
         options={({ navigation, route }) => ({
           title: "New Posting",
           headerRight: () => (

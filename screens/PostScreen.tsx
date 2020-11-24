@@ -35,7 +35,19 @@ export default function PostScreen({ navigation, route }) {
   });
   console.log(post)
   const LeftContent = props => <Avatar.Icon {...props} icon="message" />
-
+  const updateStatus = status => {
+    post.status = status;
+    setPost(prevState => ({ ...prevState, status: status }));
+    axios
+      .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, post)
+      .then(resp => {
+        setPost(prevState => ({ ...prevState, status: status }));
+      })
+      .catch(err => {
+        console.log(err)
+        console.log("Error updating post status.")
+      });
+  };
   const createConversation = () => {
     setisMessageFormLoading(true)
     const conversation = {
@@ -72,7 +84,7 @@ export default function PostScreen({ navigation, route }) {
       system: true
     }
     axios
-      .post(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}/propose`, {
+      .post(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}/propose`, {
         conversation,
         systemMessage,
         firstMessage,
@@ -86,7 +98,28 @@ export default function PostScreen({ navigation, route }) {
         const { errors } = err.response.data
         console.log(errors)
       }).finally(() => { setisMessageFormLoading(false) })
+
   }
+
+
+
+  React.useEffect(() => {
+    // whenever screen is focused
+    const unsubscribe = navigation.addListener("focus", () => {
+      axios
+        .get(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`)
+        .then(resp => {
+          setPost(post);
+          console.log(post)
+        })
+        .catch(err => {
+          console.log(err)
+          console.log("Error updating post status.")
+        });
+    });
+    return unsubscribe;
+  }, []);
+
 
   return (
     <Provider>
@@ -113,7 +146,47 @@ export default function PostScreen({ navigation, route }) {
       <View style={styles.container}>
         <View style={styles.main}>
           <View style={styles.basicInfo}>
-            <Text style={styles.postTitle}>{post.title}</Text>
+            <View style={styles.topInfo}>
+              <Text style={styles.postTitle}>{post.title}</Text>
+              {user.user_id == post.created_by.user_id &&
+                <View style={styles.switch}>
+                  <TouchableOpacity onPress={() => updateStatus("active")}>
+                    <View
+                      style={{
+                        flex: 1,
+                        padding: 5,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "100%",
+                        borderTopLeftRadius: 17.5,
+                        borderBottomLeftRadius: 17.5,
+                        backgroundColor:
+                          post.status === "active" ? "#EB5757" : "#d3d3d3"
+                      }}
+                    >
+                      <Text style={{ color: post.status === "active" ? "white" : "black" }}>Active</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => updateStatus("inactive")}>
+                    <View
+                      style={{
+                        flex: 1,
+                        padding: 5,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "100%",
+                        borderTopRightRadius: 17.5,
+                        borderBottomRightRadius: 17.5,
+                        backgroundColor:
+                          post.status === "active" ? "#d3d3d3" : "#EB5757"
+                      }}
+                    >
+                      <Text style={{ color: post.status === "active" ? "black" : "white" }}>Inactive</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              }
+            </View>
             <Text style={styles.type}>
               {post.requesting ? "Request" : "Trade"}
             </Text>
@@ -173,7 +246,14 @@ export default function PostScreen({ navigation, route }) {
               style={styles.buttonContainer}
               onPress={() => showModal()}>
               <Text style={styles.postText}>{!isInquired ? "Propose Trade" : "Proposed"}</Text>
-            </Button> : <></>}
+            </Button> : <Button
+              icon="pencil"
+              color="rgba(235, 87, 87, 1)"
+              mode="contained"
+              style={styles.buttonContainer}
+              onPress={() => navigation.navigate("EditPostScreen", { post: post })}>
+                <Text style={styles.postText}>Edit</Text>
+              </Button>}
           </View>
         </View>
         <Snackbar
@@ -196,6 +276,18 @@ export default function PostScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  topInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  switch: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 120,
+    height: 35
+  },
   modalStyle: {
     borderRadius: 15
   },
@@ -259,16 +351,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   top: {
-    flex: 0.2,
+    flex: 2,
     flexDirection: "row",
     backgroundColor: "#EB5757",
     justifyContent: "space-evenly",
     alignItems: "center",
-    borderBottomEndRadius: 30,
-    borderBottomStartRadius: 30,
-  },
-  body: {
-    flex: 1
   },
   main: {
     flex: 8,
@@ -333,24 +420,15 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   propose: {
-    width: "70%",
+    width: "90%",
+    height: 40,
+    borderRadius: 20,
     backgroundColor: "#EB5757",
     justifyContent: "center",
     alignItems: "center",
-    height: 45,
-    marginVertical: 200,
-    borderRadius: 15,
-    shadowColor: 'black',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.3,
-    elevation: 2,
-    position: 'absolute'
   },
   proposeText: {
-    fontSize: 19,
+    fontSize: 17.5,
     color: "white",
   },
   detailsText: {

@@ -6,8 +6,7 @@ import {
   View,
   TouchableOpacity
 } from "react-native";
-import { useNavigation } from '@react-navigation/native';
-
+import { useNavigation } from "@react-navigation/native";
 
 export const Posting = ({ post }) => {
   const navigation = useNavigation();
@@ -17,18 +16,63 @@ export const Posting = ({ post }) => {
       <TouchableOpacity
         onPress={() => navigation.navigate("Post", { post: post })}
       >
-        <View style={styles.postingContainer}>
-          <Text style={styles.postTitle}>{post.title}</Text>
-          <Text style={styles.postContent}>{post.content}</Text>
-          <Text style={styles.location}>{post.location}</Text>
-          <Text style={styles.postType}>
+        <View
+          style={[
+            styles.postingContainer,
+            {
+              backgroundColor: post.status === "inactive" ? "#d3d3d3" : "white"
+            }
+          ]}
+        >
+          <Text
+            style={[
+              styles.postTitle,
+              {
+                textDecorationLine:
+                  post.status === "inactive" ? "line-through" : "none"
+              }
+            ]}
+          >
+            {post.title}
+          </Text>
+          <Text
+            style={[
+              styles.postContent,
+              {
+                textDecorationLine:
+                  post.status === "inactive" ? "line-through" : "none"
+              }
+            ]}
+          >
+            {post.content}
+          </Text>
+          <Text
+            style={[
+              styles.location,
+              {
+                textDecorationLine:
+                  post.status === "inactive" ? "line-through" : "none"
+              }
+            ]}
+          >
+            {post.location}
+          </Text>
+          <Text
+            style={[
+              styles.postType,
+              {
+                textDecorationLine:
+                  post.status === "inactive" ? "line-through" : "none"
+              }
+            ]}
+          >
             {post.requesting ? "Request" : "Trade"}
           </Text>
         </View>
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   postingContainer: {
@@ -37,14 +81,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     margin: 5,
     padding: 8,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: {
       width: 1.5,
-      height: 2.5,
+      height: 2.5
     },
     shadowOpacity: 0.5,
     elevation: 20,
-    backgroundColor: 'white'
+    backgroundColor: "white"
   },
   postTitle: {
     fontWeight: "bold",

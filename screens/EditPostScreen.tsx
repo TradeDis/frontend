@@ -22,13 +22,14 @@ export default function EditPostScreen({ navigation, route }) {
         title: post.title,
         requesting: post.requesting,
         content: post.content,
-        tags: post.tags,
+        tags: post.tags
     });
 
     const updatePost = () => {
         axios
             .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, updatedPost)
             .then(resp => {
+                console.log(resp.data)
                 setPostToUpdate(resp.data)
             })
             .catch(err => {
@@ -38,16 +39,6 @@ export default function EditPostScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.top}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <View style={styles.secondaryTextContainer}>
-                        <Text style={styles.secondaryText}>Back</Text>
-                    </View>
-                </TouchableOpacity>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>TradeDis</Text>
-                </View>
-            </View>
             <View style={styles.main}>
                 <View style={styles.basicInfo}>
                     <View style={styles.postTitleContainer}>
