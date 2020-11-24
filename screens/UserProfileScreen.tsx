@@ -357,7 +357,7 @@ export default function UserProfileScreen({ navigation }: any) {
 
   const getPostData = () => {
     axios
-      .get("https://tradis.herokuapp.com/api/v1/posts")
+      .get("http://192.168.31.138:3000/api/v1/posts")
       .then(resp => {
         setPostData(resp.data)
         setFilteredPosts(resp.data)

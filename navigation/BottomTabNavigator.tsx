@@ -40,7 +40,6 @@ export default function HomeFeedStackNavigator() {
       <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
       <HomeFeedStack.Screen name='Post' component={PostScreen} />
       <HomeFeedStack.Screen name='User' component={UserProfileScreen} />
-      <HomeFeedStack.Screen name='NewPost' component={NewPostStack} />
       <HomeFeedStack.Screen name='EditPostScreen' component={EditPostScreen} />
       <HomeFeedStack.Screen
         name='NewPost'

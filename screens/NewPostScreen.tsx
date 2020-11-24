@@ -48,7 +48,6 @@ export default function NewPostScreen({ navigation }) {
 
   const [status, setStatus] = useState("pending");
   const [displayMessage, setDisplayMessage] = useState("");
-  const { user } = React.useContext(AuthContext);
   const [isLoadingComplete, setLoadingComplete] = React.useState(true);
 
   const createPosting = () => {
@@ -66,7 +65,7 @@ export default function NewPostScreen({ navigation }) {
     post.created_by = user
     //perform api request to create new post
     axios
-      .post(`https://tradis.herokuapp.com/api/v1/posts`, post)
+      .post(`http://192.168.31.138:3000/api/v1/posts`, post)
       .then(resp => {
         setStatus("success");
         setDisplayMessage("Successfully created post");

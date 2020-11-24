@@ -72,7 +72,7 @@ export default function PostScreen({ navigation, route }) {
       system: true
     }
     axios
-      .post(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}/propose`, {
+      .post(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}/propose`, {
         conversation,
         systemMessage,
         firstMessage,
