@@ -13,8 +13,8 @@ import axios from "axios";
 import BottomNavigation from "../components/BottomNavigation";
 import { API_URL } from "@env";
 import { AuthContext } from "../navigation/AuthProvider";
-import { Searchbar } from 'react-native-paper';
-import { Button, Menu, Divider, Provider } from 'react-native-paper';
+import { Searchbar } from "react-native-paper";
+import { Button, Menu, Divider, Provider } from "react-native-paper";
 import { RefreshControl } from "react-native";
 
 interface Post {
@@ -42,12 +42,11 @@ export default function HomeFeedScreen({ navigation }) {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchPosts()
+    fetchPosts();
   }, []);
 
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [inquiredPosts, setInquiredPosts] = useState<Post[]>([]);
-
 
   useEffect(() => {
     // whenever screen is focused
@@ -60,29 +59,32 @@ export default function HomeFeedScreen({ navigation }) {
   //retrive posts from DB
   const fetchPosts = () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/posts`)
+      .get(`http://10.0.0.132:3000/api/v1/posts`)
       .then(resp => {
-        const myPost = resp.data.filter(post => post.created_by.user_id == user.user_id)
+        const myPost = resp.data.filter(
+          post => post.created_by.user_id == user.user_id
+        );
         setFilteredPosts(myPost);
-        let inquired = []
+        let inquired = [];
         resp.data.map(post => {
-          if (post.proposers.length > 0) {
-            post.proposers.forEach(function (item) {
+          if (post.proposers && post.proposers.length > 0) {
+            post.proposers.forEach(function(item) {
               if (item.user_id == user.user_id) {
-                console.log("match")
-                inquired.push(post)
+                console.log("match");
+                inquired.push(post);
               }
             });
           }
-        })
-        console.log(inquired)
-        setInquiredPosts(inquired)
+        });
+        console.log(inquired);
+        setInquiredPosts(inquired);
         setPosts(resp.data);
       })
       .catch(err => {
         console.log(err);
         setError(err);
-      }).finally(() => {
+      })
+      .finally(() => {
         setRefreshing(false);
       });
   };
@@ -118,7 +120,8 @@ export default function HomeFeedScreen({ navigation }) {
       </View>
 
       <View style={styles.feed}>
-        <ScrollView style={styles.scrollView}
+        <ScrollView
+          style={styles.scrollView}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
@@ -130,17 +133,14 @@ export default function HomeFeedScreen({ navigation }) {
             ) : filteredPosts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
-                  <View style={styles.postings}>
-                    <ScrollView horizontal={true}>
-                      {filteredPosts.map(post => (
-                        <Posting
-                          key={post.post_id}
-                          post={post}
-                        ></Posting>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
+              <View style={styles.postings}>
+                <ScrollView horizontal={true}>
+                  {filteredPosts.map(post => (
+                    <Posting key={post.post_id} post={post}></Posting>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
           </View>
           <View style={styles.trendingContainer}>
             <Text style={styles.postingSubtitle}>Trending</Text>
@@ -149,17 +149,14 @@ export default function HomeFeedScreen({ navigation }) {
             ) : posts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
-                  <View style={styles.postings}>
-                    <ScrollView horizontal={true}>
-                      {posts.map(post => (
-                        <Posting
-                          key={post.post_id}
-                          post={post}
-                        ></Posting>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
+              <View style={styles.postings}>
+                <ScrollView horizontal={true}>
+                  {posts.map(post => (
+                    <Posting key={post.post_id} post={post}></Posting>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
           </View>
           <View style={styles.trendingContainer}>
             <Text style={styles.postingSubtitle}>Inquired</Text>
@@ -168,17 +165,14 @@ export default function HomeFeedScreen({ navigation }) {
             ) : inquiredPosts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
-                  <View style={styles.postings}>
-                    <ScrollView horizontal={true}>
-                      {inquiredPosts.map(post => (
-                        <Posting
-                          key={post.post_id}
-                          post={post}
-                        ></Posting>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
+              <View style={styles.postings}>
+                <ScrollView horizontal={true}>
+                  {inquiredPosts.map(post => (
+                    <Posting key={post.post_id} post={post}></Posting>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
           </View>
         </ScrollView>
       </View>
@@ -193,7 +187,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'pink',
     marginHorizontal: 20,
     // marginBottom: 70,
-    width: "100%",
+    width: "100%"
   },
   menuStyle: {
     marginTop: 50
@@ -241,7 +235,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 35,
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   topSecondaryText: {
     color: "#fff",
@@ -257,10 +251,10 @@ const styles = StyleSheet.create({
   },
   feed: {
     flex: 9,
-    paddingBottom: 120,
+    paddingBottom: 120
   },
   newPostingsContainer: {
-    margin: 10,
+    margin: 10
   },
   trendingContainer: {
     margin: 10
@@ -272,6 +266,6 @@ const styles = StyleSheet.create({
   },
   postings: {
     width: "100%",
-    flexDirection: "row",
+    flexDirection: "row"
   }
 });
