@@ -46,6 +46,7 @@ export default function HomeFeedScreen({ navigation }) {
   }, []);
 
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [myPosts, setMyPosts] = useState<Post[]>([]);
   const [inquiredPosts, setInquiredPosts] = useState<Post[]>([]);
 
   useEffect(() => {
@@ -59,17 +60,17 @@ export default function HomeFeedScreen({ navigation }) {
   //retrive posts from DB
   const fetchPosts = () => {
     axios
-      .get(`http://10.0.0.132:3000/api/v1/posts`)
+      .get(`http://192.168.2.91:3000/api/v1/posts`)
       .then(resp => {
-        const myPost = resp.data.filter(
+        const mine = resp.data.filter(
           post => post.created_by.user_id == user.user_id
         );
-        setFilteredPosts(myPost);
+        setMyPosts(mine);
         let inquired = [];
         resp.data.map(post => {
           if (post.proposers && post.proposers.length > 0) {
-            post.proposers.forEach(function(item) {
-              if (item.user_id == user.user_id) {
+            post.proposers.forEach(function(proposer) {
+              if (proposer.user_id == user.user_id) {
                 console.log("match");
                 inquired.push(post);
               }
@@ -79,6 +80,7 @@ export default function HomeFeedScreen({ navigation }) {
         console.log(inquired);
         setInquiredPosts(inquired);
         setPosts(resp.data);
+        setFilteredPosts(resp.data);
       })
       .catch(err => {
         console.log(err);
@@ -130,12 +132,12 @@ export default function HomeFeedScreen({ navigation }) {
             <Text style={styles.postingSubtitle}>My Postings</Text>
             {error ? (
               <Text>Error retrieving posts</Text>
-            ) : filteredPosts.length === 0 ? (
+            ) : myPosts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
               <View style={styles.postings}>
                 <ScrollView horizontal={true}>
-                  {filteredPosts.map(post => (
+                  {myPosts.map(post => (
                     <Posting key={post.post_id} post={post}></Posting>
                   ))}
                 </ScrollView>
@@ -146,12 +148,12 @@ export default function HomeFeedScreen({ navigation }) {
             <Text style={styles.postingSubtitle}>Trending</Text>
             {error ? (
               <Text>Error retrieving posts</Text>
-            ) : posts.length === 0 ? (
+            ) : filteredPosts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
               <View style={styles.postings}>
                 <ScrollView horizontal={true}>
-                  {posts.map(post => (
+                  {filteredPosts.map(post => (
                     <Posting key={post.post_id} post={post}></Posting>
                   ))}
                 </ScrollView>
