@@ -17,6 +17,12 @@ import { Searchbar } from 'react-native-paper';
 import { Button, Menu, Divider, Provider } from 'react-native-paper';
 import { RefreshControl } from "react-native";
 
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+
+
+
 interface Post {
   post_id: string;
   title: string;
@@ -31,6 +37,21 @@ interface Post {
 }
 
 export default function HomeFeedScreen({ navigation }) {
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
+
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = React.useRef();
+  const responseListener = React.useRef();
+
+
   const [visible, setVisible] = React.useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -48,19 +69,84 @@ export default function HomeFeedScreen({ navigation }) {
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [inquiredPosts, setInquiredPosts] = useState<Post[]>([]);
 
+  async function schedulePushNotification() {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: 'Here is the notification body',
+        data: { data: 'goes here' },
+      },
+      trigger: { seconds: 2 },
+    });
+  }
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log(token);
+
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+    // if (user.push_token == '') {
+    axios
+      .post(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}/token`, { push_token: token })
+      .then(resp =>
+        console.log(resp)
+      )
+    // }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+
+    return token;
+  }
 
   useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
     // whenever screen is focused
     const unsubscribe = navigation.addListener("focus", () => {
       fetchPosts();
     });
-    return unsubscribe;
+    console.log(user)
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+      unsubscribe
+    };
   }, []);
 
   //retrive posts from DB
   const fetchPosts = () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/posts`)
+      .get(`https://tradis.herokuapp.com/api/v1/posts`)
       .then(resp => {
         const myPost = resp.data.filter(post => post.created_by.user_id == user.user_id)
         setFilteredPosts(myPost);
@@ -69,13 +155,11 @@ export default function HomeFeedScreen({ navigation }) {
           if (post.proposers.length > 0) {
             post.proposers.forEach(function (item) {
               if (item.user_id == user.user_id) {
-                console.log("match")
                 inquired.push(post)
               }
             });
           }
         })
-        console.log(inquired)
         setInquiredPosts(inquired)
         setPosts(resp.data);
       })
@@ -116,6 +200,25 @@ export default function HomeFeedScreen({ navigation }) {
           onChangeText={searchText => filterPosts(searchText)}
         />
       </View>
+      {/* <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        }}>
+        <Text>Your expo push token: {expoPushToken}</Text>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Title: {notification && notification.request.content.title} </Text>
+          <Text>Body: {notification && notification.request.content.body}</Text>
+          <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
+        </View>
+        <Button
+          title="Press to schedule a notification"
+          onPress={async () => {
+            await schedulePushNotification();
+          }}
+        />
+      </View> */}
 
       <View style={styles.feed}>
         <ScrollView style={styles.scrollView}

@@ -39,7 +39,7 @@ export default function PostScreen({ navigation, route }) {
     post.status = status;
     setPost(prevState => ({ ...prevState, status: status }));
     axios
-      .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, post)
+      .put(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}`, post)
       .then(resp => {
         setPost(prevState => ({ ...prevState, status: status }));
       })
@@ -107,7 +107,7 @@ export default function PostScreen({ navigation, route }) {
     // whenever screen is focused
     const unsubscribe = navigation.addListener("focus", () => {
       axios
-        .get(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`)
+        .get(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}`)
         .then(resp => {
           setPost(post);
           console.log(post)

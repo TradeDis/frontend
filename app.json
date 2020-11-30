@@ -8,12 +8,16 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
+    },
+    "notification": {
+      "icon": "./assets/images/icon.png",
+      "color": "#000000"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,9 +25,12 @@
     "ios": {
       "supportsTablet": true
     },
+    "android": {
+      "useNextNotificationsApi": true
+    },
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
-    "description": ""
+    "description": "Tradis"
   }
 }

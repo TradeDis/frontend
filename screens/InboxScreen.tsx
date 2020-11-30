@@ -10,6 +10,8 @@ import { API_URL } from "@env"
 import BottomNavigation from '../components/BottomNavigation';
 import { AuthContext } from '../navigation/AuthProvider';
 import { TextInput, Button } from 'react-native-paper';
+import TimeAgo from 'react-native-timeago';
+
 
 export default function InboxScreen({ navigation }) {
   useStatsBar('light-content');
@@ -26,7 +28,7 @@ export default function InboxScreen({ navigation }) {
 
   const loadConversations = async () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/users/${user.user_id}/conversations`)
+      .get(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}/conversations`)
       .then(resp => {
         // console.log(resp.data)
         setConversations(resp.data)
@@ -91,6 +93,8 @@ export default function InboxScreen({ navigation }) {
                     </Text>
                   </ListItem.Subtitle>
                 </ListItem.Content>
+                <Text style={styles.ago}> <TimeAgo time={c.updated_at} /> </Text>
+                {/* <ListItem.Chevron color="gray" /> */}
               </ListItem>
             )
           })}
@@ -101,6 +105,9 @@ export default function InboxScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  ago: {
+    color: "gray"
+  },
   scrollView: {
     marginVertical: 10,
   },

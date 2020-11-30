@@ -6,7 +6,7 @@ import {
   SystemMessage
 } from 'react-native-gifted-chat';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { IconButton, Text, Subheading } from 'react-native-paper';
 // import { AuthContext } from '../navigation/AuthProvider';
 // import firestore from '@react-native-firebase/firestore';
 import useStatsBar from '../hooks/useStatusBar';
@@ -45,6 +45,7 @@ export default function ConversationScreen({ route }) {
   const [messages, setMessages] = useState<any[]>([]);
   const { conversation } = route.params;
   const [loading, setLoading] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const [socket, setSocket] = useState({ id: '' })
   const { user: authuser } = useContext(AuthContext);
   const currentUser = {
@@ -55,7 +56,7 @@ export default function ConversationScreen({ route }) {
 
   function refresh() {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/conversations/${conversation.conversation_id}/messages`)
+      .get(`https://tradis.herokuapp.com/api/v1/conversations/${conversation.conversation_id}/messages`)
       .then(resp => {
         resp.data.map(data => {
           data.user._id = data.user.user_id
@@ -71,17 +72,32 @@ export default function ConversationScreen({ route }) {
   }
 
   useEffect(() => {
-    const _socket = io(`http://192.168.31.138:3000/`);
+    const _socket = io(`https://tradis.herokuapp.com/`);
     console.log("connecting...")
     _socket.on('connect', () => {
       setSocket(_socket)
       setLoading(false)
-      _socket.emit("add_room", conversation.conversation_id)
+      _socket.emit("add_room", { conversation_id: conversation.conversation_id, user_id: authuser.user_id })
       console.log(_socket.id); // 'G5p5...'
       console.log("suucess")
       _socket.on("update", (message) => {
         console.log(message);
         refresh()
+      });
+      _socket.on("start_typing", () => {
+        console.log("start_typing")
+        setIsTyping(true)
+        setMessages(prev => {
+          return [...prev]
+        })
+      });
+
+      _socket.on("end_typing", () => {
+        console.log("end_typing")
+        setIsTyping(false)
+        setMessages(prev => {
+          return [...prev]
+        })
       });
     });
 
@@ -112,9 +128,8 @@ export default function ConversationScreen({ route }) {
     })
 
     axios
-      .post(`http://192.168.31.138:3000/api/v1/conversations/${conversation.conversation_id}/messages?socket_id=${socket.id}`, newMessage)
+      .post(`https://tradis.herokuapp.com/api/v1/conversations/${conversation.conversation_id}/messages?socket_id=${socket.id}`, { newMessage, conversation })
       .then(resp => {
-        // console.log(resp.data)
         // has to map it over
         resp.data.map(data => {
           data.user._id = data.user.user_id
@@ -186,29 +201,60 @@ export default function ConversationScreen({ route }) {
     );
   }
 
+  const renderFooter = () => {
+    console.log("rendering")
+    if (isTyping) {
+      return (
+        <View style={styles.isTyping}>
+          <Subheading> ✏️ The other person is typing ...  </Subheading>
+        </View>
+      )
+    }
+    return null;
+  }
+
+  let prevInput = ''
+  function onInputTextChanged(e) {
+    // console.log("is tpying")
+    // console.log(e == '')
+    const payload = { socket_id: socket.id, conversation_id: conversation.conversation_id }
+    if (prevInput == '' && e != '' && socket) {
+      socket.emit('start_typing', payload)
+    }
+
+    if (e == '' && prevInput != '' && socket) {
+      socket.emit('end_typing', payload)
+    }
+    prevInput = e
+  }
+
   if (loading) {
     return <Loading />;
   }
 
-  return (
-    <GiftedChat
-      messages={messages}
-      onSend={handleSend}
-      user={currentUser}
-      placeholder='Type your message here...'
-      alwaysShowSend
-      showUserAvatar
-      scrollToBottom
-      renderBubble={renderBubble}
-      renderLoading={renderLoading}
-      renderSend={renderSend}
-      scrollToBottomComponent={scrollToBottomComponent}
-      renderSystemMessage={renderSystemMessage}
-    />
-  );
+
+  return <GiftedChat
+    messages={messages}
+    onSend={handleSend}
+    user={currentUser}
+    placeholder='Type your message here...'
+    alwaysShowSend
+    showUserAvatar
+    scrollToBottom
+    onInputTextChanged={onInputTextChanged}
+    renderBubble={renderBubble}
+    renderLoading={renderLoading}
+    renderSend={renderSend}
+    scrollToBottomComponent={scrollToBottomComponent}
+    renderSystemMessage={renderSystemMessage}
+    renderFooter={renderFooter}
+  />
 }
 
 const styles = StyleSheet.create({
+  isTyping: {
+    margin: 20
+  },
   loadingContainer: {
     flex: 1,
     alignItems: 'center',
