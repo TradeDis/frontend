@@ -54,10 +54,6 @@ export default function InboxScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.main}>
         <View style={styles.head}>
-          <TouchableOpacity onPress={() => navigation.navigate("NewMessage")}>
-            <Button mode="contained" icon="plus" style={styles.newMessage}>New</Button>
-          </TouchableOpacity>
-          {/* <Card.Title>INBOX</Card.Title> */}
           <Button icon="filter" mode="contained" style={styles.filter}>Filter</Button>
         </View>
         <ScrollView style={styles.scrollView}
@@ -140,12 +136,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  newMessage: {
-    color: "#fff",
-    // backgroundColor: "#EB5757",
-    borderRadius: 5,
-    margin: 10,
-  },
+
   filter: {
     // color: "#fff",
     // backgroundColor: "#EB5757",
