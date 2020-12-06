@@ -40,7 +40,7 @@ export default function SignUpScreen({ navigation }: any) {
             .post(`http://192.168.31.138:3000/api/v1/users`, user)
             .then(resp => {
                 setResponse({ status: 'success', message: `User ${resp.data.username} Successfully created!` })
-                navigation.navigate('Login', { message: `User ${resp.data.username} Successfully created! Plesae login here.` })
+                navigation.navigate('Login', { message: `User ${resp.data.username} Successfully created! Please login here.` })
                 setLoadingComplete(true)
             })
             .catch(err => {

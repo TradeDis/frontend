@@ -16,7 +16,7 @@ export default function PostScreen({ navigation, route }) {
   const [visible, setVisible] = React.useState(false);
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
-  const [messageForm, setMessageForm] = React.useState('Hi there 👋 I am interseted in this posting!');
+  const [messageForm, setMessageForm] = React.useState('Hi there 👋 I am interested in this posting!');
   const [isMessageFormLoading, setisMessageFormLoading] = React.useState(false);
   const [isLoadingComplete, setLoadingComplete] = React.useState(true);
 
