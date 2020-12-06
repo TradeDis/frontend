@@ -28,6 +28,7 @@ interface Post {
   status: string;
   tags: string[];
   comments: object[];
+  reporters: number[];
 }
 
 export default function HomeFeedScreen({ navigation }) {
@@ -137,9 +138,13 @@ export default function HomeFeedScreen({ navigation }) {
             ) : (
               <View style={styles.postings}>
                 <ScrollView horizontal={true}>
-                  {myPosts.map(post => (
-                    <Posting key={post.post_id} post={post}></Posting>
-                  ))}
+                  {myPosts.map(post =>
+                    post.reporters && post.reporters.length > 1 ? (
+                      <View></View>
+                    ) : (
+                      <Posting key={post.post_id} post={post}></Posting>
+                    )
+                  )}
                 </ScrollView>
               </View>
             )}
@@ -153,9 +158,13 @@ export default function HomeFeedScreen({ navigation }) {
             ) : (
               <View style={styles.postings}>
                 <ScrollView horizontal={true}>
-                  {filteredPosts.map(post => (
-                    <Posting key={post.post_id} post={post}></Posting>
-                  ))}
+                  {filteredPosts.map(post =>
+                    post.reporters && post.reporters.length > 1 ? (
+                      <View></View>
+                    ) : (
+                      <Posting key={post.post_id} post={post}></Posting>
+                    )
+                  )}
                 </ScrollView>
               </View>
             )}
@@ -169,9 +178,13 @@ export default function HomeFeedScreen({ navigation }) {
             ) : (
               <View style={styles.postings}>
                 <ScrollView horizontal={true}>
-                  {inquiredPosts.map(post => (
-                    <Posting key={post.post_id} post={post}></Posting>
-                  ))}
+                  {inquiredPosts.map(post =>
+                    post.reporters && post.reporters.length > 1 ? (
+                      <View></View>
+                    ) : (
+                      <Posting key={post.post_id} post={post}></Posting>
+                    )
+                  )}
                 </ScrollView>
               </View>
             )}
