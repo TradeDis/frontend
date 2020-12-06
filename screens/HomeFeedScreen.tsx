@@ -66,6 +66,7 @@ export default function HomeFeedScreen({ navigation }) {
     fetchPosts()
   }, []);
 
+  const [trendingPosts, setTrendingPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [inquiredPosts, setInquiredPosts] = useState<Post[]>([]);
 
@@ -162,6 +163,7 @@ export default function HomeFeedScreen({ navigation }) {
         })
         setInquiredPosts(inquired)
         setPosts(resp.data);
+        setTrendingPosts(resp.data);
       })
       .catch(err => {
         console.log(err);
@@ -187,7 +189,7 @@ export default function HomeFeedScreen({ navigation }) {
         post.title.toLowerCase().includes(search) ||
         filterTags(post.tags, search)
     );
-    setFilteredPosts(filtered);
+    setTrendingPosts(filtered);
   };
 
   return (
@@ -249,12 +251,12 @@ export default function HomeFeedScreen({ navigation }) {
             <Text style={styles.postingSubtitle}>Trending</Text>
             {error ? (
               <Text>Error retrieving posts</Text>
-            ) : posts.length === 0 ? (
+            ) : trendingPosts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
                   <View style={styles.postings}>
                     <ScrollView horizontal={true}>
-                      {posts.map(post => (
+                      {trendingPosts.map(post => (
                         <Posting
                           key={post.post_id}
                           post={post}

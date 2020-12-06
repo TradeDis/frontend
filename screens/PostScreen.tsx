@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, TouchableOpacity, Keyboard, Switch } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Keyboard, Switch, RefreshControl, ScrollView } from "react-native";
 import { ListItem, Avatar } from "react-native-elements";
 import Tag from "../components/Tag";
 import BottomNavigation from "../components/BottomNavigation";
@@ -19,6 +19,7 @@ export default function PostScreen({ navigation, route }) {
   const [messageForm, setMessageForm] = React.useState('Hi there 👋 I am interseted in this posting!');
   const [isMessageFormLoading, setisMessageFormLoading] = React.useState(false);
   const [isLoadingComplete, setLoadingComplete] = React.useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const { user, setUser } = React.useContext(AuthContext);
   const [post, setPost] = useState(route.params?.post);
@@ -101,24 +102,35 @@ export default function PostScreen({ navigation, route }) {
 
   }
 
+  const fetchPost = () => {
+    axios
+      .get(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}`)
+      .then(resp => {
+        setPost(post);
+        setRefreshing(false)
+        console.log(post)
+      })
+      .catch(err => {
+        console.log(err)
+        console.log("Error updating post status.")
+      });
+  }
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchPost()
+  }, []);
 
 
   React.useEffect(() => {
     // whenever screen is focused
     const unsubscribe = navigation.addListener("focus", () => {
-      axios
-        .get(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}`)
-        .then(resp => {
-          setPost(post);
-          console.log(post)
-        })
-        .catch(err => {
-          console.log(err)
-          console.log("Error updating post status.")
-        });
+      fetchPost()
     });
     return unsubscribe;
   }, []);
+
+
 
 
   return (
@@ -145,130 +157,125 @@ export default function PostScreen({ navigation, route }) {
       </Portal>
       <View style={styles.container}>
         <View style={styles.main}>
-          <View style={styles.basicInfo}>
-            <View style={styles.topInfo}>
-              <Text style={styles.postTitle}>{post.title}</Text>
-              {user.user_id == post.created_by.user_id &&
-                <View style={styles.switch}>
-                  <TouchableOpacity onPress={() => updateStatus("active")}>
-                    <View
-                      style={{
-                        flex: 1,
-                        padding: 5,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                        borderTopLeftRadius: 17.5,
-                        borderBottomLeftRadius: 17.5,
-                        backgroundColor:
-                          post.status === "active" ? "#EB5757" : "#d3d3d3"
-                      }}
-                    >
-                      <Text style={{ color: post.status === "active" ? "white" : "black" }}>Active</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => updateStatus("inactive")}>
-                    <View
-                      style={{
-                        flex: 1,
-                        padding: 5,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                        borderTopRightRadius: 17.5,
-                        borderBottomRightRadius: 17.5,
-                        backgroundColor:
-                          post.status === "active" ? "#d3d3d3" : "#EB5757"
-                      }}
-                    >
-                      <Text style={{ color: post.status === "active" ? "black" : "white" }}>Inactive</Text>
-                    </View>
-                  </TouchableOpacity>
+          <ScrollView style={styles.scrollView}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            <View style={styles.basicInfo}>
+              <View style={styles.topInfo}>
+                <Text style={styles.postTitle}>{post.title}</Text>
+                {user.user_id == post.created_by.user_id &&
+                  <View style={styles.switch}>
+                    <TouchableOpacity onPress={() => updateStatus("active")}>
+                      <View
+                        style={{
+                          flex: 1,
+                          padding: 5,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: "100%",
+                          borderTopLeftRadius: 17.5,
+                          borderBottomLeftRadius: 17.5,
+                          backgroundColor:
+                            post.status === "active" ? "#EB5757" : "#d3d3d3"
+                        }}
+                      >
+                        <Text style={{ color: post.status === "active" ? "white" : "black" }}>Active</Text>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => updateStatus("inactive")}>
+                      <View
+                        style={{
+                          flex: 1,
+                          padding: 5,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: "100%",
+                          borderTopRightRadius: 17.5,
+                          borderBottomRightRadius: 17.5,
+                          backgroundColor:
+                            post.status === "active" ? "#d3d3d3" : "#EB5757"
+                        }}
+                      >
+                        <Text style={{ color: post.status === "active" ? "black" : "white" }}>Inactive</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                }
+              </View>
+              <Text style={styles.type}>
+                {post.requesting ? "Request" : "Trade"}
+              </Text>
+              {post.tags && post.tags.length > 0 && (
+                <View>
+                  <Text style={styles.tagsText}>Tags:</Text>
+                  <View style={styles.tags}>
+                    {post.tags.map((tag, index) => (
+                      <Tag key={index} tag={tag}></Tag>
+                    ))}
+                  </View>
                 </View>
-              }
-            </View>
-            <Text style={styles.type}>
-              {post.requesting ? "Request" : "Trade"}
-            </Text>
-            {post.tags && post.tags.length > 0 && (
-              <View>
-                <Text style={styles.tagsText}>Tags:</Text>
-                <View style={styles.tags}>
-                  {post.tags.map((tag, index) => (
-                    <Tag key={index} tag={tag}></Tag>
+              )}
+
+              <Text style={styles.location}>
+                {post.location ? post.location : "No location available"}
+              </Text>
+              <Text style={styles.date}>
+                {post.date
+                  ? "Posted on " + post.date.toString()
+                  : "No date available"}
+              </Text>
+              <View style={styles.details}>
+                <Text style={styles.detailsText}>Details</Text>
+                <Text style={styles.content}>{post.content}</Text>
+              </View>
+              <View style={styles.userInfo}>
+                <Text style={styles.userInfoText}>Creater Information</Text>
+                <View style={styles.userDetails}>
+                  <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${post.created_by.first_name + post.created_by.last_name}` }} />
+                  <View style={styles.user}>
+                    <Text style={styles.fullName}>{post.created_by.first_name + " " + post.created_by.last_name}</Text>
+                    <Text style={styles.username}>{post.created_by.username}</Text>
+                  </View>
+                </View>
+              </View>
+              {isOwner ?
+                <View style={styles.userInfo}>
+                  <Text style={styles.userInfoText}>Inquries</Text>
+                  {post.proposers.map(pro => (
+                    <View style={styles.userDetails} key={pro.user_id}>
+                      <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${pro.first_name + pro.last_name}` }} />
+                      <View style={styles.user}>
+                        <Text style={styles.fullName}>{pro.first_name + " " + pro.last_name}</Text>
+                        <Text style={styles.username}>{pro.username}</Text>
+                      </View>
+                    </View>
                   ))}
                 </View>
-              </View>
-            )}
-
-            <Text style={styles.location}>
-              {post.location ? post.location : "No location available"}
-            </Text>
-            <Text style={styles.date}>
-              {post.date
-                ? "Posted on " + post.date.toString()
-                : "No date available"}
-            </Text>
-            <View style={styles.details}>
-              <Text style={styles.detailsText}>Details</Text>
-              <Text style={styles.content}>{post.content}</Text>
+                : null}
+              {!isOwner ? <Button
+                disabled={isInquired}
+                icon="swap-horizontal-circle"
+                loading={!isLoadingComplete}
+                color="rgba(235, 87, 87, 1)"
+                mode="contained"
+                style={styles.buttonContainer}
+                onPress={() => showModal()}>
+                <Text style={styles.postText}>{!isInquired ? "Propose Trade" : "Proposed"}</Text>
+              </Button> : <Button
+                icon="pencil"
+                color="rgba(235, 87, 87, 1)"
+                mode="contained"
+                style={styles.buttonContainer}
+                onPress={() => navigation.navigate("EditPostScreen", { post: post })}>
+                  <Text style={styles.postText}>Edit</Text>
+                </Button>}
             </View>
-            <View style={styles.userInfo}>
-              <Text style={styles.userInfoText}>Creater Information</Text>
-              <View style={styles.userDetails}>
-                <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${post.created_by.first_name + post.created_by.last_name}` }} />
-                <View style={styles.user}>
-                  <Text style={styles.fullName}>{post.created_by.first_name + " " + post.created_by.last_name}</Text>
-                  <Text style={styles.username}>{post.created_by.username}</Text>
-                </View>
-              </View>
-            </View>
-            {isOwner ?
-              <View style={styles.userInfo}>
-                <Text style={styles.userInfoText}>Inquries</Text>
-                {post.proposers.map(pro => (
-                  <View style={styles.userDetails} key={pro.user_id}>
-                    <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${pro.first_name + pro.last_name}` }} />
-                    <View style={styles.user}>
-                      <Text style={styles.fullName}>{pro.first_name + " " + pro.last_name}</Text>
-                      <Text style={styles.username}>{pro.username}</Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
-              : null}
-            {!isOwner ? <Button
-              disabled={isInquired}
-              icon="swap-horizontal-circle"
-              loading={!isLoadingComplete}
-              color="rgba(235, 87, 87, 1)"
-              mode="contained"
-              style={styles.buttonContainer}
-              onPress={() => showModal()}>
-              <Text style={styles.postText}>{!isInquired ? "Propose Trade" : "Proposed"}</Text>
-            </Button> : <Button
-              icon="pencil"
-              color="rgba(235, 87, 87, 1)"
-              mode="contained"
-              style={styles.buttonContainer}
-              onPress={() => navigation.navigate("EditPostScreen", { post: post })}>
-                <Text style={styles.postText}>Edit</Text>
-              </Button>}
-          </View>
+          </ScrollView>
         </View>
-        <Snackbar
-          visible={snackVisible}
-          onDismiss={onDismissSnackBar}
-        // action={{
-        //   label: 'Undo',
-        //   onPress: () => {
-        //     // Do something
-        //   },
-        // }}
-        >
-          Hey there! I'm a Snackbar.
-      </Snackbar>
-        <BottomNavigation navigation={navigation}></BottomNavigation>
+
+        {/* <BottomNavigation navigation={navigation}></BottomNavigation> */}
       </View>
     </Provider>
 
@@ -276,6 +283,9 @@ export default function PostScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    marginBottom: 30,
+  },
   topInfo: {
     flexDirection: "row",
     alignItems: "center",
@@ -445,6 +455,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   userDetails: {
+    marginVertical: 7,
     flexDirection: "row",
   },
   avatar: {

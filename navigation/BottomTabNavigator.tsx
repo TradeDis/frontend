@@ -166,7 +166,7 @@ function Post() {
         name='EditPostScreen'
         component={EditPostScreen}
         options={({ navigation, route }) => ({
-          title: "New Posting",
+          title: "Edit Posting",
           headerRight: () => (
             <Button color="white" icon="camera" mode="text" onPress={() => { }}>Camera</Button>
           )
