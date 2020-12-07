@@ -37,9 +37,9 @@ export default function HomeFeedStackNavigator() {
   return (
     <HomeFeedStack.Navigator headerMode='none'>
       <HomeFeedStack.Screen name='Home' component={PostStackNavigator} />
+      <HomeFeedStack.Screen name='User' component={UserProfileScreen} />
       <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
       <HomeFeedStack.Screen name='Post' component={PostScreen} />
-      <HomeFeedStack.Screen name='User' component={UserProfileScreen} />
       <HomeFeedStack.Screen name='EditPostScreen' component={EditPostScreen} />
       <HomeFeedStack.Screen
         name='NewPost'
@@ -88,6 +88,7 @@ function Post() {
   const [visible, setVisible] = React.useState(false);
   const { user, setUser } = React.useContext(AuthContext);
   const openMenu = () => setVisible(true);
+  const created_by_id = user.user_id;
 
   const closeMenu = () => setVisible(false)
   // const { logout } = useContext(AuthContext);
@@ -113,7 +114,7 @@ function Post() {
             style={styles.menuStyle}
             visible={visible}
             onDismiss={closeMenu}
-            anchor={<Button color="white" icon="menu" mode="text" onPress={openMenu}>Menu</Button>}>
+            anchor={<Button color="white" icon="menu" mode="text" onPress={openMenu}></Button>}>
             <Menu.Item icon="account" onPress={() => navigation.navigate("User")} title={`Logged In as ${user.username}`} />
             <Divider />
             <Menu.Item icon="logout" onPress={() => setUser(null)} title="Logout" />
@@ -121,15 +122,12 @@ function Post() {
           </Menu>
         ),
         headerRight: () => (
-          <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User")}>User</Button>
+          <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User", { screen: 'User', params: {userPost_id: created_by_id }})}></Button>
         )
       })} />
 
       <PostStack.Screen name='User' component={UserStack} options={({ navigation, route }) => ({
-        title: `User ${user.first_name}`,
-        headerRight: () => (
-          <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User")}>User</Button>
-        )
+        title: `Profile`
       })} />
 
       <PostStack.Screen
@@ -138,7 +136,7 @@ function Post() {
         options={({ navigation, route }) => ({
           title: `Posting for ${route.params.post.title}`,
           headerRight: () => (
-            <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User")}>User</Button>
+            <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User")}></Button>
           )
         })}
       />
@@ -148,7 +146,7 @@ function Post() {
         options={({ navigation, route }) => ({
           title: "New Posting",
           headerRight: () => (
-            <Button color="white" icon="camera" mode="text" onPress={() => { }}>Camera</Button>
+            <Button color="white" icon="camera" mode="text" onPress={() => { }}></Button>
           )
         })}
       />
