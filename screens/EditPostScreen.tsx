@@ -37,6 +37,7 @@ export default function EditPostScreen({ navigation, route }) {
                 console.log(resp.data)
                 setPostToUpdate(resp.data)
                 setLoadingComplete(true);
+                navigation.navigate("User")
             })
             .catch(err => {
                 console.log(err);
@@ -101,9 +102,7 @@ export default function EditPostScreen({ navigation, route }) {
                         </Button>
                     </View>
                 </View>
-
             </View>
-            {/* <BottomNavigation navigation={navigation}></BottomNavigation> */}
         </View>
     );
 }
@@ -125,15 +124,6 @@ const styles = StyleSheet.create({
     main: {
         flex: 8,
     },
-    titleContainer: {
-        marginLeft: -250,
-        marginTop: 25
-    },
-    title: {
-        fontSize: 35,
-        color: "#fff",
-        fontWeight: "bold",
-    },
     secondaryTextContainer: {
         marginLeft: -105,
         marginTop: 25
@@ -148,6 +138,7 @@ const styles = StyleSheet.create({
         borderBottomColor: "#ccc",
     },
     postTitleContainer: {
+        marginTop: 35,
         borderRadius: 15,
         padding: 12,
         borderColor: 'grey',
