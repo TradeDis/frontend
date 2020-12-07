@@ -256,29 +256,30 @@ export default function PostScreen({ navigation, route }) {
               </View>
               <View style={styles.userInfo}>
                 <Text style={styles.userInfoText}>Creater Information</Text>
-                <View style={styles.userDetails}>
-                  <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${post.created_by.first_name + post.created_by.last_name}` }} />
-                  <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: { userPost_id: created_by_id } })}>
+                <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: { userPost_id: created_by_id } })}>
+                  <View style={styles.userDetails}>
+                    <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${post.created_by.first_name + post.created_by.last_name}` }} />
                     <View style={styles.user}>
                       <Text style={styles.fullName}>{post.created_by.first_name + " " + post.created_by.last_name}</Text>
                       <Text style={styles.username}>{post.created_by.username}</Text>
                     </View>
-                  </TouchableOpacity>
-                </View>
+                  </View>
+                </TouchableOpacity>
+
               </View>
               {isOwner ?
                 <View style={styles.userInfo}>
                   <Text style={styles.userInfoText}>Inquries</Text>
                   {post.proposers.map(pro => (
-                    <View style={styles.userDetails} key={pro.user_id}>
-                      <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${pro.first_name + pro.last_name}` }} />
-                      <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: { userPost_id: pro.user_id } })}>
+                    <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: { userPost_id: pro.user_id } })}>
+                      <View style={styles.userDetails} key={pro.user_id}>
+                        <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${pro.first_name + pro.last_name}` }} />
                         <View style={styles.user}>
                           <Text style={styles.fullName}>{pro.first_name + " " + pro.last_name}</Text>
                           <Text style={styles.username}>{pro.username}</Text>
                         </View>
-                      </TouchableOpacity>
-                    </View>
+                      </View>
+                    </TouchableOpacity>
                   ))}
                 </View>
                 : null}

@@ -362,7 +362,7 @@ export default function UserProfileScreen({ route }: any) {
 
   const getUserData = () => {
     axios
-      .get(`http://localhost:3000/api/v1/users/${userID}`)
+      .get(`http://192.168.31.138:3000/api/v1/users/${userID}`)
       .then(resp => {
         setUserData(resp.data)
         setUserToUpdate(resp.data)
@@ -376,7 +376,7 @@ export default function UserProfileScreen({ route }: any) {
 
   const getPostData = () => {
     axios
-      .get("http://localhost:3000/api/v1/posts")
+      .get("http://192.168.31.138:3000/api/v1/posts")
       .then(resp => {
         setPostData(resp.data)
         console.log(resp.data)
@@ -434,7 +434,7 @@ export default function UserProfileScreen({ route }: any) {
           borderBottomRightRadius: 30
         }}
       >
-        { isOwner?
+        {isOwner ?
           userInfo && (
             <View style={styles.settingsButton}>
               <Button
@@ -478,11 +478,11 @@ export default function UserProfileScreen({ route }: any) {
         <View style={styles.feedButtonContainer}>
           <Button title="Feed" onPress={() => viewFeed()} />
         </View>
-        <View style={styles.separator}/>
+        <View style={styles.separator} />
       </View>
       <SafeAreaView>
         {//shows when feed is true
-          feed && filteredPosts && posts && ( 
+          feed && filteredPosts && posts && (
             <View style={styles.customListView}>
               <ScrollView>
                 {filteredPosts.map(filteredPosts => (
@@ -545,29 +545,29 @@ export default function UserProfileScreen({ route }: any) {
                 </Button>
               </View>
             </View>
-          ) : userInfo && userData && (   
-          <View style={styles.userInfoContainerNotOwner}>
-          <View style={styles.usernameContainer}>
-            <Text>
-              {userData.username}
-            </Text>
-          </View>
-          <View style={styles.emailContainer}>
-            <Text>
-              {userData.email}
-            </Text>
-          </View>
-          <View style={styles.passwordContainer}>
-            <Text>
-              {user.password}
-            </Text>
-          </View>
-          <View style={styles.addressContainer}>
-            <Text>
-              11 waterloo st{userData.address}
-            </Text>
-          </View>
-        </View>)}
+          ) : userInfo && userData && (
+            <View style={styles.userInfoContainerNotOwner}>
+              <View style={styles.usernameContainer}>
+                <Text>
+                  {userData.username}
+                </Text>
+              </View>
+              <View style={styles.emailContainer}>
+                <Text>
+                  {userData.email}
+                </Text>
+              </View>
+              <View style={styles.passwordContainer}>
+                <Text>
+                  {user.password}
+                </Text>
+              </View>
+              <View style={styles.addressContainer}>
+                <Text>
+                  11 waterloo st{userData.address}
+                </Text>
+              </View>
+            </View>)}
         {//shows when userReviews is true
           userReviews && (
             <View style={styles.customListView}>
