@@ -16,7 +16,7 @@ export default function PostScreen({ navigation, route }) {
   const [visible, setVisible] = React.useState(false);
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
-  const [messageForm, setMessageForm] = React.useState('Hi there 👋 I am interseted in this posting!');
+  const [messageForm, setMessageForm] = React.useState('Hi there 👋 I am interested in this posting!');
   const [isMessageFormLoading, setisMessageFormLoading] = React.useState(false);
   const [isLoadingComplete, setLoadingComplete] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -27,6 +27,7 @@ export default function PostScreen({ navigation, route }) {
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: 'white', padding: 20, margin: 40 };
   const isOwner = user.user_id == post.created_by.user_id
+  const created_by_id = post.created_by.user_id;
 
   let isInquired = false;
   post.proposers.forEach(function (pro) {
@@ -34,7 +35,6 @@ export default function PostScreen({ navigation, route }) {
       isInquired = true;
     }
   });
-  console.log(post)
   const LeftContent = props => <Avatar.Icon {...props} icon="message" />
   const updateStatus = status => {
     post.status = status;
@@ -45,15 +45,24 @@ export default function PostScreen({ navigation, route }) {
         setPost(prevState => ({ ...prevState, status: status }));
       })
       .catch(err => {
-        console.log(err)
-        console.log("Error updating post status.")
+        console.log(err);
+        console.log("Error updating post status.");
       });
   };
+<<<<<<< HEAD
   const updateReports = () => {
     let updatedReporters = [];
     if(!post.reporters || post.reporters.length == 0) { //no reporters
       updatedReporters = [user.user_id];
     } else if(!post.reporters.includes(user.user_id)) { //add current user to reporters
+=======
+
+  const updateReports = () => {
+    let updatedReporters = [];
+    if (!post.reporters || post.reporters.length == 0) { //no reporters
+      updatedReporters = [user.user_id];
+    } else if (!post.reporters.includes(user.user_id)) { //add current user to reporters
+>>>>>>> b73acc02876a21ef90cccd661ad487a18e7ef788
       updatedReporters = post.reporters.push(user.user_id);
     } else { //remove current user to reporters
       updatedReporters = post.reporters.filter(id => id != user.user_id);
@@ -70,6 +79,10 @@ export default function PostScreen({ navigation, route }) {
         console.log("Error updating reporters.");
       });
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> b73acc02876a21ef90cccd661ad487a18e7ef788
   const createConversation = () => {
     setisMessageFormLoading(true)
     const conversation = {
@@ -113,8 +126,9 @@ export default function PostScreen({ navigation, route }) {
         proposer: user
       })
       .then(resp => {
+        console.log("dat!!!!!!!")
         console.log(resp.data)
-        navigation.navigate("Inbox")
+        navigation.navigate('Inbox', { screen: 'ChatApp', params: { screen: 'Room', params: { conversation: resp.data } } })
       })
       .catch(err => {
         const { errors } = err.response.data
@@ -257,25 +271,30 @@ export default function PostScreen({ navigation, route }) {
               </View>
               <View style={styles.userInfo}>
                 <Text style={styles.userInfoText}>Creater Information</Text>
-                <View style={styles.userDetails}>
-                  <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${post.created_by.first_name + post.created_by.last_name}` }} />
-                  <View style={styles.user}>
-                    <Text style={styles.fullName}>{post.created_by.first_name + " " + post.created_by.last_name}</Text>
-                    <Text style={styles.username}>{post.created_by.username}</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: { userPost_id: created_by_id } })}>
+                  <View style={styles.userDetails}>
+                    <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${post.created_by.first_name + post.created_by.last_name}` }} />
+                    <View style={styles.user}>
+                      <Text style={styles.fullName}>{post.created_by.first_name + " " + post.created_by.last_name}</Text>
+                      <Text style={styles.username}>{post.created_by.username}</Text>
+                    </View>
                   </View>
-                </View>
+                </TouchableOpacity>
+
               </View>
               {isOwner ?
                 <View style={styles.userInfo}>
                   <Text style={styles.userInfoText}>Inquries</Text>
                   {post.proposers.map(pro => (
-                    <View style={styles.userDetails} key={pro.user_id}>
-                      <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${pro.first_name + pro.last_name}` }} />
-                      <View style={styles.user}>
-                        <Text style={styles.fullName}>{pro.first_name + " " + pro.last_name}</Text>
-                        <Text style={styles.username}>{pro.username}</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: { userPost_id: pro.user_id } })}>
+                      <View style={styles.userDetails} key={pro.user_id}>
+                        <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${pro.first_name + pro.last_name}` }} />
+                        <View style={styles.user}>
+                          <Text style={styles.fullName}>{pro.first_name + " " + pro.last_name}</Text>
+                          <Text style={styles.username}>{pro.username}</Text>
+                        </View>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   ))}
                 </View>
                 : null}

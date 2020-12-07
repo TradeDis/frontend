@@ -102,9 +102,9 @@ const styles = StyleSheet.create({
 const UserInfoScreen = (props: any) => {
     return (
         <View style={styles.container}>
-        <Text>
+            <Text>
                 {props.user.username}
-            </Text>            
+            </Text>
             <View style={styles.usernameContainer}>
                 <TextInput placeholder="Username"></TextInput>
             </View>

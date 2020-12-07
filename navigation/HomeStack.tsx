@@ -36,7 +36,7 @@ function ChatApp() {
         options={({ navigation, route }) => ({
           title: "Inbox",
           headerLeft: () => (
-            <Button color="white" mode="text" onPress={() => navigation.goBack()}>Back</Button>
+            <Button color="white" mode="text" onPress={() => navigation.navigate("Home")}>Home</Button>
           ),
           headerRight: () => (
             <Button color="white" icon="account" mode="text" onPress={() => navigation.navigate("User")}>User</Button>
@@ -54,8 +54,11 @@ function ChatApp() {
       <ChatAppStack.Screen
         name='Room'
         component={ConversationScreen}
-        options={({ route }) => ({
-          title: route.params.conversation.name
+        options={({ navigation, route }) => ({
+          title: route.params.conversation.name,
+          headerLeft: () => (
+            <Button color="white" mode="text" onPress={() => navigation.navigate("Inbox")}>Inbox</Button>
+          ),
         })}
       />
     </ChatAppStack.Navigator>

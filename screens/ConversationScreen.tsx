@@ -39,7 +39,7 @@ export interface IMessage {
 }
 
 
-export default function ConversationScreen({ route }) {
+export default function ConversationScreen({ route, navigation }) {
   useStatsBar('light-content');
 
   const [messages, setMessages] = useState<any[]>([]);
@@ -102,11 +102,15 @@ export default function ConversationScreen({ route }) {
     });
 
     refresh()
+    const unsubscribe = navigation.addListener("focus", () => {
+      refresh();
+    });
     return () => {
+      unsubscribe
       console.log("Disconnecting", socket.id)
       _socket.disconnect('io server disconnect')
     }
-  }, []);
+  }, [navigation]);
 
   async function handleSend(messages: IMessage[]) {
     const { text, user, createdAt } = messages[0];

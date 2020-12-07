@@ -39,6 +39,16 @@ export default function EditPostScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
+            <View style={styles.top}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <View style={styles.secondaryTextContainer}>
+                        <Text style={styles.secondaryText}>Done</Text>
+                    </View>
+                </TouchableOpacity>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>TradeDis</Text>
+                </View>
+            </View>
             <View style={styles.main}>
                 <View style={styles.basicInfo}>
                     <View style={styles.postTitleContainer}>
@@ -104,7 +114,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     top: {
-        flex: 1.8,
+        flex: 1,
         flexDirection: "row",
         backgroundColor: "#EB5757",
         alignItems: 'center',
@@ -127,7 +137,7 @@ const styles = StyleSheet.create({
     },
     secondaryTextContainer: {
         marginLeft: -105,
-        marginTop: -40
+        marginTop: 25
     },
     secondaryText: {
         color: "#fff",
@@ -244,7 +254,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         height: 45,
-        marginTop: 40,
+        marginTop: -50,
         borderRadius: 15,
         shadowColor: 'black',
         shadowOffset: {

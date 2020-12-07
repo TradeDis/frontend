@@ -27,7 +27,9 @@ interface Post {
   requesting: boolean;
   content: string;
   location: string;
-  created_by: object;
+  created_by: {
+    user_id: number;
+  };
   date: Date;
   status: string;
   tags: string[];
@@ -131,7 +133,13 @@ export default function HomeFeedScreen({ navigation }) {
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
       response => {
-        console.log(response);
+        const { conversation } = response.notification.request.content.data;
+        console.log("RESPONSE!!!");
+        console.log(conversation);
+        navigation.navigate("Inbox", {
+          screen: "ChatApp",
+          params: { screen: "Room", params: { conversation } }
+        });
       }
     );
 
@@ -285,9 +293,13 @@ export default function HomeFeedScreen({ navigation }) {
             ) : (
               <View style={styles.postings}>
                 <ScrollView horizontal={true}>
-                  {inquiredPosts.map(post => (
-                    <Posting key={post.post_id} post={post}></Posting>
-                  ))}
+                  {inquiredPosts.map(post =>
+                    post.reporters && post.reporters.length > 1 ? (
+                      <View></View>
+                    ) : (
+                      <Posting key={post.post_id} post={post}></Posting>
+                    )
+                  )}
                 </ScrollView>
               </View>
             )}
