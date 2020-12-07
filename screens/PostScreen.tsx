@@ -51,13 +51,13 @@ export default function PostScreen({ navigation, route }) {
   };
 
   const updateReports = () => {
-    let updatedReporters = post.reporters || post.reporters.length == 0 ? [] : post.reporters;
+    let updatedReporters = !post.reporters || post.reporters.length == 0 ? [] : post.reporters;
     if (!post.reporters || post.reporters.length == 0) { //no reporters
       updatedReporters = [user.user_id];
     } else if (!post.reporters.includes(user.user_id)) { //add current user to reporters
-      updatedReporters = post.reporters.push(user.user_id);
+      updatedReporters.push(user.user_id);
     } else { //remove current user to reporters
-      updatedReporters = post.reporters.filter(id => id != user.user_id);
+      updatedReporters = updatedReporters.filter(id => id != user.user_id);
     }
     post.reporters = updatedReporters;
     setPost(prevState => ({ ...prevState, reporters: updatedReporters }));
