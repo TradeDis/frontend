@@ -13,15 +13,13 @@ import axios from "axios";
 import BottomNavigation from "../components/BottomNavigation";
 import { API_URL } from "@env";
 import { AuthContext } from "../navigation/AuthProvider";
-import { Searchbar } from 'react-native-paper';
-import { Button, Menu, Divider, Provider } from 'react-native-paper';
+import { Searchbar } from "react-native-paper";
+import { Button, Menu, Divider, Provider } from "react-native-paper";
 import { RefreshControl } from "react-native";
 
-import Constants from 'expo-constants';
-import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
-
-
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
 
 interface Post {
   post_id: string;
@@ -34,23 +32,22 @@ interface Post {
   status: string;
   tags: string[];
   comments: object[];
+  reporters: number[];
 }
 
 export default function HomeFeedScreen({ navigation }) {
-
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
       shouldPlaySound: false,
-      shouldSetBadge: false,
-    }),
+      shouldSetBadge: false
+    })
   });
 
-  const [expoPushToken, setExpoPushToken] = useState('');
+  const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = React.useRef();
   const responseListener = React.useRef();
-
 
   const [visible, setVisible] = React.useState(false);
   const openMenu = () => setVisible(true);
@@ -63,57 +60,60 @@ export default function HomeFeedScreen({ navigation }) {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchPosts()
+    fetchPosts();
   }, []);
 
-  const [trendingPosts, setTrendingPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [myPosts, setMyPosts] = useState<Post[]>([]);
   const [inquiredPosts, setInquiredPosts] = useState<Post[]>([]);
 
   async function schedulePushNotification() {
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "You've got mail! 📬",
-        body: 'Here is the notification body',
-        data: { data: 'goes here' },
+        body: "Here is the notification body",
+        data: { data: "goes here" }
       },
-      trigger: { seconds: 2 },
+      trigger: { seconds: 2 }
     });
   }
 
   async function registerForPushNotificationsAsync() {
     let token;
     if (Constants.isDevice) {
-      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
       let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
         finalStatus = status;
       }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
       console.log(token);
-
     } else {
-      alert('Must use physical device for Push Notifications');
+      alert("Must use physical device for Push Notifications");
     }
     // if (user.push_token == '') {
     axios
-      .post(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}/token`, { push_token: token })
-      .then(resp =>
-        console.log(resp)
-      )
+      .post(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}/token`, {
+        push_token: token
+      })
+      .then(resp => console.log(resp));
     // }
 
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
+    if (Platform.OS === "android") {
+      Notifications.setNotificationChannelAsync("default", {
+        name: "default",
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
+        lightColor: "#FF231F7C"
       });
     }
 
@@ -123,24 +123,28 @@ export default function HomeFeedScreen({ navigation }) {
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      notification => {
+        setNotification(notification);
+      }
+    );
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      response => {
+        console.log(response);
+      }
+    );
 
     // whenever screen is focused
     const unsubscribe = navigation.addListener("focus", () => {
       fetchPosts();
     });
-    console.log(user)
+    console.log(user);
 
     return () => {
       Notifications.removeNotificationSubscription(notificationListener);
       Notifications.removeNotificationSubscription(responseListener);
-      unsubscribe
+      unsubscribe;
     };
   }, []);
 
@@ -149,26 +153,29 @@ export default function HomeFeedScreen({ navigation }) {
     axios
       .get(`https://tradis.herokuapp.com/api/v1/posts`)
       .then(resp => {
-        const myPost = resp.data.filter(post => post.created_by.user_id == user.user_id)
-        setFilteredPosts(myPost);
-        let inquired = []
+        const mine = resp.data.filter(
+          post => post.created_by.user_id == user.user_id
+        );
+        setMyPosts(mine);
+        let inquired = [];
         resp.data.map(post => {
-          if (post.proposers.length > 0) {
-            post.proposers.forEach(function (item) {
+          if (post.proposers && post.proposers.length > 0) {
+            post.proposers.forEach(function(item) {
               if (item.user_id == user.user_id) {
-                inquired.push(post)
+                inquired.push(post);
               }
             });
           }
-        })
-        setInquiredPosts(inquired)
+        });
+        setInquiredPosts(inquired);
         setPosts(resp.data);
-        setTrendingPosts(resp.data);
+        setFilteredPosts(resp.data);
       })
       .catch(err => {
         console.log(err);
         setError(err);
-      }).finally(() => {
+      })
+      .finally(() => {
         setRefreshing(false);
       });
   };
@@ -189,7 +196,7 @@ export default function HomeFeedScreen({ navigation }) {
         post.title.toLowerCase().includes(search) ||
         filterTags(post.tags, search)
     );
-    setTrendingPosts(filtered);
+    setFilteredPosts(filtered);
   };
 
   return (
@@ -223,7 +230,8 @@ export default function HomeFeedScreen({ navigation }) {
       </View> */}
 
       <View style={styles.feed}>
-        <ScrollView style={styles.scrollView}
+        <ScrollView
+          style={styles.scrollView}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
@@ -232,39 +240,41 @@ export default function HomeFeedScreen({ navigation }) {
             <Text style={styles.postingSubtitle}>My Postings</Text>
             {error ? (
               <Text>Error retrieving posts</Text>
-            ) : filteredPosts.length === 0 ? (
+            ) : myPosts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
-                  <View style={styles.postings}>
-                    <ScrollView horizontal={true}>
-                      {filteredPosts.map(post => (
-                        <Posting
-                          key={post.post_id}
-                          post={post}
-                        ></Posting>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
+              <View style={styles.postings}>
+                <ScrollView horizontal={true}>
+                  {myPosts.map(post =>
+                    post.reporters && post.reporters.length > 1 ? (
+                      <View></View>
+                    ) : (
+                      <Posting key={post.post_id} post={post}></Posting>
+                    )
+                  )}
+                </ScrollView>
+              </View>
+            )}
           </View>
           <View style={styles.trendingContainer}>
             <Text style={styles.postingSubtitle}>Trending</Text>
             {error ? (
               <Text>Error retrieving posts</Text>
-            ) : trendingPosts.length === 0 ? (
+            ) : filteredPosts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
-                  <View style={styles.postings}>
-                    <ScrollView horizontal={true}>
-                      {trendingPosts.map(post => (
-                        <Posting
-                          key={post.post_id}
-                          post={post}
-                        ></Posting>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
+              <View style={styles.postings}>
+                <ScrollView horizontal={true}>
+                  {filteredPosts.map(post =>
+                    post.reporters && post.reporters.length > 1 ? (
+                      <View></View>
+                    ) : (
+                      <Posting key={post.post_id} post={post}></Posting>
+                    )
+                  )}
+                </ScrollView>
+              </View>
+            )}
           </View>
           <View style={styles.trendingContainer}>
             <Text style={styles.postingSubtitle}>Inquired</Text>
@@ -273,17 +283,14 @@ export default function HomeFeedScreen({ navigation }) {
             ) : inquiredPosts.length === 0 ? (
               <Text>No results available</Text>
             ) : (
-                  <View style={styles.postings}>
-                    <ScrollView horizontal={true}>
-                      {inquiredPosts.map(post => (
-                        <Posting
-                          key={post.post_id}
-                          post={post}
-                        ></Posting>
-                      ))}
-                    </ScrollView>
-                  </View>
-                )}
+              <View style={styles.postings}>
+                <ScrollView horizontal={true}>
+                  {inquiredPosts.map(post => (
+                    <Posting key={post.post_id} post={post}></Posting>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
           </View>
         </ScrollView>
       </View>
@@ -298,7 +305,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'pink',
     marginHorizontal: 20,
     // marginBottom: 70,
-    width: "100%",
+    width: "100%"
   },
   menuStyle: {
     marginTop: 50
@@ -346,7 +353,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 35,
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   topSecondaryText: {
     color: "#fff",
@@ -362,10 +369,10 @@ const styles = StyleSheet.create({
   },
   feed: {
     flex: 9,
-    paddingBottom: 120,
+    paddingBottom: 120
   },
   newPostingsContainer: {
-    margin: 10,
+    margin: 10
   },
   trendingContainer: {
     margin: 10
@@ -377,6 +384,6 @@ const styles = StyleSheet.create({
   },
   postings: {
     width: "100%",
-    flexDirection: "row",
+    flexDirection: "row"
   }
 });
