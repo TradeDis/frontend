@@ -5,6 +5,9 @@ import BottomNavigation from "../components/BottomNavigation";
 import { useState } from "react";
 import axios from "axios";
 import Tags from "react-native-tags";
+import Loading from "../components/Loading";
+import { Button } from "react-native-paper";
+
 
 interface PostToUpdate {
     post_id: string;
@@ -16,6 +19,7 @@ interface PostToUpdate {
 
 export default function EditPostScreen({ navigation, route }) {
     const [post, setPost] = useState(route.params?.post);
+    const [isLoadingComplete, setLoadingComplete] = React.useState(true);
     console.log(post)
     const [updatedPost, setPostToUpdate] = useState<PostToUpdate>({
         post_id: post.post_id,
@@ -26,13 +30,17 @@ export default function EditPostScreen({ navigation, route }) {
     });
 
     const updatePost = () => {
+        setLoadingComplete(false);
         axios
-            .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, updatedPost)
+            .put(`http://localhost:3000/api/v1/posts/${post.post_id}`, updatedPost)
             .then(resp => {
                 setPostToUpdate(resp.data)
+                setLoadingComplete(true);
             })
+            
             .catch(err => {
                 console.log(err);
+                setLoadingComplete(true);
             })
     }
 
@@ -80,6 +88,7 @@ export default function EditPostScreen({ navigation, route }) {
                         <Text style={styles.tagsText}>Tags separated by commas</Text>
                         <Tags
                             style={styles.tagsInput}
+                            
                             initialTags={post.tags}
                             createTagOnString={[","]}
                             onChangeTags={tags =>
@@ -94,16 +103,16 @@ export default function EditPostScreen({ navigation, route }) {
                         {post.date ? "Posted on " + post.date.toLocaleString() : "No date available"}
                     </Text>
                     <View style={styles.saveButtonContainer}>
-                        <TouchableOpacity
+                        <Button
+                            loading={!isLoadingComplete}
+                            color='black'  
                             style={styles.save}
                             onPress={() => updatePost()}>
                             <Text style={styles.proposeText}>Save</Text>
-                        </TouchableOpacity>
+                        </Button>
                     </View>
                 </View>
-
             </View>
-            {/* <BottomNavigation navigation={navigation}></BottomNavigation> */}
         </View>
     );
 }
