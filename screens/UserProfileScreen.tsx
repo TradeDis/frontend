@@ -429,7 +429,7 @@ export default function UserProfileScreen({ route }: any) {
         style={{
           backgroundColor: "rgba(235, 87, 87, 1)",
           width: "100%",
-          height: "30%",
+          height: "25%",
           borderBottomLeftRadius: 30,
           borderBottomRightRadius: 30
         }}
