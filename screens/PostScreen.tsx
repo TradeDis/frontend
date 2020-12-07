@@ -34,21 +34,43 @@ export default function PostScreen({ navigation, route }) {
       isInquired = true;
     }
   });
-  console.log(post)
   const LeftContent = props => <Avatar.Icon {...props} icon="message" />
   const updateStatus = status => {
     post.status = status;
     setPost(prevState => ({ ...prevState, status: status }));
     axios
-      .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, post)
+      .put(`http://192.168.2.91:3000/api/v1/posts/${post.post_id}`, post)
       .then(resp => {
         setPost(prevState => ({ ...prevState, status: status }));
       })
       .catch(err => {
-        console.log(err)
-        console.log("Error updating post status.")
+        console.log(err);
+        console.log("Error updating post status.");
       });
   };
+
+  const updateReports = () => {
+    let updatedReporters = [];
+    if (!post.reporters || post.reporters.length == 0) { //no reporters
+      updatedReporters = [user.user_id];
+    } else if (!post.reporters.includes(user.user_id)) { //add current user to reporters
+      updatedReporters = post.reporters.push(user.user_id);
+    } else { //remove current user to reporters
+      updatedReporters = post.reporters.filter(id => id != user.user_id);
+    }
+    post.reporters = updatedReporters;
+    setPost(prevState => ({ ...prevState, reporters: updatedReporters }));
+    axios
+      .put(`http://192.168.2.91:3000/api/v1/posts/${post.post_id}`, post)
+      .then(resp => {
+        setPost(prevState => ({ ...prevState, reporters: updatedReporters }));
+      })
+      .catch(err => {
+        console.log(err);
+        console.log("Error updating reporters.");
+      });
+  }
+
   const createConversation = () => {
     setisMessageFormLoading(true)
     const conversation = {
