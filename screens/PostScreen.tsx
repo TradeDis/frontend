@@ -143,16 +143,15 @@ export default function PostScreen({ navigation, route }) {
             </View>
             <View style={styles.userInfo}>
               <Text style={styles.userInfoText}>Creater Information</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: {userPost_id: created_by_id }})}>
               <View style={styles.userDetails}>
                 <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${post.created_by.first_name + post.created_by.last_name}` }} />
-                <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: {userPost_id: created_by_id }})}>
                   <View style={styles.user}>
                     <Text style={styles.fullName}>{post.created_by.first_name + " " + post.created_by.last_name}</Text>
                     <Text style={styles.username}>{post.created_by.username}</Text>
                   </View>
-                </TouchableOpacity>
-
               </View>
+              </TouchableOpacity>
             </View>
             {isOwner ?
               <View style={styles.userInfo}>
