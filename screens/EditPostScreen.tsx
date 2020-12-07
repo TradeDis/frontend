@@ -1,11 +1,12 @@
 import * as React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Keyboard, Switch, TextInput, Button } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard, Switch, TextInput } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import BottomNavigation from "../components/BottomNavigation";
 import { useState } from "react";
 import axios from "axios";
 import Tags from "react-native-tags";
 import Loading from "../components/Loading";
+import { Button } from 'react-native-paper'
 
 
 interface PostToUpdate {
