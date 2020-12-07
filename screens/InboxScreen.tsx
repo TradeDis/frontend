@@ -15,6 +15,8 @@ import { API_URL } from "@env";
 import BottomNavigation from "../components/BottomNavigation";
 import { AuthContext } from "../navigation/AuthProvider";
 import { TextInput, Button, Searchbar } from "react-native-paper";
+import TimeAgo from 'react-native-timeago';
+
 
 export default function InboxScreen({ navigation }) {
   useStatsBar("light-content");
