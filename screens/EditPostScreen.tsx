@@ -46,16 +46,6 @@ export default function EditPostScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.top}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <View style={styles.secondaryTextContainer}>
-                        <Text style={styles.secondaryText}>Done</Text>
-                    </View>
-                </TouchableOpacity>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>TradeDis</Text>
-                </View>
-            </View>
             <View style={styles.main}>
                 <View style={styles.basicInfo}>
                     <View style={styles.postTitleContainer}>
