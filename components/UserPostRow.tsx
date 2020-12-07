@@ -51,7 +51,6 @@ const UserPostRow = ({ post }) => {
     const navigation = useNavigation();
     const { user, setUser } = useContext(AuthContext);
     let isOwner = true
-    console.log(post)
     if (post.created_by.user_id != user.user_id) {
         isOwner = false
       } else {

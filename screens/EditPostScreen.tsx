@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import Tags from "react-native-tags";
 import Loading from "../components/Loading";
+import { Button } from "react-native-paper";
 
 
 interface PostToUpdate {
@@ -19,7 +20,6 @@ interface PostToUpdate {
 export default function EditPostScreen({ navigation, route }) {
     const [post, setPost] = useState(route.params?.post);
     const [isLoadingComplete, setLoadingComplete] = React.useState(true);
-
     console.log(post)
     const [updatedPost, setPostToUpdate] = useState<PostToUpdate>({
         post_id: post.post_id,
@@ -37,6 +37,7 @@ export default function EditPostScreen({ navigation, route }) {
                 console.log(resp.data)
                 setPostToUpdate(resp.data)
                 setLoadingComplete(true);
+                navigation.navigate("User")
             })
             .catch(err => {
                 console.log(err);
@@ -46,16 +47,6 @@ export default function EditPostScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.top}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <View style={styles.secondaryTextContainer}>
-                        <Text style={styles.secondaryText}>Done</Text>
-                    </View>
-                </TouchableOpacity>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>TradeDis</Text>
-                </View>
-            </View>
             <View style={styles.main}>
                 <View style={styles.basicInfo}>
                     <View style={styles.postTitleContainer}>
@@ -104,15 +95,14 @@ export default function EditPostScreen({ navigation, route }) {
                     <View style={styles.saveButtonContainer}>
                         <Button
                             loading={!isLoadingComplete}
+                            color='black'
                             style={styles.save}
                             onPress={() => updatePost()}>
                             <Text style={styles.proposeText}>Save</Text>
                         </Button>
                     </View>
                 </View>
-
             </View>
-            {/* <BottomNavigation navigation={navigation}></BottomNavigation> */}
         </View>
     );
 }
@@ -134,15 +124,6 @@ const styles = StyleSheet.create({
     main: {
         flex: 8,
     },
-    titleContainer: {
-        marginLeft: -250,
-        marginTop: 25
-    },
-    title: {
-        fontSize: 35,
-        color: "#fff",
-        fontWeight: "bold",
-    },
     secondaryTextContainer: {
         marginLeft: -105,
         marginTop: 25
@@ -157,6 +138,7 @@ const styles = StyleSheet.create({
         borderBottomColor: "#ccc",
     },
     postTitleContainer: {
+        marginTop: 35,
         borderRadius: 15,
         padding: 12,
         borderColor: 'grey',
