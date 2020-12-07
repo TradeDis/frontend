@@ -189,47 +189,47 @@ export default function PostScreen({ navigation, route }) {
               <View style={styles.topInfo}>
                 <Text style={styles.postTitle}>{post.title}</Text>
                 {user.user_id == post.created_by.user_id ?
-                <View style={styles.switch}>
-                  <TouchableOpacity onPress={() => updateStatus("active")}>
-                    <View
-                      style={{
-                        flex: 1,
-                        padding: 5,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                        borderTopLeftRadius: 17.5,
-                        borderBottomLeftRadius: 17.5,
-                        backgroundColor:
-                          post.status === "active" ? "#EB5757" : "#d3d3d3"
-                      }}
-                    >
-                      <Text style={{ color: post.status === "active" ? "white" : "black" }}>Active</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => updateStatus("inactive")}>
-                    <View
-                      style={{
-                        flex: 1,
-                        padding: 5,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                        borderTopRightRadius: 17.5,
-                        borderBottomRightRadius: 17.5,
-                        backgroundColor:
-                          post.status === "active" ? "#d3d3d3" : "#EB5757"
-                      }}
-                    >
-                      <Text style={{ color: post.status === "active" ? "black" : "white" }}>Inactive</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View> :
-                <Button 
-                  icon="flag" 
-                  color={ post.reporters && post.reporters.includes(user.user_id) ? 'rgba(235, 87, 87, 1)' : '#d3d3d3'}
-                  onPress={() => updateReports()}></Button>
-              }
+                  <View style={styles.switch}>
+                    <TouchableOpacity onPress={() => updateStatus("active")}>
+                      <View
+                        style={{
+                          flex: 1,
+                          padding: 5,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: "100%",
+                          borderTopLeftRadius: 17.5,
+                          borderBottomLeftRadius: 17.5,
+                          backgroundColor:
+                            post.status === "active" ? "#EB5757" : "#d3d3d3"
+                        }}
+                      >
+                        <Text style={{ color: post.status === "active" ? "white" : "black" }}>Active</Text>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => updateStatus("inactive")}>
+                      <View
+                        style={{
+                          flex: 1,
+                          padding: 5,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: "100%",
+                          borderTopRightRadius: 17.5,
+                          borderBottomRightRadius: 17.5,
+                          backgroundColor:
+                            post.status === "active" ? "#d3d3d3" : "#EB5757"
+                        }}
+                      >
+                        <Text style={{ color: post.status === "active" ? "black" : "white" }}>Inactive</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View> :
+                  <Button
+                    icon="flag"
+                    color={post.reporters && post.reporters.includes(user.user_id) ? 'rgba(235, 87, 87, 1)' : '#d3d3d3'}
+                    onPress={() => updateReports()}></Button>
+                }
               </View>
               <Text style={styles.type}>
                 {post.requesting ? "Request" : "Trade"}
