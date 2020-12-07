@@ -6,7 +6,6 @@ import { useState } from "react";
 import axios from "axios";
 import Tags from "react-native-tags";
 import Loading from "../components/Loading";
-import { Button } from "react-native-paper";
 
 
 interface PostToUpdate {
