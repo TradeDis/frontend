@@ -15,7 +15,6 @@ import {
   ScrollView
 } from "react-native";
 import { Text, View } from "../components/Themed";
-import CustomRow from "../components/UserPostRow";
 import UserInfoScreen from "../components/UserInfoScreen";
 import UserReviewsScreen from "../components/ReviewsUserProfileScreen";
 import axios from "axios";
@@ -23,6 +22,8 @@ import * as ImagePicker from "expo-image-picker";
 import { API_URL } from "@env";
 import BottomNavigation from "../components/BottomNavigation";
 import { AuthContext } from "../navigation/AuthProvider";
+import { useNavigation } from "@react-navigation/native";
+import UserPostRow from "../components/UserPostRow";
 
 
 
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(52, 52, 52, 0)",
     alignSelf: 'flex-end',
     marginLeft: 15,
-    marginTop: 35,
+    marginTop: 200,
     position: 'absolute'
   },
   profileImage: {
@@ -240,6 +241,12 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 35,
     position: 'absolute'
+  },
+  userInfoContainerNotOwner: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "rgba(52, 52, 52, 0.0)",
+    alignItems: 'center'
   }
 });
 
@@ -300,10 +307,16 @@ interface Post {
 }
 
 //trying to use useState
-export default function UserProfileScreen({ navigation }: any) {
+export default function UserProfileScreen({ route }: any) {
+  const navigation = useNavigation();
   const [feed, setFeedVisible] = useState(true);
   const [userInfo, setUserInfoVisible] = useState(false); //setting intial value to be false so we see feed
   const [userReviews, setUserReviewsVisible] = useState(false); //setting intial value to be false so we see feed
+
+  useEffect(() => {
+    getPostData();
+    getUserData();
+  }, []);
 
   const viewFeed = () => {
     setFeedVisible(true);
@@ -324,44 +337,50 @@ export default function UserProfileScreen({ navigation }: any) {
   };
 
   const { user, setUser } = useContext(AuthContext);
+  const [userData, setUserData] = useState<User>();
   const [status, setStatus] = useState("pending");
   const [posts, setPostData] = useState<Post[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const incommingUser_id = route.params?.userPost_id
+  let isOwner = true
+  let userID = user.user_id
+
+  if (user.user_id != incommingUser_id) {
+    isOwner = false
+    userID = incommingUser_id
+  } else {
+    isOwner = true
+  }
   const [userToUpdate, setUserToUpdate] = useState<UserToUpdate>({
-    user_id: user.user_id,
+    user_id: userID,
     username: "",
     email: "",
     password: "",
     avatar: "",
   });
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
 
-
-  useEffect(() => {
-    getUserData();
-    getPostData();
-  }, []);
 
   const getUserData = () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/users/${user.user_id}`)
+      .get(`http://localhost:3000/api/v1/users/${userID}`)
       .then(resp => {
-        setUser(resp.data)
+        setUserData(resp.data)
         setUserToUpdate(resp.data)
       })
+
       .catch(err => {
         console.log(err);
         setStatus("error")
       })
   }
 
-
   const getPostData = () => {
     axios
-      .get("http://192.168.31.138:3000/api/v1/posts")
+      .get("http://localhost:3000/api/v1/posts")
       .then(resp => {
         setPostData(resp.data)
-        setFilteredPosts(resp.data)
-        filterPosts()
+        console.log(resp.data)
+        filterPosts(resp.data)
       })
       .catch(err => {
         console.log(err);
@@ -398,18 +417,14 @@ export default function UserProfileScreen({ navigation }: any) {
     setSelectedImage({ localURI: picker.uri });
   }
 
-  const filterPosts = () => {
-    const user_id = user.user_id;
-    console.log(user_id)
-
-    const filtered = filteredPosts.filter(post => post.post_id === user_id)
+  const filterPosts = (posts1: Post[]) => {
+    const filtered = posts1.filter(post => post.created_by.user_id === incommingUser_id)
     setFilteredPosts(filtered)
 
   };
 
   return (
     <View style={styles.container}>
-
       <View
         style={{
           backgroundColor: "rgba(235, 87, 87, 1)",
@@ -419,7 +434,7 @@ export default function UserProfileScreen({ navigation }: any) {
           borderBottomRightRadius: 30
         }}
       >
-        {
+        { isOwner?
           userInfo && (
             <View style={styles.settingsButton}>
               <Button
@@ -428,15 +443,8 @@ export default function UserProfileScreen({ navigation }: any) {
                 color="white"
               />
             </View>
-          )
+          ) : <></>
         }
-        <View style={styles.backButton}>
-          <Button
-            title="Back"
-            onPress={() => { navigation.navigate('Home') }}
-            color="white"
-          />
-        </View>
       </View >
       <View style={styles.profileImage}>
         {
@@ -451,43 +459,47 @@ export default function UserProfileScreen({ navigation }: any) {
               style={{ width: 140, height: 140, borderRadius: 150 / 2 }}
             ></Image>
         }
-
       </View>
       <View style={styles.profileName}>
-        <Text style={{ fontSize: 35 }}>{user?.first_name} {user?.last_name}</Text>
+        <Text style={{ fontSize: 35 }}>{userData?.first_name} {userData?.last_name}</Text>
       </View>
       <View>
-        <View style={styles.myInfoButtonContainer}>
-          <Button title="My info" onPress={() => viewInfo()} />
-        </View>
+        {isOwner ?
+          <View style={styles.myInfoButtonContainer}>
+            <Button title="My info" onPress={() => viewInfo()} />
+          </View>
+          : <View style={styles.myInfoButtonContainer}>
+            <Button title="About" onPress={() => viewInfo()} />
+          </View>
+        }
         <View style={styles.reviewsButtonContainer}>
           <Button title="Reviews" onPress={() => viewReviews()} />
         </View>
         <View style={styles.feedButtonContainer}>
           <Button title="Feed" onPress={() => viewFeed()} />
         </View>
-        <View style={styles.separator} />
+        <View style={styles.separator}/>
       </View>
       <SafeAreaView>
         {//shows when feed is true
-          feed && posts && (
+          feed && filteredPosts && posts && ( 
             <View style={styles.customListView}>
               <ScrollView>
-                {posts.map(filteredPosts => (
-                  <CustomRow
+                {filteredPosts.map(filteredPosts => (
+                  <UserPostRow
                     post={filteredPosts}
                     key={filteredPosts.post_id}
-                  ></CustomRow>
+                  ></UserPostRow>
                 ))}
               </ScrollView>
             </View>
           )}
         {// shows when userInfo is true
-          userInfo && user && (
+          userInfo && userData && isOwner ? (
             <View style={styles.userInfoContainer}>
               <View style={styles.usernameContainer}>
                 <Text>
-                  {user.username}
+                  {userData.username}
                 </Text>
                 <TextInput
                   placeholder="Change Username"
@@ -496,10 +508,9 @@ export default function UserProfileScreen({ navigation }: any) {
                   }
                 ></TextInput>
               </View>
-
               <View style={styles.emailContainer}>
                 <Text>
-                  {user.email}
+                  {userData.email}
                 </Text>
                 <TextInput placeholder="Change Email"
                   onChangeText={email =>
@@ -519,10 +530,9 @@ export default function UserProfileScreen({ navigation }: any) {
                   }
                 ></TextInput>
               </View>
-
               <View style={styles.addressContainer}>
                 <Text>
-                  11 waterloo st{user.address}
+                  11 waterloo st{userData.address}
                 </Text>
                 <TextInput placeholder="Change Address"
                 // onChangeText={address =>
@@ -535,7 +545,29 @@ export default function UserProfileScreen({ navigation }: any) {
                 </Button>
               </View>
             </View>
-          )}
+          ) : userInfo && userData && (   
+          <View style={styles.userInfoContainerNotOwner}>
+          <View style={styles.usernameContainer}>
+            <Text>
+              {userData.username}
+            </Text>
+          </View>
+          <View style={styles.emailContainer}>
+            <Text>
+              {userData.email}
+            </Text>
+          </View>
+          <View style={styles.passwordContainer}>
+            <Text>
+              {user.password}
+            </Text>
+          </View>
+          <View style={styles.addressContainer}>
+            <Text>
+              11 waterloo st{userData.address}
+            </Text>
+          </View>
+        </View>)}
         {//shows when userReviews is true
           userReviews && (
             <View style={styles.customListView}>
@@ -557,7 +589,6 @@ export default function UserProfileScreen({ navigation }: any) {
             </View>
           )}
       </SafeAreaView>
-      {/* <BottomNavigation navigation={navigation}></BottomNavigation> */}
     </View >
 
   );

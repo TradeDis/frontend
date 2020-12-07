@@ -27,6 +27,7 @@ export default function PostScreen({ navigation, route }) {
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: 'white', padding: 20, margin: 40 };
   const isOwner = user.user_id == post.created_by.user_id
+  const created_by_id = post.created_by.user_id;
 
   let isInquired = false;
   post.proposers.forEach(function (pro) {
@@ -257,10 +258,12 @@ export default function PostScreen({ navigation, route }) {
                 <Text style={styles.userInfoText}>Creater Information</Text>
                 <View style={styles.userDetails}>
                   <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${post.created_by.first_name + post.created_by.last_name}` }} />
-                  <View style={styles.user}>
-                    <Text style={styles.fullName}>{post.created_by.first_name + " " + post.created_by.last_name}</Text>
-                    <Text style={styles.username}>{post.created_by.username}</Text>
-                  </View>
+                  <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: { userPost_id: created_by_id } })}>
+                    <View style={styles.user}>
+                      <Text style={styles.fullName}>{post.created_by.first_name + " " + post.created_by.last_name}</Text>
+                      <Text style={styles.username}>{post.created_by.username}</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
               </View>
               {isOwner ?
@@ -269,10 +272,12 @@ export default function PostScreen({ navigation, route }) {
                   {post.proposers.map(pro => (
                     <View style={styles.userDetails} key={pro.user_id}>
                       <Avatar source={{ uri: `https://ui-avatars.com/api/?background=random&rounded=true&name=${pro.first_name + pro.last_name}` }} />
-                      <View style={styles.user}>
-                        <Text style={styles.fullName}>{pro.first_name + " " + pro.last_name}</Text>
-                        <Text style={styles.username}>{pro.username}</Text>
-                      </View>
+                      <TouchableOpacity onPress={() => navigation.navigate("User", { screen: 'User', params: { userPost_id: pro.user_id } })}>
+                        <View style={styles.user}>
+                          <Text style={styles.fullName}>{pro.first_name + " " + pro.last_name}</Text>
+                          <Text style={styles.username}>{pro.username}</Text>
+                        </View>
+                      </TouchableOpacity>
                     </View>
                   ))}
                 </View>

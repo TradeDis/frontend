@@ -2,6 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { AuthContext } from '../navigation/AuthProvider';
+import { useState, useEffect, useContext } from "react";
+
 
 
 const styles = StyleSheet.create({
@@ -44,17 +47,31 @@ const styles = StyleSheet.create({
 });
 
 const UserPostRow = ({ post }) => {
+
     const navigation = useNavigation();
-    return (
-        <View>
-            <TouchableOpacity onPress={() => navigation.navigate("EditPostScreen", { post: post })}>
-                <View style={styles.container}>
-                    <Text style={styles.tags}>{post.tags}</Text>
-                    <Text style={styles.title}>{post.title}</Text>
-                    <Text style={styles.content}>{post.content}</Text>
-                    <Text style={styles.requestText}>{post.requesting ? "Request" : "Trade"}</Text>
-                </View>
-            </TouchableOpacity>
+    const { user, setUser } = useContext(AuthContext);
+    let isOwner = true
+    console.log(post)
+    if (post.created_by.user_id != user.user_id) {
+        isOwner = false
+      } else {
+        isOwner = true
+      }
+    return (isOwner ?
+        <TouchableOpacity onPress={() => navigation.navigate("EditPostScreen", { post: post })}>
+            <View style={styles.container}>
+                <Text style={styles.tags}>{post.tags}</Text>
+                <Text style={styles.title}>{post.title}</Text>
+                <Text style={styles.content}>{post.content}</Text>
+                <Text style={styles.requestText}>{post.requesting ? "Request" : "Trade"}</Text>
+            </View>
+        </TouchableOpacity>
+        :
+        <View style={styles.container}>
+            <Text style={styles.tags}>{post.tags}</Text>
+            <Text style={styles.title}>{post.title}</Text>
+            <Text style={styles.content}>{post.content}</Text>
+            <Text style={styles.requestText}>{post.requesting ? "Request" : "Trade"}</Text>
         </View>
     )
 }
