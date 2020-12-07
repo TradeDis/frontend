@@ -49,20 +49,12 @@ export default function PostScreen({ navigation, route }) {
         console.log("Error updating post status.");
       });
   };
-<<<<<<< HEAD
-  const updateReports = () => {
-    let updatedReporters = [];
-    if(!post.reporters || post.reporters.length == 0) { //no reporters
-      updatedReporters = [user.user_id];
-    } else if(!post.reporters.includes(user.user_id)) { //add current user to reporters
-=======
 
   const updateReports = () => {
-    let updatedReporters = [];
+    let updatedReporters = post.reporters || post.reporters.length == 0 ? [] : post.reporters;
     if (!post.reporters || post.reporters.length == 0) { //no reporters
       updatedReporters = [user.user_id];
     } else if (!post.reporters.includes(user.user_id)) { //add current user to reporters
->>>>>>> b73acc02876a21ef90cccd661ad487a18e7ef788
       updatedReporters = post.reporters.push(user.user_id);
     } else { //remove current user to reporters
       updatedReporters = post.reporters.filter(id => id != user.user_id);
@@ -79,10 +71,6 @@ export default function PostScreen({ navigation, route }) {
         console.log("Error updating reporters.");
       });
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> b73acc02876a21ef90cccd661ad487a18e7ef788
   const createConversation = () => {
     setisMessageFormLoading(true)
     const conversation = {
