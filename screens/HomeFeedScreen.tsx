@@ -106,7 +106,7 @@ export default function HomeFeedScreen({ navigation }) {
     }
     // if (user.push_token == '') {
     axios
-      .post(`http://192.168.31.138:3000/api/v1/users/${user.user_id}/token`, { push_token: token })
+      .post(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}/token`, { push_token: token })
       .then(resp =>
         console.log(resp)
       )
@@ -154,7 +154,7 @@ export default function HomeFeedScreen({ navigation }) {
   //retrive posts from DB
   const fetchPosts = () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/posts`)
+      .get(`https://tradis.herokuapp.com/api/v1/posts`)
       .then(resp => {
         const mine = resp.data.filter(
           post => post.created_by.user_id == user.user_id
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   top: {
-    flex: 2,
+    flex: 1.2,
     width: "100%",
     backgroundColor: "#EB5757",
     justifyContent: "center",

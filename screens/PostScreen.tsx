@@ -40,7 +40,7 @@ export default function PostScreen({ navigation, route }) {
     post.status = status;
     setPost(prevState => ({ ...prevState, status: status }));
     axios
-      .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, post)
+      .put(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}`, post)
       .then(resp => {
         setPost(prevState => ({ ...prevState, status: status }));
       })
@@ -62,7 +62,7 @@ export default function PostScreen({ navigation, route }) {
     post.reporters = updatedReporters;
     setPost(prevState => ({ ...prevState, reporters: updatedReporters }));
     axios
-      .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, post)
+      .put(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}`, post)
       .then(resp => {
         setPost(prevState => ({ ...prevState, reporters: updatedReporters }));
       })
@@ -108,7 +108,7 @@ export default function PostScreen({ navigation, route }) {
       system: true
     }
     axios
-      .post(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}/propose`, {
+      .post(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}/propose`, {
         conversation,
         systemMessage,
         firstMessage,
@@ -128,7 +128,7 @@ export default function PostScreen({ navigation, route }) {
 
   const fetchPost = () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`)
+      .get(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}`)
       .then(resp => {
         setPost(post);
         setRefreshing(false)

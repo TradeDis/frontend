@@ -52,7 +52,7 @@ export default function InboxScreen({ navigation }) {
   const loadConversations = async () => {
     axios
       .get(
-        `http://192.168.31.138:3000/api/v1/users/${user.user_id}/conversations`
+        `https://tradis.herokuapp.com/api/v1/users/${user.user_id}/conversations`
       )
       .then((resp) => {
         // console.log(resp.data)

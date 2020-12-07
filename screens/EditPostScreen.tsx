@@ -27,7 +27,7 @@ export default function EditPostScreen({ navigation, route }) {
 
     const updatePost = () => {
         axios
-            .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, updatedPost)
+            .put(`https://tradis.herokuapp.com/api/v1/posts/${post.post_id}`, updatedPost)
             .then(resp => {
                 console.log(resp.data)
                 setPostToUpdate(resp.data)

@@ -362,7 +362,7 @@ export default function UserProfileScreen({ route }: any) {
 
   const getUserData = () => {
     axios
-      .get(`http://192.168.31.138:3000/api/v1/users/${userID}`)
+      .get(`https://tradis.herokuapp.com/api/v1/users/${userID}`)
       .then(resp => {
         setUserData(resp.data)
         setUserToUpdate(resp.data)
@@ -376,7 +376,7 @@ export default function UserProfileScreen({ route }: any) {
 
   const getPostData = () => {
     axios
-      .get("http://192.168.31.138:3000/api/v1/posts")
+      .get("https://tradis.herokuapp.com/api/v1/posts")
       .then(resp => {
         setPostData(resp.data)
         console.log(resp.data)
@@ -390,7 +390,7 @@ export default function UserProfileScreen({ route }: any) {
 
   const updateUser = () => {
     axios
-      .put(`http://192.168.31.138:3000/api/v1/users/${user.user_id}`, userToUpdate)
+      .put(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}`, userToUpdate)
       .then(resp => {
         getUserData()
       })
