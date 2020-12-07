@@ -37,13 +37,20 @@ export default function HomeFeedStackNavigator() {
   return (
     <HomeFeedStack.Navigator headerMode='none'>
       <HomeFeedStack.Screen name='Home' component={PostStackNavigator} />
-      <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
       <HomeFeedStack.Screen name='Post' component={PostScreen} />
+      <HomeFeedStack.Screen name='Inbox' component={HomeStack} />
       <HomeFeedStack.Screen name='User' component={UserProfileScreen} />
       <HomeFeedStack.Screen
         name='NewPost'
         component={NewPostStack}
       />
+      {/* <HomeFeedStack.Screen
+        name='Room'
+        component={ConversationScreen}
+        options={({ route }) => ({
+          title: route.params.conversation.name
+        })}
+      /> */}
     </HomeFeedStack.Navigator>
   )
 };

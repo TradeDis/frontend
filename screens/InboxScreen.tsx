@@ -28,7 +28,7 @@ export default function InboxScreen({ navigation }) {
 
   const loadConversations = async () => {
     axios
-      .get(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}/conversations`)
+      .get(`http://192.168.31.138:3000/api/v1/users/${user.user_id}/conversations`)
       .then(resp => {
         // console.log(resp.data)
         setConversations(resp.data)
@@ -46,7 +46,14 @@ export default function InboxScreen({ navigation }) {
    */
   useEffect(() => {
     loadConversations()
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      loadConversations();
+    });
+
+    return () => {
+      unsubscribe
+    }
+  }, [navigation]);
 
   if (loading) {
     return <Loading />;
@@ -89,6 +96,7 @@ export default function InboxScreen({ navigation }) {
                 </ListItem.Subtitle> */}
                   <ListItem.Subtitle numberOfLines={1} style={{ color: "gray" }}>
                     <Text>
+                      {c.conversation_id}
                       {c.latestMessage ? (c.latestMessage.user.name == user.first_name + " " + user.last_name ? "You" : c.latestMessage.user.name) + ": " + c.latestMessage.text : ''}
                     </Text>
                   </ListItem.Subtitle>

@@ -39,7 +39,7 @@ export interface IMessage {
 }
 
 
-export default function ConversationScreen({ route }) {
+export default function ConversationScreen({ route, navigation }) {
   useStatsBar('light-content');
 
   const [messages, setMessages] = useState<any[]>([]);
@@ -56,7 +56,7 @@ export default function ConversationScreen({ route }) {
 
   function refresh() {
     axios
-      .get(`https://tradis.herokuapp.com/api/v1/conversations/${conversation.conversation_id}/messages`)
+      .get(`http://192.168.31.138:3000/api/v1/conversations/${conversation.conversation_id}/messages`)
       .then(resp => {
         resp.data.map(data => {
           data.user._id = data.user.user_id
@@ -72,7 +72,7 @@ export default function ConversationScreen({ route }) {
   }
 
   useEffect(() => {
-    const _socket = io(`https://tradis.herokuapp.com/`);
+    const _socket = io(`http://192.168.31.138:3000/`);
     console.log("connecting...")
     _socket.on('connect', () => {
       setSocket(_socket)
@@ -102,11 +102,15 @@ export default function ConversationScreen({ route }) {
     });
 
     refresh()
+    const unsubscribe = navigation.addListener("focus", () => {
+      refresh();
+    });
     return () => {
+      unsubscribe
       console.log("Disconnecting", socket.id)
       _socket.disconnect('io server disconnect')
     }
-  }, []);
+  }, [navigation]);
 
   async function handleSend(messages: IMessage[]) {
     const { text, user, createdAt } = messages[0];
@@ -128,7 +132,7 @@ export default function ConversationScreen({ route }) {
     })
 
     axios
-      .post(`https://tradis.herokuapp.com/api/v1/conversations/${conversation.conversation_id}/messages?socket_id=${socket.id}`, { newMessage, conversation })
+      .post(`http://192.168.31.138:3000/api/v1/conversations/${conversation.conversation_id}/messages?socket_id=${socket.id}`, { newMessage, conversation })
       .then(resp => {
         // has to map it over
         resp.data.map(data => {

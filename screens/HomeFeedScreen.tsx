@@ -102,7 +102,7 @@ export default function HomeFeedScreen({ navigation }) {
     }
     // if (user.push_token == '') {
     axios
-      .post(`https://tradis.herokuapp.com/api/v1/users/${user.user_id}/token`, { push_token: token })
+      .post(`http://192.168.31.138:3000/api/v1/users/${user.user_id}/token`, { push_token: token })
       .then(resp =>
         console.log(resp)
       )
@@ -128,7 +128,10 @@ export default function HomeFeedScreen({ navigation }) {
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      const { conversation } = response.notification.request.content.data
+      console.log("RESPONSE!!!")
+      console.log(conversation)
+      navigation.navigate('Inbox', { screen: 'ChatApp', params: { screen: 'Room', params: { conversation } } })
     });
 
     // whenever screen is focused
@@ -147,7 +150,7 @@ export default function HomeFeedScreen({ navigation }) {
   //retrive posts from DB
   const fetchPosts = () => {
     axios
-      .get(`https://tradis.herokuapp.com/api/v1/posts`)
+      .get(`http://192.168.31.138:3000/api/v1/posts`)
       .then(resp => {
         const myPost = resp.data.filter(post => post.created_by.user_id == user.user_id)
         setFilteredPosts(myPost);
