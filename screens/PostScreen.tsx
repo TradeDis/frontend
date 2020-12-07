@@ -39,7 +39,7 @@ export default function PostScreen({ navigation, route }) {
     post.status = status;
     setPost(prevState => ({ ...prevState, status: status }));
     axios
-      .put(`http://192.168.2.91:3000/api/v1/posts/${post.post_id}`, post)
+      .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, post)
       .then(resp => {
         setPost(prevState => ({ ...prevState, status: status }));
       })
@@ -61,7 +61,7 @@ export default function PostScreen({ navigation, route }) {
     post.reporters = updatedReporters;
     setPost(prevState => ({ ...prevState, reporters: updatedReporters }));
     axios
-      .put(`http://192.168.2.91:3000/api/v1/posts/${post.post_id}`, post)
+      .put(`http://192.168.31.138:3000/api/v1/posts/${post.post_id}`, post)
       .then(resp => {
         setPost(prevState => ({ ...prevState, reporters: updatedReporters }));
       })

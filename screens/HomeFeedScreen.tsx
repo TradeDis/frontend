@@ -152,7 +152,7 @@ export default function HomeFeedScreen({ navigation }) {
   //retrive posts from DB
   const fetchPosts = () => {
     axios
-      .get(`http://192.168.2.91:3000/api/v1/posts`)
+      .get(`http://192.168.31.138:3000/api/v1/posts`)
       .then(resp => {
         const mine = resp.data.filter(
           post => post.created_by.user_id == user.user_id
